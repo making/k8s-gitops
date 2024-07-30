@@ -41,7 +41,7 @@ spec:
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
-  secretName: tap-default-tls
+  secretName: default-tls
 ---
 apiVersion: projectcontour.io/v1
 kind: TLSCertificateDelegation
