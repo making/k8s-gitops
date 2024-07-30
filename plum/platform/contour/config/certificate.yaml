@@ -3,6 +3,8 @@ kind: Issuer
 metadata:
   name: contour-selfsigned-ca-issuer
   namespace: projectcontour
+spec:
+  selfSigned: { }
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
