@@ -21,6 +21,10 @@ configInline:
   - "upstream_cluster"
   - "user_agent"
   - "x_forwarded_for"
+  tracing:
+    includePodDetail: false
+    extensionService: opentelemetry/otel-collector
+    serviceName: contour
 contour:
   tlsExistingSecret: contourcert
 envoy:
