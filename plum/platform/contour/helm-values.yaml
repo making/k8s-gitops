@@ -1,0 +1,22 @@
+configInline:
+  accesslog-format: json
+  json-fields:
+  - "@timestamp"
+  - "authority"
+  - "bytes_received"
+  - "bytes_sent"
+  - "traceparent=%REQ(TRACEPARENT)%"
+  - "duration"
+  - "method"
+  - "path"
+  - "protocol"
+  - "referer=%REQ(REFERER)%"
+  - "request_id"
+  - "requested_server_name"
+  - "response_code"
+  - "upstream_cluster"
+  - "user_agent"
+  - "x_forwarded_for"
+envoy:
+  kind: deployment
+  replicaCount: 2

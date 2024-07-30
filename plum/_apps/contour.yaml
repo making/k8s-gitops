@@ -10,6 +10,11 @@ metadata:
 spec:
   serviceAccountName: kapp
   fetch:
+  - helmChart:
+      name: contour
+      version: 18.2.10
+      repository:
+        url: oci://registry-1.docker.io/bitnamicharts
   - http:
       url: https://raw.githubusercontent.com/projectcontour/contour/v1.29.1/examples/gateway/00-crds.yaml
   - git:
@@ -18,10 +23,17 @@ spec:
       subPath: plum/platform/contour
   syncPeriod: 24h
   template:
+  - helmTemplate:
+      name: contour
+      namespace: projectcontour
+      path: "0"
+      valuesFrom:
+      - path: 1/helm-values.yaml
   - ytt:
       paths:
-      - '0'
-      - 1/config
+      - '-'
+      - '1'
+      - 2/config
   deploy:
   - kapp:
       rawOptions:
