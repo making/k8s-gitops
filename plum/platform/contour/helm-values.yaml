@@ -1,4 +1,8 @@
 configInline:
+  gateway:
+    gatewayRef:
+      name: contour
+      namespace: projectcontour
   accesslog-format: json
   json-fields:
   - "@timestamp"
