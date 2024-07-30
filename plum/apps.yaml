@@ -14,7 +14,7 @@ spec:
   template:
   - ytt:
       paths:
-      #! - app/_apps
+      - app/_apps
       - platform/_apps
   deploy:
   - kapp:

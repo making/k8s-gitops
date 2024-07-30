@@ -1,0 +1,153 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-api
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: blog-api
+    app.kubernetes.io/part-of: blog-api
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: blog-api
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-api
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: blog-api
+    app.kubernetes.io/part-of: blog-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-api
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "8081"
+        prometheus.io/scrape: "true"
+      labels:
+        app: blog-api
+        app.kubernetes.io/part-of: blog-api
+    spec:
+      containers:
+      - env:
+        - name: JAVA_TOOL_OPTIONS
+          value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=32M -Xss512k -Dfile.encoding="UTF-8" -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.endpoint.health.show-details="always" -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include="*" -Dmanagement.health.probes.enabled="true" -Dmanagement.server.port="8081" -Dserver.port="8080" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
+        - name: BPL_JVM_THREAD_COUNT
+          value: "28"
+        - name: OTEL_SERVICE_NAME
+          value: blog-api
+        - name: SPRING_SECURITY_USER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: admin-password
+              name: blog-config
+        - name: BLOG_TENANT_USERS_0
+          valueFrom:
+            secretKeyRef:
+              key: users-0
+              name: blog-config
+        - name: BLOG_TENANT_USERS_1
+          valueFrom:
+            secretKeyRef:
+              key: users-1
+              name: blog-config
+        - name: BLOG_TENANT_USERS_2
+          valueFrom:
+            secretKeyRef:
+              key: users-2
+              name: blog-config
+        - name: BLOG_GITHUB_CONTENTOWNER
+          value: making
+        - name: BLOG_GITHUB_CONTENTREPO
+          value: blog.ik.am
+        - name: BLOG_GITHUB_ACCESSTOKEN
+          valueFrom:
+            secretKeyRef:
+              key: github-access-token
+              name: blog-config
+        - name: BLOG_GITHUB_WEBHOOKSECRET
+          valueFrom:
+            secretKeyRef:
+              key: github-webhook-secret
+              name: blog-config
+        - name: BLOG_GITHUB_TENANTS_EN_CONTENTOWNER
+          value: making
+        - name: BLOG_GITHUB_TENANTS_EN_CONTENTREPO
+          value: ik.am_en
+        - name: BLOG_GITHUB_TENANTS_EN_ACCESSTOKEN
+          valueFrom:
+            secretKeyRef:
+              key: github-access-token-en
+              name: blog-config
+        - name: BLOG_GITHUB_TENANTS_EN_WEBHOOKSECRET
+          valueFrom:
+            secretKeyRef:
+              key: github-webhook-secret-en
+              name: blog-config
+        - name: MANAGEMENT_OTLP_LOGS_ENDPOINT
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+        - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+        - name: MANAGEMENT_OPENTELEMETRY_RESOURCEATTRIBUTES_HOSTNAME
+          value: ${HOSTNAME:}
+        - name: INFO_ENV_HOSTNAME
+          value: ${HOSTNAME:}
+        image: ghcr.io/making/supply-chain/blog-api-blog@sha256:323bd1e8ba09d7f29b583847e4db4c66579eaed0c10b197bf14d4d5b6f985e66
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /livez
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+            scheme: HTTP
+        startupProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+            scheme: HTTP
+          failureThreshold: 20
+          periodSeconds: 5
+        name: workload
+        ports:
+        - containerPort: 8080
+          name: user-port
+          protocol: TCP
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
