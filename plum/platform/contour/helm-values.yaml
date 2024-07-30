@@ -37,3 +37,4 @@ envoy:
     prometheus.io/path: /stats/prometheus
     prometheus.io/port: "8002"
     prometheus.io/scrape: "true"
+  podAntiAffinityPreset: soft
