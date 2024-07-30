@@ -1,0 +1,29 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: cert-manager
+  namespace: kapp
+  annotations:
+    kapp.k14s.io/change-group: "{name}"
+spec:
+  serviceAccountName: kapp
+  fetch:
+  - git:
+      url: https://github.com/making/k8s-gitops.git
+      ref: origin/main
+      subPath: plum/platform/cert-manager
+  syncPeriod: 24h
+  template:
+  - ytt:
+      paths:
+      - 0/config
+  deploy:
+  - kapp:
+      rawOptions:
+      - --wait-timeout=5m
+      - --diff-changes=true
+      - --diff-mask=true
+      delete:
+        #! Force delete PVCs, since StatefulSet does not delete them
+        rawOptions:
+        - --apply-ignored=true

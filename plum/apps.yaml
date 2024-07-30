@@ -1,0 +1,24 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: apps
+  namespace: app-install
+spec:
+  serviceAccountName: kapp
+  fetch:
+  - git:
+      url: https://github.com/making/k8s-gitops.git
+      ref: origin/main
+      subPath: plum
+  syncPeriod: 10m
+  template:
+  - ytt:
+      paths:
+      - platform/*/app.yaml
+      #! - app/*/app.yaml
+  deploy:
+  - kapp:
+      rawOptions:
+      - --wait-timeout=5m
+      - --diff-changes=true
+      - --diff-mask=false
