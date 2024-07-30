@@ -25,6 +25,10 @@ spec:
       subPath: plum/platform/contour
   syncPeriod: 24h
   template:
+  - sops:
+      age:
+        privateKeysSecretRef:
+          name: age-key
   - helmTemplate:
       name: contour
       namespace: projectcontour
@@ -36,6 +40,8 @@ spec:
       - '-'
       - '1'
       - 2/config
+      valuesFrom:
+      - path: 2/credentials.yaml
   deploy:
   - kapp:
       rawOptions:
