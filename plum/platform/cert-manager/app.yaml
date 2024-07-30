@@ -16,7 +16,7 @@ spec:
   template:
   - ytt:
       paths:
-      - 0/config
+      - config
   deploy:
   - kapp:
       rawOptions:

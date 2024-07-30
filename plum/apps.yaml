@@ -14,7 +14,8 @@ spec:
   template:
   - ytt:
       paths:
-      - platform/*/app.yaml
+      - platform/cert-manager/app.yaml
+      - platform/contour/app.yaml
       #! - app/*/app.yaml
   deploy:
   - kapp:
