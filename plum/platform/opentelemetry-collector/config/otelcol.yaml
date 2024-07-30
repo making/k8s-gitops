@@ -20,6 +20,11 @@ spec:
       batch:
         send_batch_size: 10000
         timeout: 10s
+      resource:
+        attributes:
+        - key: cluster
+          value: "plum"
+          action: upsert
     exporters:
       debug:
         verbosity: detailed
@@ -27,5 +32,5 @@ spec:
       pipelines:
         traces:
           receivers: [ otlp ]
-          processors: [ memory_limiter, batch ]
+          processors: [ memory_limiter, resource, batch ]
           exporters: [ debug ]
