@@ -23,3 +23,5 @@ envoy:
   kind: deployment
   replicaCount: 1
   tlsExistingSecret: envoycert
+defaultBackend:
+  enabled: true
