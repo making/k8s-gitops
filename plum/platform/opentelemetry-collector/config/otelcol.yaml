@@ -25,6 +25,12 @@ spec:
         - key: cluster
           value: "plum"
           action: upsert
+      transform:
+        error_mode: ignore
+        trace_statements:
+        - context: span
+          statements:
+          - set(status.code, Int(attributes["http.status_code"])) where resource.attributes["service.name"] == "contour"
     exporters:
       debug:
         verbosity: detailed
@@ -32,5 +38,5 @@ spec:
       pipelines:
         traces:
           receivers: [ otlp ]
-          processors: [ memory_limiter, resource, batch ]
+          processors: [ memory_limiter, transform, resource, batch ]
           exporters: [ debug ]
