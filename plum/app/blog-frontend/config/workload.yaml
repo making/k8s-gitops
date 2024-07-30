@@ -1,0 +1,112 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-frontend
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: blog-frontend
+    app.kubernetes.io/part-of: blog-frontend
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: blog-frontend
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-frontend
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: blog-frontend
+    app.kubernetes.io/part-of: blog-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-frontend
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "8081"
+        prometheus.io/scrape: "true"
+      labels:
+        app: blog-frontend
+        app.kubernetes.io/part-of: blog-frontend
+    spec:
+      containers:
+      - env:
+        - name: JAVA_TOOL_OPTIONS
+          value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=32M -Xss512k -Dfile.encoding="UTF-8" -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.endpoint.health.show-details="always" -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include="*" -Dmanagement.health.probes.enabled="true" -Dmanagement.server.port="8081" -Dserver.port="8080" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
+        - name: BPL_JVM_THREAD_COUNT
+          value: "28"
+        - name: INFO_ENV_HOSTNAME
+          value: ${HOSTNAME:}
+        - name: BLOGAPI_URL
+          value: http://blog-api.blog.svc.cluster.local
+        - name: NOTEAPI_URL
+          value: http://note-api.note.svc.cluster.local
+        - name: COUNTERAPI_URL
+          value: http://counter-api.blog.svc.cluster.local/counter
+        - name: MANAGEMENT_OTLP_LOGS_ENDPOINT
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+        - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+        - name: MANAGEMENT_OPENTELEMETRY_RESOURCEATTRIBUTES_HOSTNAME
+          value: ${HOSTNAME:}
+        - name: SPRING_THREADS_VIRTUAL_ENABLED
+          value: "true"
+        image: ghcr.io/making/supply-chain/blog-frontend-blog@sha256:7c730a40c03ef14285295cafe829e1de30a404b41253d57c0ace9f21e6922f5d
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /livez
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+            scheme: HTTP
+        startupProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+            scheme: HTTP
+          failureThreshold: 20
+          periodSeconds: 5
+        name: workload
+        ports:
+        - containerPort: 8080
+          name: user-port
+          protocol: TCP
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
