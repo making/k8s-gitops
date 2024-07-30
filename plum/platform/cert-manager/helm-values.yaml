@@ -1,6 +1,7 @@
 installCRDs: true
 controller:
   extraArgs:
+  - --enable-gateway-api
   - --dns01-recursive-nameservers-only
   - --dns01-recursive-nameservers=8.8.8.8:53
 metrics:
