@@ -29,7 +29,7 @@ contour:
   tlsExistingSecret: contourcert
 envoy:
   kind: deployment
-  replicaCount: 1
+  replicaCount: 2
   tlsExistingSecret: envoycert
   service:
     loadBalancerIP: 192.168.228.200
