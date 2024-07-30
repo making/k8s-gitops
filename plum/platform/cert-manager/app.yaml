@@ -2,7 +2,7 @@ apiVersion: kappctrl.k14s.io/v1alpha1
 kind: App
 metadata:
   name: cert-manager
-  namespace: kapp
+  namespace: app-install
   annotations:
     kapp.k14s.io/change-group: "{name}"
 spec:
