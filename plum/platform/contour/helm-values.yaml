@@ -17,6 +17,9 @@ configInline:
   - "upstream_cluster"
   - "user_agent"
   - "x_forwarded_for"
+contour:
+  tlsExistingSecret: contourcert
 envoy:
   kind: deployment
   replicaCount: 2
+  tlsExistingSecret: envoycert
