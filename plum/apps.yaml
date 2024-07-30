@@ -9,14 +9,12 @@ spec:
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
-      subPath: plum
+      subPath: plum/_apps
   syncPeriod: 10m
   template:
   - ytt:
       paths:
-      - platform/cert-manager/app.yaml
-      - platform/contour/app.yaml
-      #! - app/*/app.yaml
+      - '.'
   deploy:
   - kapp:
       rawOptions:
