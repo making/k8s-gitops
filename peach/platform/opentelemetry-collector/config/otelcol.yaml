@@ -23,7 +23,7 @@ spec:
       resource:
         attributes:
         - key: cluster
-          value: "plum"
+          value: "peach"
           action: upsert
       filter:
         #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/filterprocessor
