@@ -1,8 +1,5 @@
 configInline:
-  gateway:
-    gatewayRef:
-      name: contour
-      namespace: projectcontour
+  request-timeout: 180s
   accesslog-format: json
   json-fields:
   - "@timestamp"
@@ -25,6 +22,10 @@ configInline:
     includePodDetail: false
     extensionService: opentelemetry/otel-collector
     serviceName: contour
+  gateway:
+    gatewayRef:
+      name: contour
+      namespace: projectcontour
 contour:
   tlsExistingSecret: contourcert
 envoy:
