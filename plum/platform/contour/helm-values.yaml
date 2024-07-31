@@ -29,8 +29,8 @@ configInline:
       namespace: projectcontour
 contour:
   tlsExistingSecret: contourcert
-  extraArgs:
-  - --use-proxy-protocol
+  #! extraArgs:
+  #! - --use-proxy-protocol
 envoy:
   kind: deployment
   replicaCount: 2
