@@ -99,9 +99,9 @@ spec:
           protocol: TCP
         resources:
           limits:
-            memory: 320Mi
+            memory: 384Mi
           requests:
-            memory: 320Mi
+            memory: 384Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
