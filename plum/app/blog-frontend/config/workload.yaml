@@ -110,3 +110,12 @@ spec:
           runAsUser: 1000
           seccompProfile:
             type: RuntimeDefault
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: blog-frontend
+              topologyKey: kubernetes.io/hostname
+            weight: 1
