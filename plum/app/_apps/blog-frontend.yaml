@@ -14,7 +14,10 @@ spec:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
       subPath: plum/app/blog-frontend
-  syncPeriod: 1h
+  - git:
+      url: https://github.com/categolj/blog-frontend.git
+      ref: origin/images
+  syncPeriod: 10m
   template:
   - sops:
       age:
@@ -22,9 +25,10 @@ spec:
           name: age-key
   - ytt:
       paths:
-      - config
+      - 0/config
       valuesFrom:
-      - path: credentials.yaml
+      - path: 0/credentials.yaml
+      - path: 1/image.yaml
   deploy:
   - kapp:
       rawOptions:

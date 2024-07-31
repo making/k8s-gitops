@@ -41,6 +41,7 @@ spec:
         prometheus.io/path: /actuator/prometheus
         prometheus.io/port: "8081"
         prometheus.io/scrape: "true"
+        github.com/revision: #@ data.values.git_revision
       labels:
         app: blog-frontend
         app.kubernetes.io/part-of: blog-frontend
@@ -67,7 +68,7 @@ spec:
           value: ${HOSTNAME:}
         - name: SPRING_THREADS_VIRTUAL_ENABLED
           value: "true"
-        image: ghcr.io/making/supply-chain/blog-frontend-blog@sha256:7c730a40c03ef14285295cafe829e1de30a404b41253d57c0ace9f21e6922f5d
+        image: #@ data.values.image
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 5
@@ -107,7 +108,7 @@ spec:
             drop:
             - ALL
           runAsNonRoot: true
-          runAsUser: 1000
+          runAsUser: 1002
           seccompProfile:
             type: RuntimeDefault
       affinity:
