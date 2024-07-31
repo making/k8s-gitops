@@ -1,0 +1,28 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: blog-frontend
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: blog-frontend
+    app.kubernetes.io/part-of: blog-frontend
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: contour
+    namespace: projectcontour
+  rules:
+  - matches:
+    - headers:
+      - type: RegularExpression
+        name: Host
+        value: blog\..+
+    backendRefs:
+    - kind: Service
+      name: blog-frontend
+      port: 80
+    timeouts:
+      request: 180s
