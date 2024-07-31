@@ -1,5 +1,6 @@
 configInline:
-  request-timeout: 180s
+  timeouts:
+    request-timeout: 180s
   accesslog-format: json
   json-fields:
   - "@timestamp"
