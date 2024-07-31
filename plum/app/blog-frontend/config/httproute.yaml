@@ -24,3 +24,5 @@ spec:
     - kind: Service
       name: blog-frontend
       port: 80
+    timeouts:
+      request: 180s
