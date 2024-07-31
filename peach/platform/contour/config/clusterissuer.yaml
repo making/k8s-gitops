@@ -1,0 +1,55 @@
+#@ load("@ytt:data", "data")
+kind: Secret
+apiVersion: v1
+metadata:
+  name: azuredns-config
+  namespace: cert-manager
+stringData:
+  client-secret: #@ data.values.azure.client_secret
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: makingx+peach@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt
+    solvers:
+    - dns01:
+        azureDNS:
+          clientID: #@ data.values.azure.client_id
+          clientSecretSecretRef:
+            name: azuredns-config
+            key: client-secret
+          subscriptionID: #@ data.values.azure.subscription_id
+          tenantID: #@ data.values.azure.tenant_id
+          resourceGroupName: maki-lol
+          hostedZoneName: maki.lol
+          environment: AzurePublicCloud
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: default-tls
+  namespace: projectcontour
+spec:
+  dnsNames:
+  - "*.peach.maki.lol"
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: default-tls
+---
+apiVersion: projectcontour.io/v1
+kind: TLSCertificateDelegation
+metadata:
+  name: contour-delegation
+  namespace: projectcontour
+spec:
+  delegations:
+  - secretName: default-tls
+    targetNamespaces:
+    - "*"
