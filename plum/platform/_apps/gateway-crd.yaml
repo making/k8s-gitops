@@ -9,7 +9,7 @@ spec:
   serviceAccountName: kapp
   fetch:
   - http:
-      url: https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
+      url: https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/experimental-install.yaml
   syncPeriod: 24h
   template:
   - ytt: { }
