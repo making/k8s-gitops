@@ -59,7 +59,7 @@ spec:
         - name: NOTEAPI_URL
           value: http://note-api.note.svc.cluster.local
         - name: COUNTERAPI_URL
-          value: https://httpbin.org/post #! dummy endpoint
+          value: http://counter-api.blog.svc.cluster.local/counter
         - name: MANAGEMENT_OTLP_LOGGING_ENDPOINT
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
         - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
