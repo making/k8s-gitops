@@ -1,0 +1,28 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: counter-api
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: counter-api
+    app.kubernetes.io/part-of: counter-api
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: contour
+    namespace: projectcontour
+  rules:
+  - matches:
+    - headers:
+      - type: RegularExpression
+        name: Host
+        value: counter-api\..+
+    backendRefs:
+    - kind: Service
+      name: counter-api
+      port: 80
+    timeouts:
+      request: 180s
