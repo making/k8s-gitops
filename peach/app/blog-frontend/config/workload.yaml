@@ -60,6 +60,8 @@ spec:
           value: http://note-api.note.svc.cluster.local
         - name: COUNTERAPI_URL
           value: http://counter-api.blog.svc.cluster.local/counter
+        - name: COUNTERAPI_IPBLACKLIST
+          value: #@ ",".join(data.values.ip_blacklist)
         - name: MANAGEMENT_OTLP_LOGGING_ENDPOINT
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
         - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
