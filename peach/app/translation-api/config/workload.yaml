@@ -142,4 +142,4 @@ stringData:
   type: "translation-api"
   openai-api-key: #@ data.values.openai_api_key
   github-access-token: #@ data.values.github_access_token
-  github-webhook-secret: #@ data.values.github_webhook_secre
+  github-webhook-secret: #@ data.values.github_webhook_secret
