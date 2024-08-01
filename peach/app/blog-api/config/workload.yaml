@@ -31,7 +31,7 @@ metadata:
     app: blog-api
     app.kubernetes.io/part-of: blog-api
 spec:
-  replicas: 2
+  replicas: #@ data.values.replicas
   selector:
     matchLabels:
       app: blog-api

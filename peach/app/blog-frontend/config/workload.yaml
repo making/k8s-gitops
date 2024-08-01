@@ -31,7 +31,7 @@ metadata:
     app: blog-frontend
     app.kubernetes.io/part-of: blog-frontend
 spec:
-  replicas: 2
+  replicas: #@ data.values.replicas
   selector:
     matchLabels:
       app: blog-frontend
