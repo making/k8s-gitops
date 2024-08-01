@@ -1,0 +1,37 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Secret
+metadata:
+  name: note-db
+  namespace: note
+  annotations:
+    kapp.k14s.io/change-group: service
+  labels:
+    app: note-db
+    app.kubernetes.io/part-of: note-api
+type: servicebinding.io/postgresql
+stringData:
+  type: "postgresql"
+  host: #@ data.values.note_db.host
+  port: "5432"
+  username: #@ data.values.note_db.username
+  password: #@ data.values.note_db.password
+  database: "postgres"
+  sslmode: "require"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: note-config
+  namespace: note
+  annotations:
+    kapp.k14s.io/change-group: service
+type: Opaque
+stringData:
+  type: "note"
+  entry-api-url: #@ data.values.entry_api.url
+  entry-api-client-id: #@ data.values.entry_api.client_id
+  entry-api-client-secret: #@ data.values.entry_api.client_secret
+  rsa-private-key.pem: #@ data.values.rsa.private_key
+  rsa-public-key.pem: #@ data.values.rsa.public_key
+  sendgrid-api-key: #@ data.values.sendgrid.api_key

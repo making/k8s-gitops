@@ -1,0 +1,41 @@
+apiVersion: servicebinding.io/v1
+kind: ServiceBinding
+metadata:
+  name: note-api-note-db
+  namespace: note
+  annotations:
+    kapp.k14s.io/change-group: binding
+    kapp.k14s.io/change-rule.service: "upsert after upserting service"
+    kapp.k14s.io/change-rule.service-delete: "delete before deleting service"
+    kapp.k14s.io/change-rule.workload: "upsert before upserting workload"
+    kapp.k14s.io/change-rule.workload-delete: "delete after deleting workload"
+spec:
+  service:
+    apiVersion: v1
+    kind: Secret
+    name: note-db
+  workload:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: note-api
+---
+apiVersion: servicebinding.io/v1
+kind: ServiceBinding
+metadata:
+  name: note-config-note-db
+  namespace: note
+  annotations:
+    kapp.k14s.io/change-group: binding
+    kapp.k14s.io/change-rule.service: "upsert after upserting service"
+    kapp.k14s.io/change-rule.service-delete: "delete before deleting service"
+    kapp.k14s.io/change-rule.workload: "upsert before upserting workload"
+    kapp.k14s.io/change-rule.workload-delete: "delete after deleting workload"
+spec:
+  service:
+    apiVersion: v1
+    kind: Secret
+    name: note-config
+  workload:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: note-api
