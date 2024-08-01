@@ -64,7 +64,7 @@ spec:
           value: file:/bindings/note-config/rsa-public-key.pem
         - name: SPRING_SENDGRID_APIKEY
           value: ${k8s.bindings.note-config.sendgrid-api-key}
-        - name: MANAGEMENT_OTLP_LOGS_ENDPOINT
+        - name: MANAGEMENT_OTLP_LOGGING_ENDPOINT
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
         - name: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
           value: http://otel-collector.opentelemetry.svc.cluster.local:9411
