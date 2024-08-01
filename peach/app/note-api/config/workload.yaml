@@ -31,7 +31,7 @@ metadata:
     app: note-api
     app.kubernetes.io/part-of: note-api
 spec:
-  replicas: 1
+  replicas: #@ data.values.replicas
   selector:
     matchLabels:
       app: note-api
