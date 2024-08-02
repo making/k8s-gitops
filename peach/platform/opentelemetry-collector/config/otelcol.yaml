@@ -34,7 +34,7 @@ spec:
           span:
           - IsMatch(attributes["upstream_cluster"], "grafana/.*")
           - IsMatch(attributes["upstream_cluster"], "tap-gui/.*")
-          - IsMatch(attributes["upstream_cluster"], "appsso/.*")
+          - IsMatch(attributes["upstream_cluster"], "raspberrypi/.*")
           - IsMatch(attributes["http.url"], "https://grafana.*")
           - IsMatch(attributes["http.url"], ".*://zipkin.*")
           - IsMatch(attributes["http.url"], ".*/livez")
