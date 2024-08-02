@@ -9,12 +9,13 @@ spec:
     kind: Gateway
     name: contour
     namespace: projectcontour
+  hostnames:
+  - raspberrypi.gw.ik.am
   rules:
   - matches:
-    - headers:
-      - type: RegularExpression
-        name: Host
-        value: raspberrypi\.gw\.+
+    - path:
+        type: PathPrefix
+        value: /
     backendRefs:
     - kind: Service
       name: inlets-exit
