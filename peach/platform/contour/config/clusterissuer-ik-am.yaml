@@ -30,8 +30,6 @@ metadata:
 spec:
   dnsNames:
   - "ik.am"
-  - "gw.ik.am"
-  - "synology.ik.am"
   - "*.ik.am"
   - "*.gw.ik.am"
   - "*.synology.ik.am"
