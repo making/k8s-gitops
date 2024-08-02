@@ -1,0 +1,24 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: pgbackweb
+  namespace: pgbackweb
+  labels:
+    app: pgbackweb
+    app.kubernetes.io/part-of: pgbackweb
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: contour
+    namespace: projectcontour
+  rules:
+  - matches:
+    - headers:
+      - type: RegularExpression
+        name: Host
+        value: pgbackweb\..+
+    backendRefs:
+    - kind: Service
+      name: pgbackweb
+      port: 80

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgbackweb
+  namespace: pgbackweb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgbackweb
+  template:
+    metadata:
+      labels:
+        app: pgbackweb
+    spec:
+      containers:
+      - name: pgbackweb
+        image: eduardolat/pgbackweb:0.1.2
+        ports:
+        - containerPort: 8085
+        env:
+        - name: PBW_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: pgbackweb-secret
+              key: PBW_ENCRYPTION_KEY
+        - name: PBW_POSTGRES_CONN_STRING
+          valueFrom:
+            secretKeyRef:
+              name: pgbackweb-secret
+              key: PBW_POSTGRES_CONN_STRING
