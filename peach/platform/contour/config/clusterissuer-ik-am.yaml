@@ -35,7 +35,7 @@ spec:
   - "*.synology.ik.am"
   issuerRef:
     kind: ClusterIssuer
-    name: letsencrypt
+    name: letsencrypt-ik-am
   secretName: default-tls-ik-am
 ---
 apiVersion: projectcontour.io/v1
