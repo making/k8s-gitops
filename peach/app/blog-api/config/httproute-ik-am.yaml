@@ -16,6 +16,7 @@ spec:
     namespace: projectcontour
   hostnames:
   - api.ik.am
+  - blog-api-blog.apps.ik.am
   rules:
   - matches:
     - path:
