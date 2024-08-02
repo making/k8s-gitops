@@ -19,6 +19,8 @@ coreDns:
 kubeProxy:
   enabled: false
 node-exporter:
+  podAnnotations:
+    prometheus.io/scrape: "true"
   serviceMonitor:
     enabled: false
 kube-state-metrics:
