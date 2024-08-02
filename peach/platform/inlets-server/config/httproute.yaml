@@ -11,6 +11,7 @@ spec:
     namespace: projectcontour
   hostnames:
   - inlets.gw.ik.am
+  - synology.gw.ik.am
   - synology.ik.am
   - "*.synology.ik.am"
   rules:
