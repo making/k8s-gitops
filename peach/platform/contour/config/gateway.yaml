@@ -25,3 +25,42 @@ spec:
       - kind: Secret
         group: ""
         name: default-tls
+  - name: https-at-ik-am
+    hostname: ik.am
+    port: 443
+    protocol: HTTPS
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: default-tls-ik-am
+  - name: https-ik-am
+    hostname: "*.ik.am"
+    port: 443
+    protocol: HTTPS
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: default-tls-ik-am
+  - name: https-gw-ik-am
+    hostname: "*.gw.ik.am"
+    port: 443
+    protocol: HTTPS
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: default-tls-ik-am
