@@ -145,6 +145,11 @@ spec:
         - key: cluster
           value: "peach"
           action: upsert
+      attributes:
+        actions:
+        - key: cluster
+          value: "peach"
+          action: upsert
       filter:
         #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/filterprocessor
         error_mode: ignore
@@ -221,8 +226,9 @@ spec:
           - otlp
           - prometheus
           processors:
+          - memory_limiter
+          - attributes
           - batch
-          - resource
           exporters:
           - prometheusremotewrite
         logs:
