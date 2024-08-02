@@ -1,0 +1,26 @@
+operator:
+  enabled: false
+prometheus:
+  enabled: false
+alertmanager:
+  enabled: false
+kubelet:
+  enabled: false
+blackboxExporter:
+  enabled: false
+kubeApiServer:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+coreDns:
+  enabled: false
+kubeProxy:
+  enabled: false
+node-exporter:
+  serviceMonitor:
+    enabled: false
+kube-state-metrics:
+  serviceMonitor:
+    enabled: false
