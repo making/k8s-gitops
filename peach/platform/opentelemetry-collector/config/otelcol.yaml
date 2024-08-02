@@ -184,6 +184,13 @@ spec:
         headers:
           authorization: #@ data.values.hyperdx.api_key
         compression: gzip
+      otlp/uptrace:
+        endpoint: https://otlp.uptrace.dev:4317
+        tls:
+          insecure: false
+        headers:
+          uptrace-dsn: #@ data.values.uptrace.uptrace_dsn
+        compression: gzip
       prometheusremotewrite:
         endpoint: http://inlets-exit.raspberrypi.svc.cluster.local:6868/api/v1/write
         headers:
