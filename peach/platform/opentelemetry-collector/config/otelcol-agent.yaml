@@ -52,7 +52,7 @@ spec:
         error_mode: ignore
         logs:
           log_record:
-          - resource.attributes["k8s.namespace.name"] != "projectcontour"
+          - resource.attributes["k8s.container.name"] != "envoy"
     exporters:
       otlphttp/grafana_cloud:
         endpoint: https://otlp-gateway-prod-us-central-0.grafana.net/otlp
