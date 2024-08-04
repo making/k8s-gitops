@@ -74,9 +74,11 @@ spec:
           - delete_key(attributes, "x_forwarded_for")
           - delete_key(attributes, "log.file.path")
           - delete_key(attributes, "@timestamp")
+          - delete_key(attributes, "time")
           - delete_key(attributes, "request_id")
           - delete_key(attributes, "upstream_cluster")
           - delete_key(attributes, "traceparent")
+          - delete_key(attributes, "authority")
       resourcedetection:
         detectors:
         - k8snode
