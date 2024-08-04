@@ -93,7 +93,7 @@ spec:
         - from: attributes.log
           to: body
           type: move
-        start_at: beginning
+        start_at: end
     processors:
       memory_limiter:
         check_interval: 1s
