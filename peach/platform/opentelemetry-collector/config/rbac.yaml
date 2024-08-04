@@ -71,3 +71,6 @@ subjects:
 - kind: ServiceAccount
   name: otel-collector
   namespace: opentelemetry
+- kind: ServiceAccount
+  name: otel-agent-collector
+  namespace: opentelemetry
