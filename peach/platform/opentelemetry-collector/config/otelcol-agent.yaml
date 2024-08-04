@@ -8,6 +8,11 @@ metadata:
 spec:
   mode: daemonset
   image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s:0.104.0
+  env:
+  - name: K8S_NODE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
   volumes:
   - name: varlog
     hostPath:
@@ -55,10 +60,7 @@ spec:
           - resource.attributes["k8s.container.name"] != "envoy"
       resourcedetection:
         detectors:
-        - system
-        system:
-          hostname_sources:
-          - os
+        - k8snode
     exporters:
       otlphttp/grafana_cloud:
         endpoint: https://otlp-gateway-prod-us-central-0.grafana.net/otlp
