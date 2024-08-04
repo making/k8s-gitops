@@ -21,8 +21,8 @@ spec:
       filelog:
         include:
         - /var/log/pods/*/*/*.log
-        exclude:
-        - /var/log/pods/*/otc-container/*.log
+        #! exclude:
+        #! - /var/log/pods/*/otc-container/*.log
         operators:
         - id: container-parser
           type: container
