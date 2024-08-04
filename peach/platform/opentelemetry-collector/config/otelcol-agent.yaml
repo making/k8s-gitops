@@ -33,6 +33,11 @@ spec:
         operators:
         - id: container-parser
           type: container
+        - type: json_parser
+          parse_from: body
+          timestamp:
+            parse_from: body["@timestamp"]
+            layout: '%Y-%m-%dT%H:%M:%S.%LZ'
         start_at: end
     processors:
       memory_limiter:
@@ -106,7 +111,7 @@ spec:
           - memory_limiter
           - resource
           - resourcedetection
-          - transform
+          #! - transform
           - batch
           exporters:
           - debug
