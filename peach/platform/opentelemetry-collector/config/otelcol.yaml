@@ -143,12 +143,12 @@ spec:
       resource:
         attributes:
         - key: cluster
-          value: "peach"
+          value: #@ data.values.cluster
           action: upsert
       attributes:
         actions:
         - key: cluster
-          value: "peach"
+          value: #@ data.values.cluster
           action: upsert
       filter:
         #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/filterprocessor
