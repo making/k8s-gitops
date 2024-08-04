@@ -129,4 +129,4 @@ spec:
           - transform
           - batch
           exporters:
-          - debug
+          - otlphttp/lognroll
