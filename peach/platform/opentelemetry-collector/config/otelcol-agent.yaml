@@ -53,6 +53,12 @@ spec:
         logs:
           log_record:
           - resource.attributes["k8s.container.name"] != "envoy"
+      resourcedetection:
+        detectors:
+        - system
+        system:
+          hostname_sources:
+          - os
     exporters:
       otlphttp/grafana_cloud:
         endpoint: https://otlp-gateway-prod-us-central-0.grafana.net/otlp
@@ -82,6 +88,7 @@ spec:
           - filter
           - memory_limiter
           - resource
+          - resourcedetection
           - batch
           exporters:
           - debug
