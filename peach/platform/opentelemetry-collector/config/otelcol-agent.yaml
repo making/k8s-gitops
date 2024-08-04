@@ -72,7 +72,7 @@ spec:
       pipelines:
         logs:
           receivers:
-          - otlp
+          - filelog
           processors:
           - memory_limiter
           - resource
