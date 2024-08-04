@@ -79,6 +79,7 @@ spec:
           receivers:
           - filelog
           processors:
+          - filter
           - memory_limiter
           - resource
           - batch
