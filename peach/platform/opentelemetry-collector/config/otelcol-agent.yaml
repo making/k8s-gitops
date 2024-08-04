@@ -23,6 +23,8 @@ spec:
         - /var/log/pods/*/*/*.log
         exclude:
         - /var/log/pods/*/otc-container/*.log
+        include_file_name: false
+        include_file_path: true
         operators:
         - id: get-format
           routes:
