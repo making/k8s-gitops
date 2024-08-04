@@ -34,7 +34,7 @@ spec:
         - id: container-parser
           type: container
         - type: json_parser
-          if: hasPrefix(body, "{")
+          if: body matches "^{.*}$"
         start_at: end
     processors:
       memory_limiter:
