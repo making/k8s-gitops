@@ -65,7 +65,6 @@ spec:
           statements:
           #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/transformprocessor#parsing-json-logs
           - merge_maps(cache, ParseJSON(body), "upsert") where IsMatch(body, "^\\{")
-          - set(attributes["traceparent"], cache["traceparent"])
           - set(attributes["method"], cache["method"])
           - set(attributes["requested_server_name"], cache["authority"])
           - set(attributes["path"], cache["path"])
@@ -105,6 +104,7 @@ spec:
           - memory_limiter
           - resource
           - resourcedetection
+          - transform
           - batch
           exporters:
           - debug
