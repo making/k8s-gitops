@@ -63,11 +63,13 @@ spec:
         log_statements:
         - context: log
           statements:
+          - delete_key(attributes, "log.file.path")
           #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/transformprocessor#parsing-json-logs
           - merge_maps(cache, ParseJSON(body), "upsert") where IsMatch(body, "^\\{")
           - set(attributes["method"], cache["method"])
           - set(attributes["host"], cache["requested_server_name"])
           - set(attributes["path"], cache["path"])
+          - set(attributes["status"], cache["response_code"])
           - set(attributes["duration"], cache["duration"])
           - set(attributes["remote"], cache["x_forwarded_for"])
           - set(attributes["user_agent"], cache["user_agent"])
