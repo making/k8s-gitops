@@ -25,6 +25,7 @@ spec:
       - config
       valuesFrom:
       - path: credentials.yaml
+      - path: values.yaml
   deploy:
   - kapp:
       rawOptions:
