@@ -60,11 +60,6 @@ spec:
         - key: cluster
           value: #@ data.values.cluster
           action: upsert
-      attributes:
-        actions:
-        - key: service. name
-          value: envoy
-          action: upsert
       filter:
         #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/filterprocessor
         error_mode: ignore
@@ -128,7 +123,6 @@ spec:
           - resource
           - resourcedetection
           - transform
-          - attributes
           - batch
           exporters:
           - otlphttp/lognroll
