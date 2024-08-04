@@ -141,8 +141,8 @@ spec:
           receivers:
           - filelog
           processors:
-          #! - memory_limiter
+          - memory_limiter
           - resource
-          #! - batch
+          - batch
           exporters:
           - debug
