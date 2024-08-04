@@ -62,8 +62,8 @@ spec:
           action: upsert
       attributes:
         actions:
-        - key: cluster
-          value: #@ data.values.cluster
+        - key: service. name
+          value: envoy
           action: upsert
       filter:
         #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/filterprocessor
@@ -77,6 +77,7 @@ spec:
         - context: log
           statements:
           #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/transformprocessor#parsing-json-logs
+          - set(severity_text, "INFO")
           - set(attributes["host"], attributes["requested_server_name"])
           - set(attributes["status"], attributes["response_code"])
           - set(attributes["remote"], attributes["x_forwarded_for"])
