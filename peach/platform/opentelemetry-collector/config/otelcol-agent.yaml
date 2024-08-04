@@ -1,0 +1,80 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:base64", "base64")
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-agent
+  namespace: opentelemetry
+spec:
+  mode: daemonset
+  volumes:
+  - name: varlog
+    hostPath:
+      path: /var/log
+  volumeMounts:
+  - name: varlog
+    mountPath: /var/log
+    readOnly: true
+  config:
+    receivers:
+      filelog:
+        include:
+        - /var/log/pods/*/*/*.log
+        exclude:
+        - /var/log/pods/*/otc-container/*.log
+        operators:
+        - id: container-parser
+          type: container
+        include_file_path: false
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 75
+        spike_limit_percentage: 15
+      batch:
+        send_batch_size: 10000
+        timeout: 10s
+      resource:
+        attributes:
+        - key: cluster
+          value: #@ data.values.cluster
+          action: upsert
+      attributes:
+        actions:
+        - key: cluster
+          value: #@ data.values.cluster
+          action: upsert
+      filter:
+        #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/filterprocessor
+        { }
+    exporters:
+      otlphttp/grafana_cloud:
+        endpoint: https://otlp-gateway-prod-us-central-0.grafana.net/otlp
+        headers:
+          authorization: #@ "Basic " + base64.encode(data.values.grafala_cloud_otlp.username + ":" + data.values.grafala_cloud_otlp.password)
+        compression: gzip
+      otlphttp/lognroll:
+        endpoint: https://lognroll.fly.dev
+        headers:
+          authorization: #@ "Bearer " + data.values.lognroll.token
+        compression: gzip
+      otlp/uptrace:
+        endpoint: https://otlp.uptrace.dev:4317
+        tls:
+          insecure: false
+        headers:
+          uptrace-dsn: #@ data.values.uptrace.uptrace_dsn
+        compression: gzip
+      debug:
+        verbosity: detailed
+    service:
+      pipelines:
+        logs:
+          receivers:
+          - otlp
+          processors:
+          - memory_limiter
+          - resource
+          - batch
+          exporters:
+          - debug
