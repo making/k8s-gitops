@@ -90,6 +90,9 @@ spec:
           - delete_key(attributes, "upstream_cluster")
           - delete_key(attributes, "traceparent")
           - delete_key(attributes, "authority")
+          - delete_key(attributes, "trace_id")
+          - delete_key(attributes, "span_id")
+          - delete_key(attributes, "trace_flags")
       resourcedetection:
         detectors:
         - k8snode
