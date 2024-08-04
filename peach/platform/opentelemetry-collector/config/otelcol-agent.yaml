@@ -58,6 +58,20 @@ spec:
         logs:
           log_record:
           - resource.attributes["k8s.container.name"] != "envoy"
+      transform:
+        error_mode: ignore
+        log_statements:
+        - context: log
+          statements:
+          #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/transformprocessor#parsing-json-logs
+          - merge_maps(cache, ParseJSON(body), "upsert") where IsMatch(body, "^\\{")
+          - set(attributes["traceparent"], cache["traceparent"])
+          - set(attributes["method"], cache["method"])
+          - set(attributes["requested_server_name"], cache["authority"])
+          - set(attributes["path"], cache["path"])
+          - set(attributes["duration"], cache["duration"])
+          - set(attributes["remote"], cache["x_forwarded_for"])
+          - set(attributes["user_agent"], cache["user_agent"])
       resourcedetection:
         detectors:
         - k8snode
