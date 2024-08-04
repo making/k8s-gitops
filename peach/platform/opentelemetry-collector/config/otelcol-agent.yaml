@@ -36,6 +36,7 @@ spec:
         - type: json_parser
           if: body matches "^{.*}$"
         - type: regex_parser
+          if: attributes.traceparent != nil
           parse_from: attributes.traceparent
           regex: '^[0-9]{2}-(?P<trace_id>[0-9a-z]+)-(?P<span_id>[0-9a-z]+)-(?P<trace_flags>[0-9]{2})$'
         - type: trace_parser
