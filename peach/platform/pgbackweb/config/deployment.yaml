@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: pgbackweb
-        image: eduardolat/pgbackweb:0.2.0
+        image: eduardolat/pgbackweb:0.1.2
         ports:
         - containerPort: 8085
         env:
