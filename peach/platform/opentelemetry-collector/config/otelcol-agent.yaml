@@ -89,6 +89,8 @@ spec:
           - delete_key(attributes, "trace_id")
           - delete_key(attributes, "span_id")
           - delete_key(attributes, "trace_flags")
+          - delete_key(resource.attributes, "k8s.pod.uid")
+          - delete_key(resource.attributes, "k8s.node.uid")
       resourcedetection:
         detectors:
         - k8snode
