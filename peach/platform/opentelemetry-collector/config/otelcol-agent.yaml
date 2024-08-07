@@ -66,6 +66,7 @@ spec:
         logs:
           log_record:
           - resource.attributes["k8s.container.name"] != "envoy"
+          - attributes["user_agent"] == "BotPoke"
       transform:
         error_mode: ignore
         log_statements:
