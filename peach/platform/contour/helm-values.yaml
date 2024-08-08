@@ -22,7 +22,7 @@ configInline:
   tracing:
     includePodDetail: false
     extensionService: opentelemetry/otel-collector
-    serviceName: contour
+    serviceName: envoy
   gateway:
     gatewayRef:
       name: contour
