@@ -70,10 +70,14 @@ spec:
       transform:
         error_mode: ignore
         log_statements:
+        #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/transformprocessor#parsing-json-logs
+        - context: resource
+          statements:
+          - set(attributes["service.name"], attributes["k8s.container.name"])
         - context: log
           statements:
-          #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/transformprocessor#parsing-json-logs
           - set(severity_text, "INFO")
+          - set(instrumentation_scope.name, attributes["upstream_cluster"])
           - set(attributes["host"], attributes["requested_server_name"])
           - set(attributes["status"], attributes["response_code"])
           - set(attributes["remote"], attributes["x_forwarded_for"])
