@@ -196,6 +196,9 @@ spec:
         headers:
           uptrace-dsn: #@ data.values.uptrace.uptrace_dsn
         compression: gzip
+      otlphttp/zipkin:
+        endpoint: #@ data.values.zipkin.endpoint
+        compression: gzip
       prometheusremotewrite:
         endpoint: http://inlets-exit.raspberrypi.svc.cluster.local:6868/api/v1/write
         headers:
@@ -220,6 +223,7 @@ spec:
           exporters:
           - otlphttp/grafana_cloud
           - otlphttp/hdx
+          - otlphttp/zipkin
           - otlp/uptrace
         metrics:
           receivers:
