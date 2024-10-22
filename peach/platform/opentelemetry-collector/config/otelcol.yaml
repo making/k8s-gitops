@@ -142,7 +142,7 @@ spec:
         timeout: 10s
       resource:
         attributes:
-        - key: cluster
+        - key: k8s.cluster.name
           value: #@ data.values.cluster
           action: upsert
       attributes:
