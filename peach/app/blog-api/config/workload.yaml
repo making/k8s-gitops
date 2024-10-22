@@ -104,9 +104,9 @@ spec:
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
         - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
-        - name: management.opentelemetry.resource-attributes.container.name
+        - name: management.opentelemetry.resource-attributes.k8s.pod.name
           value: ${HOSTNAME:}
-        - name: management.opentelemetry.resource-attributes.host.name
+        - name: management.opentelemetry.resource-attributes.k8s.node.name
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
