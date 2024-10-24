@@ -9,7 +9,7 @@ spec:
   serviceAccountName: kapp
   fetch:
   - http:
-      url: https://raw.githubusercontent.com/projectcontour/contour/v1.29.1/examples/gateway/00-crds.yaml
+      url: https://raw.githubusercontent.com/projectcontour/contour/v1.30.0/examples/gateway/00-crds.yaml
   syncPeriod: 24h
   template:
   - ytt: { }
