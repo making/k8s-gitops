@@ -13,3 +13,12 @@ spec:
           protocol: TCP
           #! https://projectcontour.io/docs/1.30/config/gateway-api/#gateway-listeners
           containerPort: #@ 8000 + 3000
+#@overlay/match by=overlay.subset({"kind":"Service", "metadata": {"name": "contour-envoy"}}), expects="0+"
+---
+spec:
+  ports:
+  #@overlay/append
+  - name: test
+    protocol: TCP
+    port: 3000
+    targetPort: test
