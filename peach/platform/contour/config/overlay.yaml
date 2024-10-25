@@ -1,0 +1,15 @@
+#@ load("@ytt:overlay", "overlay")
+#@overlay/match by=overlay.subset({"kind":"Deployment", "metadata": {"name": "contour-envoy"}}), expects="0+"
+---
+spec:
+  template:
+    spec:
+      containers:
+      #@overlay/match by="name", missing_ok=True
+      - name: envoy
+        ports:
+        #@overlay/append
+        - name: test
+          protocol: TCP
+          #! https://projectcontour.io/docs/1.30/config/gateway-api/#gateway-listeners
+          containerPort: #@ 8000 + 3000
