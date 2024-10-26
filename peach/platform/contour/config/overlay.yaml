@@ -26,9 +26,9 @@ spec:
   - name: tcp
     protocol: TCP
     port: 3000
-    targetPort: test
+    targetPort: tcp
   #@overlay/append
   - name: tls
     protocol: TCP
     port: 3443
-    targetPort: test
+    targetPort: tls
