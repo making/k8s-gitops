@@ -9,16 +9,26 @@ spec:
       - name: envoy
         ports:
         #@overlay/append
-        - name: test
+        - name: tcp
           protocol: TCP
           #! https://projectcontour.io/docs/1.30/config/gateway-api/#gateway-listeners
           containerPort: #@ 8000 + 3000
+        #@overlay/append
+        - name: tls
+          protocol: TCP
+          #! https://projectcontour.io/docs/1.30/config/gateway-api/#gateway-listeners
+          containerPort: #@ 8000 + 3443
 #@overlay/match by=overlay.subset({"kind":"Service", "metadata": {"name": "contour-envoy"}}), expects="0+"
 ---
 spec:
   ports:
   #@overlay/append
-  - name: test
+  - name: tcp
     protocol: TCP
     port: 3000
+    targetPort: test
+  #@overlay/append
+  - name: tls
+    protocol: TCP
+    port: 3443
     targetPort: test

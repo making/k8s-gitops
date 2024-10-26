@@ -64,14 +64,18 @@ spec:
       - kind: Secret
         group: ""
         name: default-tls-ik-am
-  - name: tls
+  - name: tcp
     port: 3000
+    protocol: TCP
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: tls
+    port: 3443
     protocol: TLS
     hostname: "*.example.com"
     allowedRoutes:
       namespaces:
         from: All
-      kinds:
-      - kind: TLSRoute
     tls:
       mode: Passthrough
