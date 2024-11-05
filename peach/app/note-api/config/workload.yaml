@@ -68,8 +68,16 @@ spec:
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
         - name: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
           value: http://otel-collector.opentelemetry.svc.cluster.local:9411
-        - name: MANAGEMENT_OPENTELEMETRY_RESOURCEATTRIBUTES_HOSTNAME
+        - name: management.opentelemetry.resource-attributes.k8s.pod.name
           value: ${HOSTNAME:}
+        - name: management.opentelemetry.resource-attributes.k8s.node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: management.opentelemetry.resource-attributes.host.ip
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
         - name: INFO_ENV_HOSTNAME
           value: ${HOSTNAME:}
         image: #@ data.values.image
