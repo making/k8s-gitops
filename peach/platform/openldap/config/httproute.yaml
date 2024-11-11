@@ -7,6 +7,8 @@ metadata:
     app: ltb-passwd
     app.kubernetes.io/part-of: ltb-passwd
 spec:
+  hostnames:
+  - ltb-passwd.ik.am
   parentRefs:
   - group: gateway.networking.k8s.io
     kind: Gateway
@@ -14,10 +16,9 @@ spec:
     namespace: projectcontour
   rules:
   - matches:
-    - headers:
-      - type: RegularExpression
-        name: Host
-        value: ltb-passwd.ik.am
+    - path:
+        type: PathPrefix
+        value: /
     backendRefs:
     - kind: Service
       name: openldap-stack-ha-ltb-passwd
