@@ -36,7 +36,7 @@ spec:
           value: #@ data.values.smtp.port
         #@overlay/match by="name", missing_ok=True
         - name: SMTP_SECURE_TYPE
-          value: "ssl"
+          value: "tls"
         #@overlay/match by="name", missing_ok=True
         - name: SITE_URL
           value: https://ltb-passwd.ik.am
