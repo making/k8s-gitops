@@ -1,0 +1,24 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: ltb-passwd
+  namespace: openldap
+  labels:
+    app: ltb-passwd
+    app.kubernetes.io/part-of: ltb-passwd
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: contour
+    namespace: projectcontour
+  rules:
+  - matches:
+    - headers:
+      - type: RegularExpression
+        name: Host
+        value: ltb-passwd.ik.am
+    backendRefs:
+    - kind: Service
+      name: openldap-stack-ha-ltb-passwd
+      port: 80

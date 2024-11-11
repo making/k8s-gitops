@@ -15,6 +15,7 @@ env:
 ltb-passwd:
   enabled: true
   ingress:
+    enabled: false
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-ik-am
     hosts:
