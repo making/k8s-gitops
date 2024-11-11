@@ -1,3 +1,5 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
 #@overlay/match by=overlay.subset({"kind":"Deployment","metadata":{"name":"openldap-stack-ha-ltb-passwd"}})
 ---
 spec:
