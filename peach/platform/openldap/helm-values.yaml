@@ -13,7 +13,7 @@ env:
   LDAP_DOMAIN: ik.am
   LDAP_ORGANISATION: IK.AM
 ltb-passwd:
-  enabled: false
+  enabled: true
   ingress:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-ik-am
