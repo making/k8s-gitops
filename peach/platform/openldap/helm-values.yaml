@@ -39,6 +39,7 @@ customLdifFiles:
     ou: groups
 phpldapadmin:
   ingress:
+    enabled: false
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-ik-am
     hosts:
