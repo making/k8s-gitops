@@ -223,7 +223,7 @@ spec:
           exporters:
           - otlphttp/grafana_cloud
           - otlphttp/hdx
-          - otlphttp/zipkin
+          #! - otlphttp/zipkin
           - otlp/uptrace
         metrics:
           receivers:
