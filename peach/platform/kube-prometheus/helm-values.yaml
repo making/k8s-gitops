@@ -24,5 +24,7 @@ node-exporter:
   serviceMonitor:
     enabled: false
 kube-state-metrics:
+  podAnnotations:
+    prometheus.io/scrape: "true"
   serviceMonitor:
     enabled: false
