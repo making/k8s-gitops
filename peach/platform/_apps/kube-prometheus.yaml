@@ -10,7 +10,7 @@ spec:
   fetch:
   - helmChart:
       name: kube-prometheus
-      version: 9.5.10
+      version: 10.0.4
       repository:
         url: oci://registry-1.docker.io/bitnamicharts
   - git:
