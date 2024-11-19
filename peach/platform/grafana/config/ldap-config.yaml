@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ldap-config
+  namespace: grafana
+stringData:
+  ldap.toml: |
+    verbose_logging = true
+    [[servers]]
+    host = "ldap.example.com"
+    port = 636
+    use_ssl = true
+    start_tls = false
+    ssl_skip_verify = true
+    bind_dn = "user@grafana.org"
+    bind_password = 'user_password123'
+    search_filter = "(sAMAccountName=%s)"
+    search_base_dns = ["DC=grafana,DC=org"]
+    group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
+    group_search_filter_user_attribute = "distinguishedName"
+    group_search_base_dns = ["ou=groups,dc=grafana,dc=org"]
+    [servers.attributes]
+    name = "givenName"
+    surname = "sn"
+    username = "sAMAccountName"
+    member_of = "memberOf"
+    email = "mail"
+    [[servers.group_mappings]]
+    group_dn = "cn=superadmins,dc=grafana,dc=org"
+    org_role = "Admin"
+    grafana_admin = true
+    [[servers.group_mappings]]
+    group_dn = "cn=users,dc=grafana,dc=org"
+    org_role = "Editor"
+    [[servers.group_mappings]]
+    group_dn = "*"
+    org_role = "Viewer"

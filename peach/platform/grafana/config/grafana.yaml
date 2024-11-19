@@ -1,0 +1,120 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: grafana-operator-grafana
+  namespace: grafana
+  labels:
+    app.kubernetes.io/part-of: grafana
+spec:
+  client:
+    timeout: 5
+  service:
+    spec:
+      type: ClusterIP
+  deployment:
+    metadata:
+      labels:
+        app.kubernetes.io/part-of: grafana
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app.kubernetes.io/part-of: grafana
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/part-of: grafana
+        spec:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/part-of: grafana
+                  topologyKey: kubernetes.io/hostname
+                weight: 1
+          securityContext:
+            fsGroup: 1001
+            fsGroupChangePolicy: Always
+            supplementalGroups: [ ]
+            sysctls: [ ]
+          volumes:
+          - name: empty-dir
+            emptyDir: { }
+          - name: grafana-data
+            emptyDir: { }
+          - name: grafana-configmaps
+            secret:
+              secretName: ldap-config
+          containers:
+          - name: grafana
+            image: docker.io/bitnami/grafana:11.3.0-debian-12-r2
+            imagePullPolicy: IfNotPresent
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+              privileged: false
+              readOnlyRootFilesystem: false
+              runAsGroup: 0
+              runAsNonRoot: true
+              runAsUser: 1001
+              seLinuxOptions: { }
+              seccompProfile:
+                type: RuntimeDefault
+            livenessProbe:
+              initialDelaySeconds: 120
+              periodSeconds: 10
+              timeoutSeconds: 5
+              successThreshold: 1
+              failureThreshold: 6
+              tcpSocket:
+                port: 3000
+            readinessProbe:
+              initialDelaySeconds: 30
+              periodSeconds: 10
+              timeoutSeconds: 5
+              successThreshold: 1
+              failureThreshold: 6
+              httpGet:
+                path: /api/health
+                port: 3000
+                scheme: HTTP
+            volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/grafana/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/grafana/tmp
+              subPath: app-tmp-dir
+            - name: grafana-configmaps
+              mountPath: /etc/grafana-configmaps
+              readOnly: false
+  config:
+    analytics:
+      check_for_updates: "false"
+      reporting_enabled: "false"
+    database:
+      wal: "true"
+    log:
+      level: warn
+      mode: console
+    auth:
+      disable_login_form: "false"
+    auth.ldap:
+      enabled: "true"
+      config_file: /etc/grafana-configmaps/ldap.toml
+    security:
+      disable_gravatar: "false"
+    server:
+      root_url: |-
+        http://localhost:3000
+  jsonnet:
+    libraryLabelSelector:
+      matchLabels:
+        app.kubernetes.io/part-of: grafana
