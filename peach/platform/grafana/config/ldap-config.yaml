@@ -20,7 +20,7 @@ stringData:
     search_base_dns = ["(@= data.values.ldap.search_base_dn @)"]
     group_search_filter = "(@= data.values.ldap.group_search_filter @)"
     group_search_base_dns = ["(@= data.values.ldap.group_search_base_dns @)"]
-    group_search_filter_user_attribute = "distinguishedName"
+    group_search_filter_user_attribute = "DN"
     [servers.attributes]
     name = "givenName"
     surname = "sn"
