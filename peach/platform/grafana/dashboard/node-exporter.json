@@ -1014,7 +1014,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Node Exporter Quickstart and Dashboard",
+  "title": "Node Exporter Dashboard",
   "uid": "node-exporter",
   "version": 1,
   "weekStart": ""
