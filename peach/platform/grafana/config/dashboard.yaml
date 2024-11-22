@@ -7,4 +7,4 @@ spec:
   instanceSelector:
     matchLabels:
       app.kubernetes.io/part-of: grafana
-  url: https://github.com/making/k8s-gitops/raw/refs/heads/main/peach/platform/grafana/dashboard/node-exporter.json
+  url: https://raw.githubusercontent.com/making/k8s-gitops/refs/heads/main/peach/platform/grafana/dashboard/node-exporter.json
