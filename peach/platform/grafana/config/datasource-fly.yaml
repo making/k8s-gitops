@@ -1,0 +1,39 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Secret
+metadata:
+  name: prometheus-fly
+  namespace: grafana
+stringData:
+  token: #@ data.values.prometheus_fly.token
+type: Opaque
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: prometheus-fly
+  namespace: grafana
+spec:
+  valuesFrom:
+  - targetPath: secureJsonData.httpHeaderValue1
+    valueFrom:
+      secretKeyRef:
+        name: prometheus-fly
+        key: token
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: grafana
+  datasource:
+    name: prometheus-fly
+    type: prometheus
+    access: proxy
+    basicAuth: true
+    url: #@ data.values.prometheus_fly.url
+    isDefault: false
+    basicAuthUser: ${username}
+    jsonData:
+      tlsSkipVerify: false
+      timeInterval: "5s"
+      httpHeaderName1: Authorization
+    secureJsonData:
+      httpHeaderValue1: "Bearer ${token}"
