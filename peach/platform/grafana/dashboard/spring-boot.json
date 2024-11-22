@@ -13,7 +13,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "11.4.0-79418"
+      "version": "11.3.0-pre"
     },
     {
       "type": "datasource",
@@ -51,6 +51,19 @@
   "id": null,
   "links": [],
   "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "panels": [],
+      "title": "RED Metrics",
+      "type": "row"
+    },
     {
       "datasource": {
         "uid": "$datasource"
@@ -105,7 +118,7 @@
         "h": 14,
         "w": 8,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 1,
       "options": {
@@ -129,7 +142,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
-      "pluginVersion": "11.4.0-79418",
+      "pluginVersion": "11.3.0-pre",
       "targets": [
         {
           "datasource": {
@@ -211,7 +224,7 @@
         "h": 14,
         "w": 8,
         "x": 8,
-        "y": 0
+        "y": 1
       },
       "id": 2,
       "options": {
@@ -226,7 +239,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0-79418",
+      "pluginVersion": "11.3.0-pre",
       "targets": [
         {
           "datasource": {
@@ -304,7 +317,7 @@
         "h": 14,
         "w": 8,
         "x": 16,
-        "y": 0
+        "y": 1
       },
       "id": 3,
       "options": {
@@ -319,7 +332,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0-79418",
+      "pluginVersion": "11.3.0-pre",
       "targets": [
         {
           "datasource": {
