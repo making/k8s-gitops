@@ -27,7 +27,7 @@ spec:
     name: prometheus-fly
     type: prometheus
     access: proxy
-    basicAuth: true
+    basicAuth: false
     url: #@ data.values.prometheus_fly.url
     isDefault: false
     basicAuthUser: ${username}
