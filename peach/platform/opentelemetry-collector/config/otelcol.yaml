@@ -153,6 +153,15 @@ spec:
       filter:
         #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/filterprocessor
         error_mode: ignore
+        metrics:
+          metric:
+          - attributes["uri"] == "/livez"
+          - attributes["uri"] == "/readyz"
+          - attributes["uri"] == "/aboutme"
+          - IsMatch(attributes["uri"], ".*/actuator.*")
+          - IsMatch(attributes["envoy_cluster_name"], "grafana_.*")
+          - IsMatch(attributes["envoy_cluster_name"], "extension_.*")
+          - IsMatch(attributes["envoy_cluster_name"], "projectcontour_.*")
         traces:
           span:
           - IsMatch(attributes["upstream_cluster"], "grafana/.*")
