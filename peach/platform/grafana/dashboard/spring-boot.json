@@ -130,6 +130,18 @@
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "min(process_uptime_seconds{app=~\"$app\", region=~\"$region\", instance=~\"$instance\"})",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Uptime",
@@ -137,6 +149,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fieldConfig": {
@@ -198,6 +211,18 @@
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "max(process_cpu_usage{app=~\"$app\", region=~\"$region\", instance=~\"$instance\"})",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Process CPU Usage",
@@ -265,6 +290,18 @@
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "max(jvm_threads_states_threads{app=~\"$app\", region=~\"$region\", instance=~\"$instance\", state=\"blocked\"})",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Blocked Threads",
@@ -272,6 +309,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fieldConfig": {
@@ -331,6 +369,18 @@
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "max(sum(jvm_memory_used_bytes{app=~\"$app\", region=~\"$region\", instance=~\"$instance\", area=\"heap\"}) by (instance) / sum(jvm_memory_max_bytes{app=~\"$app\", region=~\"$region\", instance=~\"$instance\", area=\"heap\"}) by (instance))",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Heap Usage",
@@ -494,6 +544,18 @@
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "avg(jvm_memory_used_bytes{app=~\"$app\", region=~\"$region\", instance=~\"$instance\", area=\"heap\"}) by (id)",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Used Heap",
@@ -501,6 +563,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fieldConfig": {
@@ -591,6 +654,18 @@
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "avg(jvm_memory_used_bytes{app=~\"$app\", region=~\"$region\", instance=~\"$instance\", area=\"nonheap\"}) by (id)",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Used NonHeap",
@@ -702,6 +777,18 @@
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "60 * sum(rate(http_server_requests_seconds_count{app=~\"$app\", region=~\"$region\", instance=~\"$instance\"}[5m])) by (outcome)",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Request Rate",
@@ -709,6 +796,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fieldConfig": {
@@ -796,10 +884,22 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_server_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", pod=~\"$pod\", status=~\"5..\"}[5m])) by (app) / sum(rate(http_server_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", pod=~\"$pod\"}[5m])) by (app) ",
+          "expr": "sum(rate(http_server_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", pod=~\"$pod\", status=~\"5..\"}[5m])) by (status) / sum(rate(http_server_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", pod=~\"$pod\"}[5m])) by (status) ",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(http_server_requests_seconds_count{app=~\"$app\", region=~\"$region\", instance=~\"$instance\", status=~\"5..\"}[5m])) by (status) / sum(rate(http_server_requests_seconds_count{app=~\"$app\", region=~\"$region\", instance=~\"$instance\"}[5m])) by (status) ",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Error Rate",
@@ -897,6 +997,21 @@
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "histogram_quantile($percentile, sum(rate(http_server_requests_seconds_bucket{app=~\"$app\", region=~\"$region\", instance=~\"$instance\"}[5m])) by (le, outcome))",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Duration",
@@ -921,6 +1036,7 @@
       {
         "current": {},
         "datasource": {
+          "type": "prometheus",
           "uid": "$datasource"
         },
         "definition": "label_values(application_ready_time_seconds,app)",
@@ -962,6 +1078,7 @@
       {
         "current": {},
         "datasource": {
+          "type": "prometheus",
           "uid": "$datasource"
         },
         "definition": "label_values({cluster=~\"$cluster\", app=\"$app\"},pod)",
