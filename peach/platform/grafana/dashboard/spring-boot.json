@@ -50,6 +50,7 @@
   "graphTooltip": 0,
   "id": null,
   "links": [],
+  "liveNow": true,
   "panels": [
     {
       "collapsed": false,
@@ -149,7 +150,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "60 * sum(rate(http_server_requests_seconds_count{cluster=~\"$cluster\", app=~\"$app\"}[5m])) by (app, outcome)",
+          "expr": "60 * sum(rate(http_server_requests_seconds_count{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\"}[5m])) by (app, outcome)",
           "legendFormat": "{{app}} [{{outcome}}]",
           "range": true,
           "refId": "A"
@@ -246,7 +247,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_server_requests_seconds_count{cluster=~\".+\", app=~\"$app\", status=~\"5..\"}[5m])) by (app) / sum(rate(http_server_requests_seconds_count{cluster=~\".+\", app=~\"$app\"}[5m])) by (app) ",
+          "expr": "sum(rate(http_server_requests_seconds_count{cluster=~\".+\", app=~\"$app\", pod=~\"$pod\", status=~\"5..\"}[5m])) by (app) / sum(rate(http_server_requests_seconds_count{cluster=~\".+\", app=~\"$app\", pod=~\"$pod\"}[5m])) by (app) ",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -340,7 +341,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile($percentile, sum(rate(http_server_requests_seconds_bucket{cluster=~\"$cluster\", app=~\"$app\"}[5m])) by (le, app))",
+          "expr": "histogram_quantile($percentile, sum(rate(http_server_requests_seconds_bucket{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\"}[5m])) by (le, app))",
           "format": "time_series",
           "instant": false,
           "legendFormat": "__auto",
@@ -394,12 +395,32 @@
         "definition": "label_values({cluster=~\"$cluster\"},app)",
         "includeAll": false,
         "label": "app",
-        "multi": true,
         "name": "app",
         "options": [],
         "query": {
           "qryType": 1,
           "query": "label_values({cluster=~\"$cluster\"},app)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values({cluster=~\"$cluster\", app=\"$app\"},pod)",
+        "includeAll": true,
+        "label": "pod",
+        "multi": true,
+        "name": "pod",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values({cluster=~\"$cluster\", app=\"$app\"},pod)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -449,6 +470,6 @@
   "timezone": "",
   "title": "Spring Boot Dashboard",
   "uid": "spring-boot",
-  "version": 1,
+  "version": 7,
   "weekStart": ""
 }
