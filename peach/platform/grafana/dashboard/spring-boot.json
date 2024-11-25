@@ -466,7 +466,7 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 10,
+        "w": 12,
         "x": 0,
         "y": 7
       },
@@ -496,7 +496,7 @@
           }
         }
       ],
-      "title": "Heap Usage",
+      "title": "Used Heap",
       "type": "timeseries"
     },
     {
@@ -562,7 +562,7 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 10,
+        "w": 12,
         "x": 10,
         "y": 7
       },
@@ -592,7 +592,7 @@
           }
         }
       ],
-      "title": "NonHeap Usage",
+      "title": "Used NonHeap",
       "type": "timeseries"
     },
     {
