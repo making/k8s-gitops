@@ -126,7 +126,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "min(process_uptime_seconds{cluster=~\"$cluster\", pod=~\"$pod\"})",
+          "expr": "min(process_uptime_seconds{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\"})",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -194,7 +194,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(process_cpu_usage{cluster=~\"$cluster\", pod=~\"$pod\"})",
+          "expr": "max(process_cpu_usage{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\"})",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -261,7 +261,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(jvm_threads_states_threads{cluster=~\"$cluster\", pod=~\"$pod\", state=\"blocked\"})",
+          "expr": "max(jvm_threads_states_threads{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\", state=\"blocked\"})",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -327,7 +327,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(sum(jvm_memory_used_bytes{cluster=~\"$cluster\", pod=~\"$pod\", area=\"heap\"}) by (pod) / sum(jvm_memory_max_bytes{cluster=~\"$cluster\", pod=~\"$pod\", area=\"heap\"}) by (pod))",
+          "expr": "max(sum(jvm_memory_used_bytes{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\", area=\"heap\"}) by (pod) / sum(jvm_memory_max_bytes{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\", area=\"heap\"}) by (pod))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -393,7 +393,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(sum(jvm_memory_used_bytes{cluster=~\"$cluster\", pod=~\"$pod\", area=\"nonheap\"}) by (pod) / sum(jvm_memory_max_bytes{cluster=~\"$cluster\", pod=~\"$pod\", area=\"nonheap\"}) by (pod))",
+          "expr": "max(sum(jvm_memory_used_bytes{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\", area=\"nonheap\"}) by (pod) / sum(jvm_memory_max_bytes{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\", area=\"nonheap\"}) by (pod))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -490,7 +490,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(jvm_memory_used_bytes{cluster=~\"$cluster\", pod=~\"$pod\", area=\"heap\"}) by (id)",
+          "expr": "avg(jvm_memory_used_bytes{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\", area=\"heap\"}) by (id)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -587,7 +587,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(jvm_memory_used_bytes{cluster=~\"$cluster\", pod=~\"$pod\", area=\"nonheap\"}) by (id)",
+          "expr": "avg(jvm_memory_used_bytes{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\", area=\"nonheap\"}) by (id)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -698,7 +698,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "60 * sum(rate(http_server_requests_seconds_count{cluster=~\"$cluster\", pod=~\"$pod\"}[5m])) by (outcome)",
+          "expr": "60 * sum(rate(http_server_requests_seconds_count{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\"}[5m])) by (outcome)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -796,7 +796,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_server_requests_seconds_count{cluster=~\".+\", pod=~\"$pod\", status=~\"5..\"}[5m])) by (app) / sum(rate(http_server_requests_seconds_count{cluster=~\".+\", pod=~\"$pod\"}[5m])) by (app) ",
+          "expr": "sum(rate(http_server_requests_seconds_count{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\", status=~\"5..\"}[5m])) by (app) / sum(rate(http_server_requests_seconds_count{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\"}[5m])) by (app) ",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -891,7 +891,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile($percentile, sum(rate(http_server_requests_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\"}[5m])) by (le, outcome))",
+          "expr": "histogram_quantile($percentile, sum(rate(http_server_requests_seconds_bucket{cluster=~\"$cluster\", app=~\"$app\", pod=~\"$pod\"}[5m])) by (le, outcome))",
           "format": "time_series",
           "instant": false,
           "legendFormat": "__auto",
