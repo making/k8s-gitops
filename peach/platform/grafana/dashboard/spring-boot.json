@@ -1514,7 +1514,8 @@
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "bytes",
+          "min": 0
         },
         "overrides": []
       },
@@ -1669,7 +1670,8 @@
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "bytes",
+          "min": 0
         },
         "overrides": []
       },
