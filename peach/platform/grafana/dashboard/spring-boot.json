@@ -122,6 +122,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
@@ -189,6 +190,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
@@ -255,6 +257,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
@@ -320,6 +323,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
@@ -385,6 +389,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
@@ -481,6 +486,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
@@ -577,6 +583,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
@@ -687,6 +694,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
@@ -784,6 +792,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
@@ -877,6 +886,7 @@
       "targets": [
         {
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
@@ -909,42 +919,44 @@
         "type": "datasource"
       },
       {
-        "allValue": ".+",
         "current": {},
         "datasource": {
           "uid": "$datasource"
         },
-        "definition": "label_values(cluster)",
-        "includeAll": true,
-        "multi": true,
-        "name": "cluster",
-        "options": [],
-        "query": {
-          "query": "label_values(cluster)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "type": "query"
-      },
-      {
-        "current": {},
-        "datasource": {
-          "uid": "$datasource"
-        },
-        "definition": "label_values({cluster=~\"$cluster\"},app)",
+        "definition": "label_values(application_ready_time_seconds,app)",
         "includeAll": false,
         "label": "app",
         "name": "app",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values({cluster=~\"$cluster\"},app)",
+          "query": "label_values(application_ready_time_seconds,app)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
         "regex": "",
         "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".+",
+        "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "label_values(application_ready_time_seconds{app=\"$app\"},cluster)",
+        "includeAll": true,
+        "multi": true,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(application_ready_time_seconds{app=\"$app\"},cluster)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
         "type": "query"
       },
       {
