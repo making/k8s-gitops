@@ -313,7 +313,40 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -340,21 +373,16 @@
       },
       "id": 14,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
       "pluginVersion": "11.3.0-pre",
       "targets": [
@@ -365,7 +393,7 @@
           },
           "editorMode": "code",
           "expr": "max(system_load_average_1m{app=~\"$app\", cluster=~\"$cluster\", pod=~\"$pod\"})",
-          "legendFormat": "__auto",
+          "legendFormat": "load average (1m)",
           "range": true,
           "refId": "A"
         },
@@ -377,13 +405,37 @@
           "editorMode": "code",
           "expr": "max(system_load_average_1m{app=~\"$app\", region=~\"$region\", instance=~\"$instance\"})",
           "hide": false,
-          "legendFormat": "__auto",
+          "legendFormat": "load average (1m)",
           "range": true,
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "max(system_cpu_count{app=~\"$app\", cluster=~\"$cluster\", pod=~\"$pod\"})",
+          "hide": false,
+          "legendFormat": "cpu count",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "max(system_cpu_count{app=~\"$app\", region=~\"$region\", instance=~\"$instance\"})",
+          "hide": false,
+          "legendFormat": "cpu count",
+          "range": true,
+          "refId": "D"
         }
       ],
       "title": "System Load (1m)",
-      "type": "stat"
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -903,8 +955,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1014,8 +1065,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1125,8 +1175,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -1268,7 +1317,7 @@
             "h": 10,
             "w": 8,
             "x": 0,
-            "y": 31
+            "y": 49
           },
           "id": 16,
           "options": {
@@ -1378,7 +1427,7 @@
             "h": 10,
             "w": 8,
             "x": 8,
-            "y": 31
+            "y": 49
           },
           "id": 17,
           "options": {
@@ -1484,7 +1533,7 @@
             "h": 10,
             "w": 8,
             "x": 16,
-            "y": 31
+            "y": 49
           },
           "id": 18,
           "options": {
@@ -1766,7 +1815,7 @@
             "h": 6,
             "w": 24,
             "x": 0,
-            "y": 32
+            "y": 26
           },
           "id": 24,
           "options": {
@@ -1923,8 +1972,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1940,7 +1988,7 @@
             "h": 6,
             "w": 12,
             "x": 0,
-            "y": 21
+            "y": 39
           },
           "id": 20,
           "options": {
@@ -2033,8 +2081,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2050,7 +2097,7 @@
             "h": 6,
             "w": 12,
             "x": 12,
-            "y": 21
+            "y": 39
           },
           "id": 21,
           "options": {
@@ -2143,8 +2190,7 @@
           "uid": "$datasource"
         },
         "definition": "label_values(application_ready_time_seconds{app=\"$app\"},cluster)",
-        "includeAll": true,
-        "multi": true,
+        "includeAll": false,
         "name": "cluster",
         "options": [],
         "query": {
