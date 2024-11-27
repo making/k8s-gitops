@@ -1,4 +1,4 @@
-#@ dashbaords = ["node-exporter", "spring-boot", "envoy"]
+#@ dashbaords = ["node-exporter", "spring-boot", "envoy", "fly-app"]
 #@ for dashbaord in dashbaords:
 ---
 apiVersion: grafana.integreatly.org/v1beta1
