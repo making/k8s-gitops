@@ -121,7 +121,7 @@ spec:
             - action: labelmap
               regex: __meta_kubernetes_node_label_(.+)
             - action: labeldrop
-              regex: '^(beta_|vke_|vultr_).+'
+              regex: '^(beta_|vke_|vultr_|topology_|failure_).+'
             - replacement: kubernetes.default.svc:443
               target_label: __address__
             - regex: (.+)
