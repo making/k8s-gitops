@@ -1018,7 +1018,7 @@
               },
               "editorMode": "code",
               "expr": "avg(container_memory_usage_bytes{cluster=~\"$cluster\", pod=~\"$pod\", container!=\"\"})",
-              "legendFormat": "usage",
+              "legendFormat": "usage(container)",
               "range": true,
               "refId": "A"
             },
@@ -1048,6 +1048,19 @@
               "legendFormat": "limits",
               "range": true,
               "refId": "C"
+            },
+            {
+              "refId": "D",
+              "expr": "avg(sum(jvm_memory_used_bytes{cluster=~\"$cluster\", pod=~\"$pod\"}) by (pod))",
+              "range": true,
+              "instant": false,
+              "datasource": {
+                "uid": "$datasource",
+                "type": "prometheus"
+              },
+              "hide": false,
+              "editorMode": "code",
+              "legendFormat": "usage(jvm)"
             }
           ],
           "title": "Container Memory Usage",
