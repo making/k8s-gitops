@@ -118,6 +118,12 @@ spec:
             kubernetes_sd_configs:
             - role: node
             relabel_configs:
+            - regex: __meta_kubernetes_node_label_beta_(.+)
+              action: labeldrop
+            - regex: __meta_kubernetes_node_label_vke_(.+)
+              action: labeldrop
+            - regex: __meta_kubernetes_node_label_vultr_(.+)
+              action: labeldrop
             - action: labelmap
               regex: __meta_kubernetes_node_label_(.+)
             - replacement: kubernetes.default.svc:443
@@ -127,12 +133,6 @@ spec:
               source_labels:
               - __meta_kubernetes_node_name
               target_label: __metrics_path__
-            - regex: __meta_kubernetes_node_label_beta_(.+)
-              action: labeldrop
-            - regex: __meta_kubernetes_node_label_vke_(.+)
-              action: labeldrop
-            - regex: __meta_kubernetes_node_label_vultr_(.+)
-              action: labeldrop
             scheme: https
             tls_config:
               ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
