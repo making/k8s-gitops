@@ -2264,8 +2264,8 @@
       },
       {
         "current": {
-          "text": "0.5",
-          "value": "0.5"
+          "text": "0.9",
+          "value": "0.9"
         },
         "label": "percentile",
         "name": "percentile",
