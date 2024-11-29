@@ -137,7 +137,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max(jvm{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"}) by (runtime, vendor, version) or max(jvm_info{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"}) by (runtime, vendor, version)",
+          "expr": "max(jvm{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (runtime, vendor, version) or max(jvm_info{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (runtime, vendor, version)",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -203,7 +203,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "min(process_uptime_seconds{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"})",
+          "expr": "min(process_uptime_seconds{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"})",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -272,7 +272,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(process_cpu_usage{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"})",
+          "expr": "max(process_cpu_usage{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"})",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -368,7 +368,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(system_load_average_1m{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"})",
+          "expr": "max(system_load_average_1m{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"})",
           "legendFormat": "load average (1m)",
           "range": true,
           "refId": "A"
@@ -379,7 +379,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(system_cpu_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"})",
+          "expr": "max(system_cpu_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"})",
           "hide": false,
           "legendFormat": "cpu count",
           "range": true,
@@ -448,7 +448,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(jvm_threads_states_threads{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", state=\"blocked\"})",
+          "expr": "max(jvm_threads_states_threads{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", state=\"blocked\"})",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -515,7 +515,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(sum(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", area=\"heap\"}) by (pod) / sum(jvm_memory_max_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", area=\"heap\"}) by (pod))",
+          "expr": "max(sum(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", area=\"heap\"}) by (pod) / sum(jvm_memory_max_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", area=\"heap\"}) by (pod))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -582,7 +582,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(sum(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", area=\"nonheap\"}) by (pod) / sum(jvm_memory_max_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", area=\"nonheap\", id!=\"Compressed Class Space\"}) by (pod))",
+          "expr": "max(sum(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", area=\"nonheap\"}) by (pod) / sum(jvm_memory_max_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", area=\"nonheap\", id!=\"Compressed Class Space\"}) by (pod))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -680,7 +680,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", area=\"heap\"}) by (id)",
+          "expr": "avg(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", area=\"heap\"}) by (id)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -778,7 +778,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", area=\"nonheap\"}) by (id)",
+          "expr": "avg(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", area=\"nonheap\"}) by (id)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -892,7 +892,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(rate(container_cpu_usage_seconds_total{cluster=~\"$cluster\", pod=~\"$pod\", container!=\"\"}[5m]))",
+          "expr": "avg(rate(container_cpu_usage_seconds_total{cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\", container!=\"\"}[5m]))",
           "legendFormat": "usage",
           "range": true,
           "refId": "A"
@@ -904,7 +904,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(kube_pod_container_resource_requests{resource=\"cpu\",cluster=~\"$cluster\",  pod=~\"$pod\"})",
+          "expr": "avg(kube_pod_container_resource_requests{resource=\"cpu\",cluster=~\"$cluster\",  namespace=~\"$namespace\", pod=~\"$pod\"})",
           "hide": false,
           "instant": false,
           "legendFormat": "requests",
@@ -917,7 +917,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(kube_pod_container_resource_limits{resource=\"cpu\",cluster=~\"$cluster\",  pod=~\"$pod\"})",
+          "expr": "avg(kube_pod_container_resource_limits{resource=\"cpu\",cluster=~\"$cluster\",  namespace=~\"$namespace\", pod=~\"$pod\"})",
           "hide": false,
           "instant": false,
           "legendFormat": "limits",
@@ -1020,7 +1020,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(container_memory_usage_bytes{cluster=~\"$cluster\", pod=~\"$pod\", container!=\"\"})",
+          "expr": "avg(container_memory_usage_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\", container!=\"\"})",
           "legendFormat": "usage(container)",
           "range": true,
           "refId": "A"
@@ -1032,7 +1032,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(kube_pod_container_resource_requests{resource=\"memory\",cluster=~\"$cluster\",  pod=~\"$pod\"})",
+          "expr": "avg(kube_pod_container_resource_requests{resource=\"memory\",cluster=~\"$cluster\",  namespace=~\"$namespace\", pod=~\"$pod\"})",
           "hide": false,
           "instant": false,
           "legendFormat": "requests",
@@ -1045,7 +1045,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(kube_pod_container_resource_limits{resource=\"memory\",cluster=~\"$cluster\",  pod=~\"$pod\"})",
+          "expr": "avg(kube_pod_container_resource_limits{resource=\"memory\",cluster=~\"$cluster\",  namespace=~\"$namespace\", pod=~\"$pod\"})",
           "hide": false,
           "instant": false,
           "legendFormat": "limits",
@@ -1058,7 +1058,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(sum(jvm_memory_used_bytes{cluster=~\"$cluster\", pod=~\"$pod\"}) by (pod))",
+          "expr": "avg(sum(jvm_memory_used_bytes{cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (pod))",
           "hide": false,
           "instant": false,
           "legendFormat": "usage(jvm)",
@@ -1171,7 +1171,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "60 * sum(rate(http_server_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"}[5m])) by (outcome)",
+          "expr": "60 * sum(rate(http_server_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"}[5m])) by (outcome)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1269,7 +1269,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_server_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", status=~\"5..\"}[5m])) by (status) / sum(rate(http_server_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"}[5m])) by (status) ",
+          "expr": "sum(rate(http_server_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", status=~\"5..\"}[5m])) by (status) / sum(rate(http_server_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"}[5m])) by (status) ",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1364,7 +1364,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile($percentile, sum(rate(http_server_requests_seconds_bucket{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"}[5m])) by (le, outcome))",
+          "expr": "histogram_quantile($percentile, sum(rate(http_server_requests_seconds_bucket{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"}[5m])) by (le, outcome))",
           "format": "time_series",
           "instant": false,
           "legendFormat": "__auto",
@@ -1477,7 +1477,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "60 * sum(rate(http_client_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"}[5m])) by (outcome)",
+          "expr": "60 * sum(rate(http_client_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"}[5m])) by (outcome)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1575,7 +1575,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_client_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", status=~\"5..\"}[5m])) by (status) / sum(rate(http_client_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"}[5m])) by (status) ",
+          "expr": "sum(rate(http_client_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", status=~\"5..\"}[5m])) by (status) / sum(rate(http_client_requests_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"}[5m])) by (status) ",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1670,7 +1670,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile($percentile, sum(rate(http_client_requests_seconds_bucket{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"}[5m])) by (le, outcome))",
+          "expr": "histogram_quantile($percentile, sum(rate(http_client_requests_seconds_bucket{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"}[5m])) by (le, outcome))",
           "format": "time_series",
           "instant": false,
           "legendFormat": "__auto",
@@ -1780,7 +1780,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", id=\"$heap_id\"})",
+          "expr": "avg(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", id=\"$heap_id\"})",
           "legendFormat": "used",
           "range": true,
           "refId": "A"
@@ -1791,7 +1791,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(jvm_memory_committed_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", id=\"$heap_id\"})",
+          "expr": "avg(jvm_memory_committed_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", id=\"$heap_id\"})",
           "hide": false,
           "legendFormat": "committed",
           "range": true,
@@ -1803,7 +1803,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(jvm_memory_max_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", id=\"$heap_id\"})",
+          "expr": "avg(jvm_memory_max_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", id=\"$heap_id\"})",
           "hide": false,
           "legendFormat": "max",
           "range": true,
@@ -1899,7 +1899,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", id=\"$nonheap_id\"})",
+          "expr": "avg(jvm_memory_used_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", id=\"$nonheap_id\"})",
           "legendFormat": "used",
           "range": true,
           "refId": "A"
@@ -1910,7 +1910,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(jvm_memory_committed_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", id=\"$nonheap_id\"})",
+          "expr": "avg(jvm_memory_committed_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", id=\"$nonheap_id\"})",
           "hide": false,
           "legendFormat": "committed",
           "range": true,
@@ -1922,7 +1922,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(jvm_memory_max_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\", id=\"$nonheap_id\"})",
+          "expr": "avg(jvm_memory_max_bytes{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\", id=\"$nonheap_id\"})",
           "hide": false,
           "legendFormat": "max",
           "range": true,
@@ -2033,7 +2033,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(irate(jvm_gc_pause_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"}[5m])) by (gc, action, cause)",
+          "expr": "avg(irate(jvm_gc_pause_seconds_count{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"}[5m])) by (gc, action, cause)",
           "legendFormat": "{{gc}} {{action}} [{{cause}}]",
           "range": true,
           "refId": "A"
@@ -2130,7 +2130,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(irate(jvm_gc_pause_seconds_sum{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", pod=~\"$pod\"}[5m])) by (gc, action, cause)",
+          "expr": "avg(irate(jvm_gc_pause_seconds_sum{app=~\"$app\", cluster=~\"$cluster\", instance=~\"$instance\", namespace=~\"$namespace\", pod=~\"$pod\"}[5m])) by (gc, action, cause)",
           "legendFormat": "{{gc}} {{action}} [{{cause}}]",
           "range": true,
           "refId": "A"
