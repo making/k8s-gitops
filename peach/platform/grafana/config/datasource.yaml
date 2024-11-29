@@ -42,6 +42,7 @@ spec:
       timeInterval: "5s"
       exemplarTraceIdDestinations:
       - name: trace_id
+        urlDisplayLabel: trace_id
         datasourceUid: tempo
     secureJsonData:
       basicAuthPassword: ${password}
