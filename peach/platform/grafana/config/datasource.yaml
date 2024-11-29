@@ -40,5 +40,8 @@ spec:
     jsonData:
       tlsSkipVerify: false
       timeInterval: "5s"
+      exemplarTraceIdDestinations:
+      - name: trace_id
+        datasourceUid: tempo
     secureJsonData:
       basicAuthPassword: ${password}
