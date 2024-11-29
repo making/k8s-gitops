@@ -1,0 +1,44 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tempo
+  namespace: grafana
+stringData:
+  username: #@ data.values.tempo.username
+  password: #@ data.values.tempo.password
+type: Opaque
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: tempo
+  namespace: grafana
+spec:
+  valuesFrom:
+  - targetPath: basicAuthUser
+    valueFrom:
+      secretKeyRef:
+        name: tempo
+        key: username
+  - targetPath: secureJsonData.basicAuthPassword
+    valueFrom:
+      secretKeyRef:
+        name: tempo
+        key: password
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: grafana
+  datasource:
+    name: tempo
+    type: tempo
+    access: proxy
+    basicAuth: true
+    url: #@ data.values.tempo.url
+    isDefault: true
+    basicAuthUser: ${username}
+    jsonData:
+      tlsSkipVerify: false
+      timeInterval: "5s"
+    secureJsonData:
+      basicAuthPassword: ${password}
