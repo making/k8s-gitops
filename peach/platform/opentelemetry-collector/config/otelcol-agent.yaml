@@ -83,7 +83,8 @@ spec:
           - resource.attributes["k8s.namespace.name"] == "kube-system"
           - resource.attributes["k8s.namespace.name"] == "openldap"
           - resource.attributes["k8s.namespace.name"] == "raspberrypi"
-          - IsMatch(body, ".*(kube-probe|superfluous).*")
+          - resource.attributes["k8s.namespace.name"] == "inlets"
+          - IsMatch(body, ".*(kube-probe).*")
       filter/drop-some-envoy-authority:
         error_mode: ignore
         logs:
