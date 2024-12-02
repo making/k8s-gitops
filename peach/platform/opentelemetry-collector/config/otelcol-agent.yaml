@@ -72,6 +72,11 @@ spec:
           log_record:
           - resource.attributes["k8s.namespace.name"] == "kube-system"
           - IsMatch(body, ".*(kube-probe|superfluous).*")
+      filter/grafana-envoy:
+        error_mode: ignore
+        logs:
+          log_record:
+          - IsMatch(attributes["authority"], "grafana.*")
       transform:
         error_mode: ignore
         log_statements:
@@ -131,6 +136,7 @@ spec:
           - filelog
           processors:
           - filter/selected
+          - filter/grafana-envoy
           - memory_limiter
           - resource
           - resourcedetection
@@ -143,6 +149,7 @@ spec:
           - filelog
           processors:
           - filter/only-envoy
+          - filter/grafana-envoy
           - memory_limiter
           - resource
           - resourcedetection
