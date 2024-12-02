@@ -120,7 +120,7 @@ spec:
         verbosity: detailed
     service:
       pipelines:
-        log/all:
+        logs/all:
           receivers:
           - filelog
           processors:
