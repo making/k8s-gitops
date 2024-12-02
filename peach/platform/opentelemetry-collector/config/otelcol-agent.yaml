@@ -71,6 +71,8 @@ spec:
         logs:
           log_record:
           - resource.attributes["k8s.namespace.name"] == "kube-system"
+          - resource.attributes["k8s.namespace.name"] == "openldap"
+          - resource.attributes["k8s.namespace.name"] == "raspberrypi"
           - IsMatch(body, ".*(kube-probe|superfluous).*")
       filter/grafana-envoy:
         error_mode: ignore
