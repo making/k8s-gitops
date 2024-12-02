@@ -147,9 +147,9 @@ spec:
           protocol: TCP
         resources:
           limits:
-            memory: 384Mi
+            memory: 416Mi
           requests:
-            memory: 384Mi
+            memory: 416Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
