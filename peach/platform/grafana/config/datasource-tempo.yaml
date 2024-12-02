@@ -46,5 +46,12 @@ spec:
         spanEndTimeShift: "1h"
         filterByTraceID: true
         filterBySpanID: false
+      tracesToLogs:
+        datasourceUid: loki
+        spanStartTimeShift: "-2h"
+        spanEndTimeShift: "2h"
+        mapTagNamesEnabled: true
+        filterByTraceID: true
+        filterBySpanID: false
     secureJsonData:
       basicAuthPassword: ${password}
