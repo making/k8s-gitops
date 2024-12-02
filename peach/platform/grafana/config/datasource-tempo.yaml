@@ -40,5 +40,11 @@ spec:
     jsonData:
       tlsSkipVerify: false
       timeInterval: "5s"
+      tracesToLogsV2:
+        datasourceUid: loki
+        spanStartTimeShift: "-1h"
+        spanEndTimeShift: "1h"
+        filterByTraceID: true
+        filterBySpanID: false
     secureJsonData:
       basicAuthPassword: ${password}
