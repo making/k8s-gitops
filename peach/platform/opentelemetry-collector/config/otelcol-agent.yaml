@@ -60,13 +60,12 @@ spec:
         - key: k8s.cluster.name
           value: #@ data.values.cluster
           action: upsert
-      filter:
+      filter/only-envoy:
         #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/filterprocessor
         error_mode: ignore
         logs:
           log_record:
           - resource.attributes["k8s.container.name"] != "envoy"
-          - attributes["user_agent"] == "BotPoke"
       transform:
         error_mode: ignore
         log_statements:
@@ -121,11 +120,22 @@ spec:
         verbosity: detailed
     service:
       pipelines:
-        logs:
+        log/all:
           receivers:
           - filelog
           processors:
-          - filter
+          - memory_limiter
+          - resource
+          - resourcedetection
+          - transform
+          - batch
+          exporters:
+          - otlphttp/grafana_cloud
+        logs/only-envoy:
+          receivers:
+          - filelog
+          processors:
+          - filter/only-envoy
           - memory_limiter
           - resource
           - resourcedetection
