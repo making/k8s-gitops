@@ -45,6 +45,6 @@ spec:
       - datasourceUid: tempo
         matcherRegex: '"traceId":"(\w+)"'
         name: traceId
-        url: $${__value.raw}
+        url: ${__value.raw}
     secureJsonData:
       basicAuthPassword: ${password}
