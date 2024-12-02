@@ -13,6 +13,16 @@ spec:
     valueFrom:
       fieldRef:
         fieldPath: spec.nodeName
+  - name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        name: otel-creds
+        key: aws_access_key_id
+  - name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: otel-creds
+        key: aws_secret_access_key
   volumes:
   - name: varlog
     hostPath:
@@ -74,11 +84,12 @@ spec:
           - resource.attributes["k8s.namespace.name"] == "openldap"
           - resource.attributes["k8s.namespace.name"] == "raspberrypi"
           - IsMatch(body, ".*(kube-probe|superfluous).*")
-      filter/grafana-envoy:
+      filter/drop-some-envoy-authority:
         error_mode: ignore
         logs:
           log_record:
           - IsMatch(attributes["authority"], "grafana.*")
+          - IsMatch(attributes["authority"], "s3.*")
       transform:
         error_mode: ignore
         log_statements:
@@ -129,6 +140,15 @@ spec:
         headers:
           uptrace-dsn: #@ data.values.uptrace.uptrace_dsn
         compression: gzip
+      awss3:
+        s3uploader:
+          endpoint: #@ data.values.s3.endpoint
+          region: #@ data.values.s3.region
+          s3_bucket: logs
+          s3_partition: hour
+          s3_force_path_style: true
+          compression: gzip
+        marshaler: otlp_json
       debug:
         verbosity: detailed
     service:
@@ -138,7 +158,7 @@ spec:
           - filelog
           processors:
           - filter/selected
-          - filter/grafana-envoy
+          - filter/drop-some-envoy-authority
           - memory_limiter
           - resource
           - resourcedetection
@@ -146,12 +166,13 @@ spec:
           - batch
           exporters:
           - otlphttp/grafana_cloud
+          - awss3
         logs/only-envoy:
           receivers:
           - filelog
           processors:
           - filter/only-envoy
-          - filter/grafana-envoy
+          - filter/drop-some-envoy-authority
           - memory_limiter
           - resource
           - resourcedetection
