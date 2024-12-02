@@ -40,11 +40,11 @@ spec:
     jsonData:
       tlsSkipVerify: false
       timeInterval: "5s"
-    secureJsonData:
-      basicAuthPassword: ${password}
       maxLines: 50
       derivedFields:
       - datasourceUid: tempo
         matcherRegex: '"traceId":"(\w+)"'
         name: traceId
         url: $${__value.raw}
+    secureJsonData:
+      basicAuthPassword: ${password}
