@@ -66,6 +66,12 @@ spec:
         logs:
           log_record:
           - resource.attributes["k8s.container.name"] != "envoy"
+      filter/selected:
+        error_mode: ignore
+        logs:
+          log_record:
+          - resource.attributes["k8s.namespace.name"] == "kube-system"
+          - IsMatch(body, ".*(kube-probe|superfluous).*")
       transform:
         error_mode: ignore
         log_statements:
@@ -120,10 +126,11 @@ spec:
         verbosity: detailed
     service:
       pipelines:
-        logs/all:
+        logs:
           receivers:
           - filelog
           processors:
+          - filter/selected
           - memory_limiter
           - resource
           - resourcedetection
