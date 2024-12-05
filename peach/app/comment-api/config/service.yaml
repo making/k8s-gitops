@@ -1,0 +1,20 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Secret
+metadata:
+  name: comment-db
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: service
+  labels:
+    app: comment-db
+    app.kubernetes.io/part-of: comment-api
+type: servicebinding.io/postgresql
+stringData:
+  type: "postgresql"
+  host: #@ data.values.comment_db.host
+  port: #@ data.values.comment_db.port
+  username: #@ data.values.comment_db.username
+  password: #@ data.values.comment_db.password
+  database: "comment"
+  sslmode: "require"

@@ -1,0 +1,26 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: comment-api
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: comment-api
+    app.kubernetes.io/part-of: comment-api
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: contour
+    namespace: projectcontour
+  rules:
+  - matches:
+    - headers:
+      - type: RegularExpression
+        name: Host
+        value: comment-api\..+
+    backendRefs:
+    - kind: Service
+      name: comment-api
+      port: 80
