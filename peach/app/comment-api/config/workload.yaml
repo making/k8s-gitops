@@ -67,6 +67,10 @@ spec:
             secretKeyRef:
               name: comment-config
               key: oauth2-google-client-secret
+        #! - name: logging.structured.format.console
+        #!   value: ecs
+        - name: spring.datasource.hikari.maximum-pool-size
+          value: "4"
         - name: management.zipkin.tracing.endpoint
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
         - name: management.opentelemetry.resource-attributes.k8s.pod.name
@@ -86,7 +90,7 @@ spec:
         livenessProbe:
           failureThreshold: 5
           httpGet:
-            path: /livez
+            path: /actuator/health/liveness
             port: 8080
             scheme: HTTP
           initialDelaySeconds: 10
@@ -95,12 +99,12 @@ spec:
           timeoutSeconds: 1
         readinessProbe:
           httpGet:
-            path: /readyz
+            path: /actuator/health/readiness
             port: 8080
             scheme: HTTP
         startupProbe:
           httpGet:
-            path: /readyz
+            path: /actuator/health/readiness
             port: 8080
             scheme: HTTP
           failureThreshold: 20
