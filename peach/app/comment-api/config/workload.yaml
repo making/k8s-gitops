@@ -67,8 +67,8 @@ spec:
             secretKeyRef:
               name: comment-config
               key: oauth2-google-client-secret
-        #! - name: logging.structured.format.console
-        #!   value: ecs
+        - name: logging.structured.format.console
+          value: ecs
         - name: spring.datasource.hikari.maximum-pool-size
           value: "4"
         - name: management.zipkin.tracing.endpoint
