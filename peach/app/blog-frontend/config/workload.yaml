@@ -17,8 +17,11 @@ spec:
     targetPort: 8080
   selector:
     app: blog-frontend
-  sessionAffinity: None
   type: ClusterIP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 600
 ---
 apiVersion: apps/v1
 kind: Deployment
