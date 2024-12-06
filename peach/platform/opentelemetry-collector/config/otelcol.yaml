@@ -175,6 +175,9 @@ spec:
           - IsMatch(attributes["http.url"], ".*/readyz")
           - IsMatch(attributes["http.url"], ".*/aboutme")
           - IsMatch(attributes["http.url"], ".*/actuator.*")
+          - IsMatch(attributes["uri"], ".*/actuator.*")
+          - IsMatch(attributes["uri"], ".*/livez")
+          - IsMatch(attributes["uri"], ".*/readyz")
           - attributes["http.route"] == "/livez"
           - attributes["http.route"] == "/readyz"
           - attributes["user_agent.original"] == "kube-probe//"
