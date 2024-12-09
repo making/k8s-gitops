@@ -1,0 +1,41 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: kube-prometheus
+  namespace: app-install
+  annotations:
+    kapp.k14s.io/change-group: "{name}"
+spec:
+  serviceAccountName: kapp
+  fetch:
+  - helmChart:
+      name: kube-prometheus
+      version: 10.0.4
+      repository:
+        url: oci://registry-1.docker.io/bitnamicharts
+  - git:
+      url: https://github.com/making/k8s-gitops.git
+      ref: origin/main
+      subPath: lemon/platform/kube-prometheus
+  syncPeriod: 24h
+  template:
+  - helmTemplate:
+      name: kube-prometheus
+      namespace: kube-prometheus
+      path: "0"
+      valuesFrom:
+      - path: 1/helm-values.yaml
+  - ytt:
+      paths:
+      - "-"
+      - 1/config
+  deploy:
+  - kapp:
+      rawOptions:
+      - --wait-timeout=5m
+      - --diff-changes=true
+      - --diff-mask=true
+      delete:
+        #! Force delete PVCs, since StatefulSet does not delete them
+        rawOptions:
+        - --apply-ignored=true
