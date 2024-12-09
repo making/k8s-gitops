@@ -18,3 +18,5 @@ stringData:
   password: #@ data.values.blog_db.password
   database: "blog"
   sslmode: "require"
+  #! for pgbouncer https://stackoverflow.com/a/57070517
+  options: "prepareThreshold=0"
