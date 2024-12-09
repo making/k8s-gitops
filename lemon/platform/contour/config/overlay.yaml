@@ -1,0 +1,10 @@
+#@ load("@ytt:overlay", "overlay")
+#@overlay/match by=overlay.subset({"kind":"Service", "metadata": {"name": "contour-envoy"}}), expects="0+"
+---
+spec:
+  ports:
+  #@overlay/append
+  - name: ldaps
+    protocol: TCP
+    port: 636
+    targetPort: https
