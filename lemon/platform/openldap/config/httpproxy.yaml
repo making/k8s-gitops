@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: openldap
+  namespace: openldap
+spec:
+  virtualhost:
+    fqdn: ldap.lemon.maki.lol
+    tls:
+      secretName: projectcontour/default-tls
+  tcpproxy:
+    services:
+    - name: openldap-stack-ha
+      port: 389

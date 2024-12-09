@@ -1,0 +1,53 @@
+replicaCount: 1
+customTLS:
+  enabled: true
+  secret: openldap-tls
+service:
+  type: NodePort
+  ldapPortNodePort: 30389
+  sslLdapPortNodePort: 30636
+persistence:
+  size: 1Gi
+logLevel: info
+env:
+  LDAP_DOMAIN: ik.am
+  LDAP_ORGANISATION: IK.AM
+ltb-passwd:
+  enabled: true
+  ingress:
+    enabled: true
+    annotations:
+      projectcontour.io/tls-cert-namespace: projectcontour
+    hosts:
+    - ltb-passwd.lemon.maki.lol
+    tls:
+    - secretName: default-tls
+      hosts:
+      - ltb-passwd.lemon.maki.lol
+  ldap:
+    server: ldaps://ldap.lemon.maki.lol:443
+    searchBase: ou=people,dc=ik,dc=am
+    bindDN: cn=admin,dc=ik,dc=am
+customLdifFiles:
+  01-groups.ldif: |-
+    dn: ou=people,dc=ik,dc=am
+    objectClass: organizationalUnit
+    ou: people
+
+    dn: ou=groups,dc=ik,dc=am
+    objectClass: organizationalUnit
+    ou: groups
+phpldapadmin:
+  ingress:
+    enabled: true
+    annotations:
+      projectcontour.io/tls-cert-namespace: projectcontour
+    hosts:
+    - phpldapadmin.lemon.maki.lol
+    tls:
+    - secretName: default-tls
+      hosts:
+      - phpldapadmin.lemon.maki.lol
+  env:
+    PHPLDAPADMIN_HTTPS: "false"
+    PHPLDAPADMIN_LDAP_HOSTS: openldap-stack-ha
