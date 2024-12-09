@@ -57,6 +57,11 @@ spec:
             secretKeyRef:
               name: comment-config
               key: comment-admins
+        - name: comment.google-chat-webhook-url
+          valueFrom:
+            secretKeyRef:
+              name: comment-config
+              key: comment-google-chat-webhook-url
         - name: spring.security.oauth2.client.registration.google.client-id
           valueFrom:
             secretKeyRef:
@@ -148,3 +153,4 @@ stringData:
   oauth2-google-client-id: #@ data.values.oauth2.google.client_id
   oauth2-google-client-secret: #@ data.values.oauth2.google.client_secret
   comment-admins: #@ ','.join(data.values.comment.admins)
+  comment-google-chat-webhook-url: #@ data.values.comment.google_chat_webhook_url
