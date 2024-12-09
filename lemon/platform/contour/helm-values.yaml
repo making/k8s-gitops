@@ -30,6 +30,7 @@ envoy:
   replicaCount: 2
   tlsExistingSecret: envoycert
   service:
+    externalTrafficPolicy: Local
     annotations:
       oci.oraclecloud.com/load-balancer-type: "lb"
       oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
