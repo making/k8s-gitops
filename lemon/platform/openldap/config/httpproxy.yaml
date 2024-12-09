@@ -7,8 +7,9 @@ spec:
   virtualhost:
     fqdn: ldap.lemon.maki.lol
     tls:
+      passthrough: true
       secretName: projectcontour/default-tls
   tcpproxy:
     services:
     - name: openldap-stack-ha
-      port: 389
+      port: 636
