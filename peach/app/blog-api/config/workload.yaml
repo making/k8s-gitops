@@ -114,7 +114,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        # https://stackoverflow.com/a/57070517 for pgbouncer
+        #! https://stackoverflow.com/a/57070517 for pgbouncer
         - name: spring.datasource.hikari.data-source-properties.prepareThreshold
           value: "0"
         - name: INFO_ENV_HOSTNAME
