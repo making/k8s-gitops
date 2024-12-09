@@ -30,9 +30,9 @@ envoy:
   replicaCount: 2
   tlsExistingSecret: envoycert
   service:
-    externalTrafficPolicy: Local
     annotations:
       oci.oraclecloud.com/load-balancer-type: "lb"
+      service.beta.kubernetes.io/oci-load-balancer-connection-idle-timeout: 100
       oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
   podAnnotations:
     prometheus.io/path: /stats/prometheus
