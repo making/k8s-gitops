@@ -1,6 +1,6 @@
 replicaCount: 1
 customTLS:
-  enabled: false
+  enabled: true
   secret: openldap-tls
 service:
   type: NodePort
