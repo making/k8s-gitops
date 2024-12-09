@@ -1,0 +1,41 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: nfs-server-provisioner
+  namespace: app-install
+  annotations:
+    kapp.k14s.io/change-group: "{name}"
+spec:
+  serviceAccountName: kapp
+  fetch:
+  - helmChart:
+      name: nfs-server-provisioner
+      version: 1.8.0
+      repository:
+        url: https://kubernetes-sigs.github.io/nfs-ganesha-server-and-external-provisioner
+  - git:
+      url: https://github.com/making/k8s-gitops.git
+      ref: origin/main
+      subPath: lemon/platform/nfs-server-provisioner
+  syncPeriod: 168h
+  template:
+  - helmTemplate:
+      name: nfs-server-provisioner
+      namespace: nfs
+      path: "0"
+      valuesFrom:
+      - path: 1/helm-values.yaml
+  - ytt:
+      paths:
+      - "-"
+      - 1/config
+  deploy:
+  - kapp:
+      rawOptions:
+      - --wait-timeout=5m
+      - --diff-changes=true
+      - --diff-mask=true
+      delete:
+        #! Force delete PVCs, since StatefulSet does not delete them
+        rawOptions:
+        - --apply-ignored=true
