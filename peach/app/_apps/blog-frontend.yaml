@@ -29,7 +29,7 @@ spec:
       valuesFrom:
       - path: 0/credentials.yaml
       - path: 0/values.yaml
-      - path: 1/image_native.yaml
+      - path: 1/image.yaml
   deploy:
   - kapp:
       rawOptions:
