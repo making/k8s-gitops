@@ -1,0 +1,19 @@
+minecraftServer:
+  eula: "TRUE"
+  version: "1.21.3"
+  difficulty: peaceful
+  gameMode: creative
+  serviceType: ClusterIP
+  #! serviceType: LoadBalancer
+resources:
+  requests:
+    memory: 2Gi
+persistence:
+  storageClass: nfs
+  dataDir:
+    enabled: true
+    Size: 8Gi
+serviceAnnotations:
+  oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
+  oci-network-load-balancer.oraclecloud.com/security-list-management-mode: All
+  oci.oraclecloud.com/load-balancer-type: nlb
