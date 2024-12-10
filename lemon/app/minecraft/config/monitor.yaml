@@ -18,7 +18,7 @@ spec:
       containers:
       - name: monitor
         image: itzg/mc-monitor
-        command:
+        args:
         - "collect-otel"
         - "-otel-collector-endpoint=otel-collector.opentelemetry.svc.cluster.local:4317"
         - "-otel-collector-timeout=35s"
