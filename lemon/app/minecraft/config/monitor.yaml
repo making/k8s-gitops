@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitor
+  namespace: minecraft
+  labels:
+    app: monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitor
+  template:
+    metadata:
+      labels:
+        app: monitor
+    spec:
+      containers:
+      - name: monitor
+        image: itzg/mc-monitor
+        command:
+        - "collect-otel"
+        - "-otel-collector-endpoint=otel-collector.opentelemetry.svc.cluster.local:4317"
+        - "-otel-collector-timeout=35s"
+        env:
+        - name: EXPORT_SERVERS
+          value: "minecraft-minecraft.minecraft.svc.cluster.local:25565"
+        - name: DEBUG
+          value: "true"
