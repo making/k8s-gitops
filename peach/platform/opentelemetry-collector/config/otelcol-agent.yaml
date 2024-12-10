@@ -91,6 +91,11 @@ spec:
           log_record:
           - IsMatch(attributes["authority"], "grafana.*")
           - IsMatch(attributes["authority"], "s3.*")
+      filter/drop-write-log:
+        error_mode: ignore
+        logs:
+          log_record:
+          - attributes["path"] == "/api/v1/write"
       transform:
         error_mode: ignore
         log_statements:
@@ -164,6 +169,7 @@ spec:
           - resource
           - resourcedetection
           - transform
+          - filter/drop-write-log
           - batch
           exporters:
           - otlphttp/grafana_cloud
@@ -178,6 +184,7 @@ spec:
           - resource
           - resourcedetection
           - transform
+          - filter/drop-write-log
           - batch
           exporters:
           - otlphttp/lognroll
