@@ -17,3 +17,5 @@ serviceAnnotations:
   oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
   oci-network-load-balancer.oraclecloud.com/security-list-management-mode: All
   oci.oraclecloud.com/load-balancer-type: nlb
+podAnnotations:
+  instrumentation.opentelemetry.io/inject-java: opentelemetry/default
