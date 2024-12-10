@@ -4,6 +4,7 @@ minecraftServer:
   difficulty: peaceful
   gameMode: creative
   serviceType: LoadBalancer
+  externalTrafficPolicy: Local
 resources:
   requests:
     memory: 2Gi
