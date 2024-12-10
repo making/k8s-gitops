@@ -1,0 +1,30 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: default
+  namespace: opentelemetry
+spec:
+  exporter:
+    endpoint: http://otel-collector.opentelemetry.svc.cluster.local:4317
+  propagators:
+  - tracecontext
+  - baggage
+  sampler:
+    type: parentbased_traceidratio
+    argument: "1.0"
+  java:
+    env:
+    - name: OTEL_EXPERIMENTAL_RESOURCE_DISABLED_KEYS
+      value: process.command_args,process.executable.path,process.runtime.name,process.runtime.version,process.pid,process.runtime.description,os.type,os.description,host.arch,service.instance.id,service.version,container.id,k8s.replicaset.name,k8s.deployment.name
+    - name: OTEL_EXPORTER_OTLP_COMPRESSION
+      value: gzip
+    - name: OTEL_LOGS_EXPORTER
+      value: otlp
+    - name: OTEL_METRICS_EXPORTER
+      value: none
+    - name: OTEL_TRACES_EXPORTER
+      value: none
+    - name: OTEL_INSTRUMENTATION_LOGBACK_APPENDER_EXPERIMENTAL_LOG_ATTRIBUTES
+      value: "true"
+    - name: OTEL_INSTRUMENTATION_LOGBACK_APPENDER_EXPERIMENTAL_CAPTURE_KEY_VALUE_PAIR_ATTRIBUTES
+      value: "true"
