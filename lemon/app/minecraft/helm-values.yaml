@@ -3,8 +3,7 @@ minecraftServer:
   version: "1.21.3"
   difficulty: peaceful
   gameMode: creative
-  serviceType: ClusterIP
-  #! serviceType: LoadBalancer
+  serviceType: LoadBalancer
 resources:
   requests:
     memory: 2Gi
