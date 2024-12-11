@@ -5,9 +5,10 @@ minecraftServer:
   gameMode: creative
   serviceType: LoadBalancer
   externalTrafficPolicy: Local
+  memory: 2048M
 resources:
   requests:
-    memory: 2Gi
+    memory: 2.5Gi
 persistence:
   storageClass: nfs
   dataDir:
