@@ -1,7 +1,7 @@
 minecraftServer:
   eula: "TRUE"
   version: "1.21.3"
-  difficulty: peaceful
+  difficulty: easy
   gameMode: creative
   serviceType: LoadBalancer
   externalTrafficPolicy: Local
