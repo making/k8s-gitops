@@ -42,6 +42,7 @@ spec:
         prometheus.io/port: "8080"
         prometheus.io/scrape: "true"
         github.com/revision: #@ data.values.git_revision
+        instrumentation.opentelemetry.io/inject-java: opentelemetry/only-logs
       labels:
         app: comment-api
         app.kubernetes.io/part-of: comment-api
