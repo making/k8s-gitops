@@ -50,7 +50,7 @@ spec:
       containers:
       - env:
         - name: JAVA_TOOL_OPTIONS
-          value: -XX:ActiveProcessorCount=2 -XX:MaxMetaspaceSize=64M -XX:ReservedCodeCacheSize=32M -Xss512k -Dfile.encoding="UTF-8" -Dmanagement.endpoint.health.show-details="always" -Dserver.port="8080" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
+          value: -XX:ActiveProcessorCount=2 -XX:MaxMetaspaceSize=128M -XX:ReservedCodeCacheSize=32M -Xss512k -Dfile.encoding="UTF-8" -Dmanagement.endpoint.health.show-details="always" -Dserver.port="8080" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
         - name: BPL_JVM_THREAD_COUNT
           value: "28"
         - name: comment.admins
@@ -122,9 +122,9 @@ spec:
           protocol: TCP
         resources:
           limits:
-            memory: 416Mi
+            memory: 512Mi
           requests:
-            memory: 416Mi
+            memory: 512Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
