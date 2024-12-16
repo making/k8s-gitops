@@ -17,7 +17,7 @@ spec:
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
-      subPath: peach/app/comment-api
+      subPath: lemon/app/comment-api
   - git:
       url: https://github.com/categolj/comment-api.git
       ref: origin/images
