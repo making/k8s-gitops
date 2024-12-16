@@ -76,7 +76,7 @@ spec:
         - name: logging.structured.format.console
           value: ecs
         - name: spring.datasource.hikari.maximum-pool-size
-          value: "4"
+          value: "3"
         - name: management.zipkin.tracing.endpoint
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
         - name: management.opentelemetry.resource-attributes.k8s.pod.name
