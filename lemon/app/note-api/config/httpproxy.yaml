@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: note-api
+  namespace: note
+spec:
+  virtualhost:
+    fqdn: note-api.lemon.maki.lol
+    tls:
+      secretName: projectcontour/default-tls
+  routes:
+  - services:
+    - name: note-api
+      port: 80
