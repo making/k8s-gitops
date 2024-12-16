@@ -12,3 +12,4 @@ spec:
   - services:
     - name: blog-api
       port: 80
+      protocol: h2c
