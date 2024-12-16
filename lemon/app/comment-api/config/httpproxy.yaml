@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: blog-api
+  namespace: blog
+spec:
+  virtualhost:
+    fqdn: comment-api.lemon.maki.lol
+    tls:
+      secretName: projectcontour/default-tls
+  routes:
+  - services:
+    - name: comment-api
+      port: 80
