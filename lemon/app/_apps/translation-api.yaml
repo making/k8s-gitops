@@ -1,7 +1,7 @@
 apiVersion: kappctrl.k14s.io/v1alpha1
 kind: App
 metadata:
-  name: comment-api
+  name: translation-api
   namespace: app-install
   annotations:
     kapp.k14s.io/change-group: "{name}"
@@ -13,9 +13,9 @@ spec:
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
-      subPath: lemon/app/comment-api
+      subPath: lemon/app/translation-api
   - git:
-      url: https://github.com/categolj/comment-api.git
+      url: https://github.com/categolj/translation-api.git
       ref: origin/images
   syncPeriod: 10m
   template:
