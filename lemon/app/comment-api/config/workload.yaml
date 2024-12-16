@@ -1,0 +1,157 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Service
+metadata:
+  name: comment-api
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: comment-api
+    app.kubernetes.io/part-of: comment-api
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: comment-api
+  type: ClusterIP
+  sessionAffinity: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comment-api
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: comment-api
+    app.kubernetes.io/part-of: comment-api
+spec:
+  replicas: #@ data.values.replicas
+  selector:
+    matchLabels:
+      app: comment-api
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+        github.com/revision: #@ data.values.git_revision
+        instrumentation.opentelemetry.io/inject-java: opentelemetry/only-logs
+      labels:
+        app: comment-api
+        app.kubernetes.io/part-of: comment-api
+    spec:
+      containers:
+      - env:
+        - name: JAVA_TOOL_OPTIONS
+          value: -XX:ActiveProcessorCount=2 -XX:MaxMetaspaceSize=128M -XX:ReservedCodeCacheSize=32M -Xss512k -Dfile.encoding="UTF-8" -Dmanagement.endpoint.health.show-details="always" -Dserver.port="8080" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
+        - name: BPL_JVM_THREAD_COUNT
+          value: "28"
+        - name: comment.admins
+          valueFrom:
+            secretKeyRef:
+              name: comment-config
+              key: comment-admins
+        - name: comment.google-chat-webhook-url
+          valueFrom:
+            secretKeyRef:
+              name: comment-config
+              key: comment-google-chat-webhook-url
+        - name: spring.security.oauth2.client.registration.google.client-id
+          valueFrom:
+            secretKeyRef:
+              name: comment-config
+              key: oauth2-google-client-id
+        - name: spring.security.oauth2.client.registration.google.client-secret
+          valueFrom:
+            secretKeyRef:
+              name: comment-config
+              key: oauth2-google-client-secret
+        - name: logging.structured.format.console
+          value: ecs
+        - name: spring.datasource.hikari.maximum-pool-size
+          value: "3"
+        - name: management.zipkin.tracing.endpoint
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+        - name: management.opentelemetry.resource-attributes.k8s.pod.name
+          value: ${HOSTNAME:}
+        - name: management.opentelemetry.resource-attributes.k8s.node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: management.opentelemetry.resource-attributes.host.ip
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: info.env.hostname
+          value: ${HOSTNAME:}
+        image: #@ data.values.image
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+            scheme: HTTP
+        startupProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+            scheme: HTTP
+          failureThreshold: 20
+          periodSeconds: 5
+        name: workload
+        ports:
+        - containerPort: 8080
+          name: user-port
+          protocol: TCP
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1002
+          seccompProfile:
+            type: RuntimeDefault
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: comment-api
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: comment-config
+  namespace: blog
+type: Opaque
+stringData:
+  oauth2-google-client-id: #@ data.values.oauth2.google.client_id
+  oauth2-google-client-secret: #@ data.values.oauth2.google.client_secret
+  comment-admins: #@ ','.join(data.values.comment.admins)
+  comment-google-chat-webhook-url: #@ data.values.comment.google_chat_webhook_url
