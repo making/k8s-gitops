@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: translation-api
+  namespace: blog
+spec:
+  virtualhost:
+    fqdn: translation-api.lemon.maki.lol
+    tls:
+      secretName: projectcontour/default-tls
+  routes:
+  - services:
+    - name: translation-api
+      port: 80
