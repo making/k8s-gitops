@@ -12,3 +12,5 @@ spec:
   - services:
     - name: comment-api
       port: 80
+    loadBalancerPolicy:
+      strategy: Cookie
