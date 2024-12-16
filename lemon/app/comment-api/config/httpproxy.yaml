@@ -1,7 +1,7 @@
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: blog-api
+  name: comment-api
   namespace: blog
 spec:
   virtualhost:
