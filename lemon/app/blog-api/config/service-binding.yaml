@@ -1,0 +1,21 @@
+apiVersion: servicebinding.io/v1
+kind: ServiceBinding
+metadata:
+  name: blog-api-blog-db
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: binding
+    kapp.k14s.io/change-rule.service: "upsert after upserting service"
+    kapp.k14s.io/change-rule.service-delete: "delete before deleting service"
+    kapp.k14s.io/change-rule.workload: "upsert before upserting workload"
+    kapp.k14s.io/change-rule.workload-delete: "delete after deleting workload"
+spec:
+  name: blog-db
+  service:
+    apiVersion: v1
+    kind: Secret
+    name: blog-db
+  workload:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: blog-api

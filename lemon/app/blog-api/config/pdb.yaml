@@ -1,0 +1,13 @@
+#@ load("@ytt:data", "data")
+#@ if/end data.values.pdb:
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: blog-api
+  namespace: blog
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: blog-api

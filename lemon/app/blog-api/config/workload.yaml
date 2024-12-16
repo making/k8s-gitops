@@ -1,0 +1,189 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-api
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: blog-api
+    app.kubernetes.io/part-of: blog-api
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: blog-api
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-api
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: blog-api
+    app.kubernetes.io/part-of: blog-api
+spec:
+  replicas: #@ data.values.replicas
+  selector:
+    matchLabels:
+      app: blog-api
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "8081"
+        prometheus.io/scrape: "true"
+        github.com/revision: #@ data.values.git_revision
+      labels:
+        app: blog-api
+        app.kubernetes.io/part-of: blog-api
+    spec:
+      containers:
+      - env:
+        - name: JAVA_TOOL_OPTIONS
+          value: -XX:ActiveProcessorCount=2 -XX:MaxMetaspaceSize=48M -XX:ReservedCodeCacheSize=32M -Xss512k -Dfile.encoding="UTF-8" -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.endpoint.health.show-details="always" -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include="*" -Dmanagement.health.probes.enabled="true" -Dmanagement.server.port="8081" -Dserver.port="8080" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
+        - name: BPL_JVM_THREAD_COUNT
+          value: "28"
+        - name: SPRING_SECURITY_USER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: admin-password
+              name: blog-config
+        - name: BLOG_TENANT_USERS_0
+          valueFrom:
+            secretKeyRef:
+              key: users-0
+              name: blog-config
+        - name: BLOG_TENANT_USERS_1
+          valueFrom:
+            secretKeyRef:
+              key: users-1
+              name: blog-config
+        - name: BLOG_TENANT_USERS_2
+          valueFrom:
+            secretKeyRef:
+              key: users-2
+              name: blog-config
+        - name: BLOG_GITHUB_CONTENTOWNER
+          value: making
+        - name: BLOG_GITHUB_CONTENTREPO
+          value: blog.ik.am
+        - name: BLOG_GITHUB_ACCESSTOKEN
+          valueFrom:
+            secretKeyRef:
+              key: github-access-token
+              name: blog-config
+        - name: BLOG_GITHUB_WEBHOOKSECRET
+          valueFrom:
+            secretKeyRef:
+              key: github-webhook-secret
+              name: blog-config
+        - name: BLOG_GITHUB_TENANTS_EN_CONTENTOWNER
+          value: making
+        - name: BLOG_GITHUB_TENANTS_EN_CONTENTREPO
+          value: ik.am_en
+        - name: BLOG_GITHUB_TENANTS_EN_ACCESSTOKEN
+          valueFrom:
+            secretKeyRef:
+              key: github-access-token-en
+              name: blog-config
+        - name: BLOG_GITHUB_TENANTS_EN_WEBHOOKSECRET
+          valueFrom:
+            secretKeyRef:
+              key: github-webhook-secret-en
+              name: blog-config
+        - name: MANAGEMENT_OTLP_LOGGING_ENDPOINT
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+        - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+        - name: management.opentelemetry.resource-attributes.k8s.pod.name
+          value: ${HOSTNAME:}
+        - name: management.opentelemetry.resource-attributes.k8s.node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: management.opentelemetry.resource-attributes.host.ip
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        #! https://stackoverflow.com/a/57070517 for pgbouncer
+        - name: spring.datasource.hikari.data-source-properties.prepareThreshold
+          value: "0"
+        - name: INFO_ENV_HOSTNAME
+          value: ${HOSTNAME:}
+        image: #@ data.values.image
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /livez
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+            scheme: HTTP
+        startupProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+            scheme: HTTP
+          failureThreshold: 20
+          periodSeconds: 5
+        name: workload
+        ports:
+        - containerPort: 8080
+          name: user-port
+          protocol: TCP
+        resources:
+          limits:
+            memory: 416Mi
+          requests:
+            memory: 416Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1002
+          seccompProfile:
+            type: RuntimeDefault
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: blog-api
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blog-config
+  namespace: blog
+type: Opaque
+stringData:
+  github-access-token: #@ data.values.github_access_token
+  github-webhook-secret: #@ data.values.github_webhook_secret
+  github-access-token-en: #@ data.values.github_access_token_en
+  github-webhook-secret-en: #@ data.values.github_webhook_secret_en
+  admin-password: #@ data.values.admin_password
+  users-0: #@ data.values.users[0]
+  users-1: #@ data.values.users[1]
+  users-2: #@ data.values.users[2]
