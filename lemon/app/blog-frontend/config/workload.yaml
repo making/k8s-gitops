@@ -71,7 +71,7 @@ spec:
         - name: comment-api.url
           value: http://comment-api.blog.svc.cluster.local
         - name: note-api.url
-          value: https://note-api.ik.am
+          value: http://note-api.note.svc.cluster.local
         - name: counter-api.url
           value: https://counter-api.ik.am/counter
         - name: counter-api.ip-black-list
