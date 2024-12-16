@@ -1,0 +1,16 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: blog-frontend
+  namespace: blog
+spec:
+  virtualhost:
+    fqdn: blog-frontend.lemon.maki.lol
+    tls:
+      secretName: projectcontour/default-tls
+  routes:
+  - services:
+    - name: blog-frontend
+      port: 80
+    loadBalancerPolicy:
+      strategy: Cookie
