@@ -46,10 +46,8 @@ spec:
         - name: inlets-token-volume
           mountPath: /var/inlets/
         livenessProbe:
-          httpGet:
-            path: /tunnel
+          tcpSocket:
             port: 6868
-            scheme: HTTP
           initialDelaySeconds: 10
           timeoutSeconds: 1
           periodSeconds: 10
