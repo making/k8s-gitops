@@ -16,5 +16,5 @@ stringData:
   port: #@ data.values.blog_db.port
   username: #@ data.values.blog_db.username
   password: #@ data.values.blog_db.password
-  database: "blog"
+  database: "postgres"
   sslmode: "require"
