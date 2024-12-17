@@ -70,6 +70,8 @@ spec:
           value: http://blog-api.blog.svc.cluster.local
         - name: comment-api.url
           value: http://comment-api.blog.svc.cluster.local
+        - name: translation-api.url
+          value: http://translation-api.blog.svc.cluster.local
         - name: note-api.url
           value: http://note-api.note.svc.cluster.local
         - name: counter-api.url
