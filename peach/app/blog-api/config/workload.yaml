@@ -114,6 +114,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        - name: logging.structured.format.console
+          value: ecs
         - name: INFO_ENV_HOSTNAME
           value: ${HOSTNAME:}
         #! https://stackoverflow.com/a/57070517 for pgbouncer
