@@ -116,8 +116,6 @@ spec:
               fieldPath: status.hostIP
         - name: INFO_ENV_HOSTNAME
           value: ${HOSTNAME:}
-        - name: logging.structured.format.console
-          value: ecs
         image: #@ data.values.image
         imagePullPolicy: IfNotPresent
         livenessProbe:
