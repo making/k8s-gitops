@@ -1,0 +1,29 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: blog-api-api-ik-am
+  namespace: blog
+spec:
+  virtualhost:
+    fqdn: api.ik.am
+    tls:
+      secretName: projectcontour/default-tls-ik-am
+  routes:
+  - services:
+    - name: blog-api
+      port: 80
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: blog-api-blog-api-blog-apps-ik-am
+  namespace: blog
+spec:
+  virtualhost:
+    fqdn: blog-api-blog.apps.ik.am
+    tls:
+      secretName: projectcontour/default-tls-ik-am
+  routes:
+  - services:
+    - name: blog-api
+      port: 80
