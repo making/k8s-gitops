@@ -52,7 +52,7 @@ spec:
           value: -XX:ActiveProcessorCount=2 -XX:MaxMetaspaceSize=48M -XX:ReservedCodeCacheSize=32M -Xss512k -Dfile.encoding="UTF-8" -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.endpoint.health.show-details="always" -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include="*" -Dmanagement.health.probes.enabled="true" -Dmanagement.server.port="8081" -Dserver.port="8080" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
         - name: BPL_JVM_THREAD_COUNT
           value: "28"
-        - name: SPRING_SECURITY_USER_PASSWORD
+        - name: spring.security.user.password
           valueFrom:
             secretKeyRef:
               key: admin-password
@@ -72,37 +72,37 @@ spec:
             secretKeyRef:
               key: users-2
               name: blog-config
-        - name: BLOG_GITHUB_CONTENTOWNER
+        - name: blog.github.content-owner
           value: making
-        - name: BLOG_GITHUB_CONTENTREPO
+        - name: blog.github.content-repo
           value: blog.ik.am
-        - name: BLOG_GITHUB_ACCESSTOKEN
+        - name: blog.github.access-token
           valueFrom:
             secretKeyRef:
               key: github-access-token
               name: blog-config
-        - name: BLOG_GITHUB_WEBHOOKSECRET
+        - name: blog.github.webhook-secret
           valueFrom:
             secretKeyRef:
               key: github-webhook-secret
               name: blog-config
-        - name: BLOG_GITHUB_TENANTS_EN_CONTENTOWNER
+        - name: blog.github.tenants.en.content-owner
           value: making
-        - name: BLOG_GITHUB_TENANTS_EN_CONTENTREPO
+        - name: blog.github.tenants.en.content-repo
           value: ik.am_en
-        - name: BLOG_GITHUB_TENANTS_EN_ACCESSTOKEN
+        - name: blog.github.tenants.en.access-token
           valueFrom:
             secretKeyRef:
               key: github-access-token-en
               name: blog-config
-        - name: BLOG_GITHUB_TENANTS_EN_WEBHOOKSECRET
+        - name: blog.github.tenants.en.webhook-secret
           valueFrom:
             secretKeyRef:
               key: github-webhook-secret-en
               name: blog-config
-        - name: MANAGEMENT_OTLP_LOGGING_ENDPOINT
+        - name: management.otlp.logging.endpoint
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
-        - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
+        - name: management.otlp.tracing.endpoint
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
         - name: management.opentelemetry.resource-attributes.k8s.pod.name
           value: ${HOSTNAME:}
@@ -114,7 +114,9 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        - name: INFO_ENV_HOSTNAME
+        - name: logging.structured.format.console
+          value: ecs
+        - name: info.env.hostname
           value: ${HOSTNAME:}
         #! https://stackoverflow.com/a/57070517 for pgbouncer
         - name: spring.datasource.hikari.data-source-properties.prepareThreshold
