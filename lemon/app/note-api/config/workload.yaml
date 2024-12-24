@@ -42,6 +42,7 @@ spec:
         prometheus.io/port: "8081"
         prometheus.io/scrape: "true"
         github.com/revision: #@ data.values.git_revision
+        instrumentation.opentelemetry.io/inject-java: opentelemetry/only-logs
       labels:
         app: note-api
         app.kubernetes.io/part-of: note-api
@@ -52,22 +53,20 @@ spec:
           value: -XX:ActiveProcessorCount=2 -XX:MaxMetaspaceSize=36M -XX:ReservedCodeCacheSize=32M -Xss512k -Dfile.encoding="UTF-8" -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.endpoint.health.show-details="always" -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include="*" -Dmanagement.health.probes.enabled="true" -Dmanagement.server.port="8081" -Dserver.port="8080" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
         - name: BPL_JVM_THREAD_COUNT
           value: "28"
-        - name: ENTRY_APIURL
+        - name: entry.api-url
           value: ${k8s.bindings.note-config.entry-api-url}
-        - name: ENTRY_CLIENTID
+        - name: entry.client-id
           value: ${k8s.bindings.note-config.entry-api-client-id}
-        - name: ENTRY_CLIENTSECRET
+        - name: entry.client-secret
           value: ${k8s.bindings.note-config.entry-api-client-secret}
-        - name: RSA_PRIVATEKEY
+        - name: rsa.public-key
           value: file:/bindings/note-config/rsa-private-key.pem
-        - name: RSA_PUBLICKEY
+        - name: rsa.private-key
           value: file:/bindings/note-config/rsa-public-key.pem
-        - name: SPRING_SENDGRID_APIKEY
+        - name: spring.sendgrid.api-key
           value: ${k8s.bindings.note-config.sendgrid-api-key}
-        - name: MANAGEMENT_OTLP_LOGGING_ENDPOINT
-          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
-        - name: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
-          value: http://otel-collector.opentelemetry.svc.cluster.local:9411
+        - name: management.zipkin.tracing.endpoint
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
         - name: management.opentelemetry.resource-attributes.k8s.pod.name
           value: ${HOSTNAME:}
         - name: management.opentelemetry.resource-attributes.k8s.node.name
@@ -78,7 +77,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        - name: INFO_ENV_HOSTNAME
+        - name: info.env.hostname
           value: ${HOSTNAME:}
         image: #@ data.values.image
         imagePullPolicy: IfNotPresent
@@ -111,9 +110,9 @@ spec:
           protocol: TCP
         resources:
           limits:
-            memory: 416Mi
+            memory: 512Mi
           requests:
-            memory: 416Mi
+            memory: 512Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
