@@ -33,7 +33,7 @@ contour:
   - --use-proxy-protocol
 envoy:
   kind: deployment
-  replicaCount: 2
+  replicaCount: 1
   tlsExistingSecret: envoycert
   service:
     annotations:

@@ -1,2 +1,2 @@
-replicas: 0
+replicas: 1
 pdb: false
