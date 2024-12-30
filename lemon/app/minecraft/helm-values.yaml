@@ -9,7 +9,7 @@ minecraftServer:
   rcon:
     enabled: true
   vanillaTweaksShareCodes:
-  - https://vanillatweaks.net/share#VBeQiV
+  - VBeQiV
 resources:
   requests:
     memory: 2.5Gi
