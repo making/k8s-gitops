@@ -1,3 +1,13 @@
+ingress:
+  enabled: true
+  annotations:
+    projectcontour.io/tls-cert-namespace: projectcontour
+    projectcontour.io/websocket-routes: "/"
+  host: rcon.lemon.maki.lol
+  tls:
+  - hosts:
+    - rcon.lemon.maki.lol
+    secretName: default-tls
 rconWeb:
   isAdmin: true
   rconHost: minecraft-minecraft-rcon.minecraft.svc.cluster.local
