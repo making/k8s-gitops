@@ -35,6 +35,7 @@ spec:
   - ytt:
       paths:
       - '-'
+      - 1/config
   deploy:
   - kapp:
       rawOptions:
