@@ -3,7 +3,7 @@ minecraftServer:
   version: "1.21.3"
   difficulty: easy
   gameMode: creative
-  overrideServerProperties: "true"
+  overrideServerProperties: true
   serviceType: LoadBalancer
   externalTrafficPolicy: Local
   memory: 2048M
