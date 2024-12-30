@@ -1,3 +1,5 @@
+image:
+  tag: multiarch
 ingress:
   enabled: true
   annotations:
