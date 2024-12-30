@@ -4,7 +4,7 @@ ingress:
   enabled: true
   annotations:
     projectcontour.io/tls-cert-namespace: projectcontour
-    projectcontour.io/websocket-routes: "/"
+    projectcontour.io/websocket-routes: /websocket
   host: rcon.lemon.maki.lol
   tls:
   - hosts:
