@@ -1,0 +1,5 @@
+rconWeb:
+  isAdmin: true
+  rconHost: minecraft-minecraft-rcon.minecraft.svc.cluster.local
+  rconPasswordExistingSecret: "minecraft-minecraft-rcon"
+  rconPasswordKey: "rcon-password"
