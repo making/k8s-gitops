@@ -6,6 +6,8 @@ minecraftServer:
   serviceType: LoadBalancer
   externalTrafficPolicy: Local
   memory: 2048M
+  rcon:
+    enabled: true
 resources:
   requests:
     memory: 2.5Gi
@@ -14,8 +16,6 @@ persistence:
   dataDir:
     enabled: true
     Size: 8Gi
-rcon:
-  enabled: true
 serviceAnnotations:
   oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
   oci-network-load-balancer.oraclecloud.com/security-list-management-mode: All
