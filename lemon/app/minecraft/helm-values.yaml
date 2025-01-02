@@ -1,6 +1,6 @@
 minecraftServer:
   eula: "TRUE"
-  version: "1.21.3"
+  version: "1.21.4"
   difficulty: easy
   gameMode: creative
   overrideServerProperties: true
