@@ -1,0 +1,28 @@
+#@ load("@ytt:overlay", "overlay")
+#@overlay/match by=overlay.subset({"kind":"Deployment","metadata":{"name":"minecraft-minecraft"}})
+---
+spec:
+  template:
+    spec:
+      containers:
+      #@overlay/append
+      - name: geyser
+        image: roblkyogre/docker-geyser:20250101-121422
+        ports:
+        - name: geyser
+          containerPort: 19132
+          protocol: UDP
+        env:
+        - name: REMOTE_ADDRESS
+          value: localhost
+        - name: REMOTE_PORT
+          value: "25565"
+#@overlay/match by=overlay.subset({"kind":"Service","metadata":{"name":"minecraft-minecraft"}})
+---
+spec:
+  ports:
+  #@overlay/append
+  - name: geyser
+    protocol: UDP
+    port: 19132
+    targetPort: geyser
