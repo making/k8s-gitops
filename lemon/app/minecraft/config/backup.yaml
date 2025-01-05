@@ -69,7 +69,8 @@ spec:
               # 5. Create a tar.gz archive
               TIMESTAMP=$(date '+%Y%m%d%H%M%S')
               ARCHIVE="/tmp/minecraft-data-${TIMESTAMP}.tar.gz"
-              tar czf "${ARCHIVE}" -C /tmp/minecraft-data/data .
+              cd /tmp
+              tar czf "${ARCHIVE}" minecraft-data
               
               # 6. Configure MinIO client (alias "s3")
               #    For AWS S3 or S3-compatible services that need region, set AWS_DEFAULT_REGION.
