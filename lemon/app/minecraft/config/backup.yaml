@@ -4,13 +4,13 @@ metadata:
   name: minecraft-backup
   namespace: minecraft
 spec:
-  # If cluster is in UTC, '0 18 * * *' => 3:00 AM JST next day
+  #! If cluster is in UTC, '0 18 * * *' => 3:00 AM JST next day
   schedule: "0 18 * * *"
   jobTemplate:
     spec:
       template:
         spec:
-          # ServiceAccount must allow kubectl exec/cp (pods, pods/exec, etc.)
+          #! ServiceAccount must allow kubectl exec/cp (pods, pods/exec, etc.)
           serviceAccountName: minecraft-backup
           restartPolicy: Never
           containers:
