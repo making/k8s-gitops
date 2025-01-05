@@ -61,7 +61,7 @@ spec:
               # 3. Copy /data to a local temp directory
               mkdir -p /tmp/minecraft-data
               kubectl cp "minecraft/${POD_ID}:/data" /tmp/minecraft-data
-              ls -la /tmp/minecraft-data
+              ls -lah /tmp/minecraft-data
               
               # 4. Turn auto-saving back on
               kubectl exec -n minecraft "${POD_ID}" -- rcon-cli save-on
