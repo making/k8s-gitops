@@ -6,14 +6,14 @@ minecraftServer:
   overrideServerProperties: true
   serviceType: LoadBalancer
   externalTrafficPolicy: Local
-  memory: 3584M
+  memory: 3072M
   rcon:
     enabled: true
   vanillaTweaksShareCodes:
   - VBeQiV
 resources:
   requests:
-    memory: 4Gi
+    memory: 3.5Gi
 persistence:
   storageClass: nfs
   dataDir:
