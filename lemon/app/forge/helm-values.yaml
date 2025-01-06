@@ -1,0 +1,33 @@
+minecraftServer:
+  eula: "TRUE"
+  type: "FORGE"
+  version: "1.20.1"
+  difficulty: easy
+  gameMode: creative
+  modUrls:
+  - https://mediafilez.forgecdn.net/files/6045/363/hmag-forge-mc1.20.1-9.0.25.jar
+  - https://mediafilez.forgecdn.net/files/5571/439/Siren_head%20v1.1.4-1.20.1.jar
+  overrideServerProperties: true
+  enforceSecureProfile: false
+  serviceType: LoadBalancer
+  externalTrafficPolicy: Local
+  memory: 3584M
+  rcon:
+    enabled: true
+  vanillaTweaksShareCodes:
+  - VBeQiV
+extraEnv: { }
+resources:
+  requests:
+    memory: 4Gi
+persistence:
+  storageClass: nfs
+  dataDir:
+    enabled: true
+    Size: 8Gi
+serviceAnnotations:
+  oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
+  oci-network-load-balancer.oraclecloud.com/security-list-management-mode: All
+  oci.oraclecloud.com/load-balancer-type: nlb
+podAnnotations:
+  instrumentation.opentelemetry.io/inject-java: opentelemetry/default
