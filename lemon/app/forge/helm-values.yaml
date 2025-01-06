@@ -11,7 +11,8 @@ minecraftServer:
   enforceSecureProfile: false
   serviceType: LoadBalancer
   externalTrafficPolicy: Local
-  memory: 3584M
+  memory: 4096M
+  jvmOpts: "-XX:+ExitOnOutOfMemoryError -XX:NativeMemoryTracking=summary"
   rcon:
     enabled: true
   vanillaTweaksShareCodes:
@@ -19,7 +20,7 @@ minecraftServer:
 extraEnv: { }
 resources:
   requests:
-    memory: 4Gi
+    memory: 4.5Gi
 persistence:
   storageClass: oci-bv
   dataDir:
