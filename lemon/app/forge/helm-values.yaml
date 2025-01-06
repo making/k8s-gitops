@@ -8,7 +8,7 @@ minecraftServer:
   - https://mediafilez.forgecdn.net/files/6045/363/hmag-forge-mc1.20.1-9.0.25.jar
   - https://mediafilez.forgecdn.net/files/5571/439/Siren_head%20v1.1.4-1.20.1.jar
   overrideServerProperties: true
-  enforceSecureProfile: false
+  enforceSecureProfile: true
   serviceType: LoadBalancer
   externalTrafficPolicy: Local
   memory: 4096M
