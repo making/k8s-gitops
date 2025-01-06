@@ -21,10 +21,10 @@ resources:
   requests:
     memory: 4Gi
 persistence:
-  storageClass: nfs
+  storageClass: oci-bv
   dataDir:
     enabled: true
-    Size: 8Gi
+    Size: 50Gi
 serviceAnnotations:
   oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
   oci-network-load-balancer.oraclecloud.com/security-list-management-mode: All
