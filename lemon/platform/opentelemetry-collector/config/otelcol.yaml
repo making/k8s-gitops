@@ -257,6 +257,7 @@ spec:
           - otlp
           processors:
           - memory_limiter
+          - filter
           - resource
           - batch
           exporters:
