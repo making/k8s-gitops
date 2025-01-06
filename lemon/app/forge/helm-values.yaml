@@ -14,11 +14,11 @@ minecraftServer:
   serviceType: LoadBalancer
   externalTrafficPolicy: Local
   memory: 4096M
-  jvmOpts: "-XX:+ExitOnOutOfMemoryError -XX:NativeMemoryTracking=summary"
+  jvmOpts: "-Dfile.encoding=UTF-8 -Duser.country=JP -Duser.language=ja -Duser.timezone=Asia/Tokyo -XX:+ExitOnOutOfMemoryError -XX:NativeMemoryTracking=summary"
   rcon:
     enabled: true
   vanillaTweaksShareCodes:
-  - VBeQiV
+  - uRsiNA
 extraEnv: { }
 resources:
   requests:
