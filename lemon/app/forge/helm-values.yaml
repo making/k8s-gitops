@@ -30,8 +30,8 @@ minecraftServer:
     containerPort: 8080
     protocol: TCP
     service:
-      enabled: false
-      embedded: true
+      enabled: true
+      embedded: false
       port: 8080
 extraEnv: { }
 resources:
