@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: webmap
+  namespace: forge
+spec:
+  virtualhost:
+    fqdn: webmap.ik.am
+    tls:
+      secretName: projectcontour/default-tls-ik-am
+  routes:
+  - services:
+    - name: forge-minecraft
+      port: 8080

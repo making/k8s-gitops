@@ -14,6 +14,7 @@ minecraftServer:
   - https://mediafilez.forgecdn.net/files/5911/986/framework-forge-1.20.1-0.7.12.jar
   - https://mediafilez.forgecdn.net/files/5893/833/refurbished_furniture-forge-1.20.1-1.0.8.jar
   #! - client only https://mediafilez.forgecdn.net/files/5838/485/Neat-1.20.1-41-FORGE.jar
+  #! - client only https://github.com/Korea-Minecraft-Forum/CocoaInput/releases/download/4.3.1-0/CocoaInput-1.20.1-forge-4.3.1-EXPERIMENTAL.jar
   overrideServerProperties: true
   enforceSecureProfile: true
   serviceType: LoadBalancer
@@ -24,6 +25,14 @@ minecraftServer:
     enabled: true
   vanillaTweaksShareCodes:
   - uRsiNA
+  extraPorts:
+  - name: webmap
+    containerPort: 8080
+    protocol: TCP
+    service:
+      enabled: false
+      embedded: true
+      port: 8080
 extraEnv: { }
 resources:
   requests:
