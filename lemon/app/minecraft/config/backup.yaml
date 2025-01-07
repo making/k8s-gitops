@@ -85,7 +85,7 @@ spec:
               mc cp "${ARCHIVE}" "s3/${S3_BUCKET_NAME}/${TIMESTAMP}/minecraft-data.tar.gz"
               
               # 8. Remove backups older than 7 days
-              mc find "s3/${S3_BUCKET_NAME}" --older-than 7d --exec "mc rm {}"
+              mc find "s3/${S3_BUCKET_NAME}" --older-than 3d --exec "mc rm {}"
               
               echo "Backup and cleanup completed at $(date)."
 ---
