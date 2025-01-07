@@ -1,134 +1,135 @@
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: minecraft-backup
-  namespace: minecraft
-spec:
-  #! If cluster is in UTC, '0 18 * * *' => 3:00 AM JST next day
-  schedule: "0 18 * * *"
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          #! ServiceAccount must allow kubectl exec/cp (pods, pods/exec, etc.)
-          serviceAccountName: minecraft-backup
-          restartPolicy: Never
-          containers:
-          - name: backup
-            image: ghcr.io/making/backup-kubectl-s3client
-            imagePullPolicy: IfNotPresent
-            env:
-            - name: S3_ENDPOINT
-              valueFrom:
-                secretKeyRef:
-                  name: s3-credentials
-                  key: endpoint
-            - name: S3_BUCKET_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: s3-credentials
-                  key: bucket
-            - name: S3_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: s3-credentials
-                  key: access_key
-            - name: S3_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: s3-credentials
-                  key: secret_key
-            - name: S3_REGION
-              valueFrom:
-                secretKeyRef:
-                  name: s3-credentials
-                  key: region
-            command: [ "/bin/sh" ]
-            args:
-            - -c
-            - |
-              set -eux
-              
-              # 1. Get Minecraft server Pod (adjust the label if needed)
-              POD_ID=$(kubectl get pod -n minecraft \
-                -l app.kubernetes.io/instance=minecraft-minecraft \
-                -o jsonpath='{.items[0].metadata.name}')
-              
-              # 2. Turn off auto-save and force-save
-              kubectl exec -n minecraft "${POD_ID}" -- rcon-cli save-off
-              kubectl exec -n minecraft "${POD_ID}" -- rcon-cli save-all
-              
-              # 3. Copy /data to a local temp directory
-              mkdir -p /tmp/minecraft-data
-              kubectl cp "minecraft/${POD_ID}:/data" /tmp/minecraft-data
-              ls -lah /tmp/minecraft-data
-              
-              # 4. Turn auto-saving back on
-              kubectl exec -n minecraft "${POD_ID}" -- rcon-cli save-on
-              
-              # 5. Create a tar.gz archive
-              TIMESTAMP=$(date '+%Y%m%d%H%M%S')
-              ARCHIVE="/tmp/minecraft-data-${TIMESTAMP}.tar.gz"
-              cd /tmp
-              tar czf "${ARCHIVE}" minecraft-data
-              
-              # 6. Configure MinIO client (alias "s3")
-              #    For AWS S3 or S3-compatible services that need region, set AWS_DEFAULT_REGION.
-              #    mc doesn't have a direct '--region' flag, but some S3-compatible endpoints
-              #    require it in the URL. Here, we also export AWS_DEFAULT_REGION for completeness.
-              export AWS_DEFAULT_REGION="$S3_REGION"
-              set +x
-              mc alias set s3 "$S3_ENDPOINT" "$S3_ACCESS_KEY" "$S3_SECRET_KEY"
-              set -x
-              
-              # 7. Upload the tar.gz to the specified bucket
-              mc cp "${ARCHIVE}" "s3/${S3_BUCKET_NAME}/${TIMESTAMP}/minecraft-data.tar.gz"
-              
-              # 8. Remove backups older than 7 days
-              mc find "s3/${S3_BUCKET_NAME}" --older-than 3d --exec "mc rm {}"
-              
-              echo "Backup and cleanup completed at $(date)."
----
-#@ load("@ytt:data", "data")
-apiVersion: v1
-kind: Secret
-metadata:
-  name: s3-credentials
-  namespace: minecraft
-type: Opaque
-stringData:
-  endpoint: #@ data.values.s3.endpoint
-  bucket: #@ data.values.s3.bucket
-  access_key: #@ data.values.s3.access_key
-  secret_key: #@ data.values.s3.secret_key
-  region: #@ data.values.s3.region
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: minecraft-backup
-  namespace: minecraft
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: minecraft-backup
-  namespace: minecraft
-rules:
-- apiGroups: [ "" ]
-  resources: [ "pods", "pods/exec" ]
-  verbs: [ "get", "list", "create", "delete" ]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: minecraft-backup
-  namespace: minecraft
-subjects:
-- kind: ServiceAccount
-  name: minecraft-backup
-  namespace: minecraft
-roleRef:
-  kind: Role
-  name: minecraft-backup
-  apiGroup: rbac.authorization.k8s.io
+#! apiVersion: batch/v1
+#! kind: CronJob
+#! metadata:
+#!   name: minecraft-backup
+#!   namespace: minecraft
+#! spec:
+#!   #! If cluster is in UTC, '0 18 * * *' => 3:00 AM JST next day
+#!   schedule: "0 18 * * *"
+#!   jobTemplate:
+#!     spec:
+#!       template:
+#!         spec:
+#!           #! ServiceAccount must allow kubectl exec/cp (pods, pods/exec, etc.)
+#!           serviceAccountName: minecraft-backup
+#!           restartPolicy: Never
+#!           containers:
+#!           - name: backup
+#!             image: ghcr.io/making/backup-kubectl-s3client
+#!             imagePullPolicy: IfNotPresent
+#!             env:
+#!             - name: S3_ENDPOINT
+#!               valueFrom:
+#!                 secretKeyRef:
+#!                   name: s3-credentials
+#!                   key: endpoint
+#!             - name: S3_BUCKET_NAME
+#!               valueFrom:
+#!                 secretKeyRef:
+#!                   name: s3-credentials
+#!                   key: bucket
+#!             - name: S3_ACCESS_KEY
+#!               valueFrom:
+#!                 secretKeyRef:
+#!                   name: s3-credentials
+#!                   key: access_key
+#!             - name: S3_SECRET_KEY
+#!               valueFrom:
+#!                 secretKeyRef:
+#!                   name: s3-credentials
+#!                   key: secret_key
+#!             - name: S3_REGION
+#!               valueFrom:
+#!                 secretKeyRef:
+#!                   name: s3-credentials
+#!                   key: region
+#!             command: [ "/bin/sh" ]
+#!             args:
+#!             - -c
+#!             - |
+#!               set -eux
+#!
+#!               # 1. Get Minecraft server Pod (adjust the label if needed)
+#!               POD_ID=$(kubectl get pod -n minecraft \
+#!                 -l app.kubernetes.io/instance=minecraft-minecraft \
+#!                 -o jsonpath='{.items[0].metadata.name}')
+#!
+#!               # 2. Turn off auto-save and force-save
+#!               kubectl exec -n minecraft "${POD_ID}" -- rcon-cli save-off
+#!               kubectl exec -n minecraft "${POD_ID}" -- rcon-cli save-all
+#!
+#!               # 3. Copy /data to a local temp directory
+#!               mkdir -p /tmp/minecraft-data
+#!               kubectl cp "minecraft/${POD_ID}:/data" /tmp/minecraft-data
+#!               ls -lah /tmp/minecraft-data
+#!
+#!               # 4. Turn auto-saving back on
+#!               kubectl exec -n minecraft "${POD_ID}" -- rcon-cli save-on
+#!
+#!               # 5. Create a tar.gz archive
+#!               TIMESTAMP=$(date '+%Y%m%d%H%M%S')
+#!               ARCHIVE="/tmp/minecraft-data-${TIMESTAMP}.tar.gz"
+#!               cd /tmp
+#!               tar czf "${ARCHIVE}" minecraft-data
+#!
+#!               # 6. Configure MinIO client (alias "s3")
+#!               #    For AWS S3 or S3-compatible services that need region, set AWS_DEFAULT_REGION.
+#!               #    mc doesn't have a direct '--region' flag, but some S3-compatible endpoints
+#!               #    require it in the URL. Here, we also export AWS_DEFAULT_REGION for completeness.
+#!               export AWS_DEFAULT_REGION="$S3_REGION"
+#!               set +x
+#!               mc alias set s3 "$S3_ENDPOINT" "$S3_ACCESS_KEY" "$S3_SECRET_KEY"
+#!               set -x
+#!
+#!               # 7. Upload the tar.gz to the specified bucket
+#!               mc cp "${ARCHIVE}" "s3/${S3_BUCKET_NAME}/${TIMESTAMP}/minecraft-data.tar.gz"
+#!
+#!               # 8. Remove backups older than 7 days
+#!               mc find "s3/${S3_BUCKET_NAME}" --older-than 3d --exec "mc rm {}"
+#!
+#!               echo "Backup and cleanup completed at $(date)."
+#! ---
+#! #@ load("@ytt:data", "data")
+#! apiVersion: v1
+#! kind: Secret
+#! metadata:
+#!   name: s3-credentials
+#!   namespace: minecraft
+#! type: Opaque
+#! stringData:
+#!   endpoint: #@ data.values.s3.endpoint
+#!   bucket: #@ data.values.s3.bucket
+#!   access_key: #@ data.values.s3.access_key
+#!   secret_key: #@ data.values.s3.secret_key
+#!   region: #@ data.values.s3.region
+#! ---
+#! apiVersion: v1
+#! kind: ServiceAccount
+#! metadata:
+#!   name: minecraft-backup
+#!   namespace: minecraft
+#! ---
+#! apiVersion: rbac.authorization.k8s.io/v1
+#! kind: Role
+#! metadata:
+#!   name: minecraft-backup
+#!   namespace: minecraft
+#! rules:
+#! - apiGroups: [ "" ]
+#!   resources: [ "pods", "pods/exec" ]
+#!   verbs: [ "get", "list", "create", "delete" ]
+#! ---
+#! apiVersion: rbac.authorization.k8s.io/v1
+#! kind: RoleBinding
+#! metadata:
+#!   name: minecraft-backup
+#!   namespace: minecraft
+#! subjects:
+#! - kind: ServiceAccount
+#!   name: minecraft-backup
+#!   namespace: minecraft
+#! roleRef:
+#!   kind: Role
+#!   name: minecraft-backup
+#!   apiGroup: rbac.authorization.k8s.io
+#!
