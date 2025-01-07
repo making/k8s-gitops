@@ -10,5 +10,5 @@ spec:
       secretName: projectcontour/default-tls-ik-am
   routes:
   - services:
-    - name: forge-minecraft
+    - name: forge-minecraft-webmap
       port: 8080
