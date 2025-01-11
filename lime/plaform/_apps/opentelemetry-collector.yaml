@@ -1,0 +1,38 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: opentelemetry-collector
+  namespace: app-install
+  annotations:
+    kapp.k14s.io/change-group: "{name}"
+    kapp.k14s.io/change-rule.create-order.1: "upsert after upserting opentelemetry-operator"
+    kapp.k14s.io/change-rule.delete-order.1: "delete before deleting opentelemetry-operator"
+spec:
+  serviceAccountName: kapp
+  fetch:
+  - git:
+      url: https://github.com/making/k8s-gitops.git
+      ref: origin/main
+      subPath: lime/platform/opentelemetry-collector
+  syncPeriod: 24h
+  template:
+  - sops:
+      age:
+        privateKeysSecretRef:
+          name: age-key
+  - ytt:
+      paths:
+      - config
+      valuesFrom:
+      - path: credentials.yaml
+      - path: values.yaml
+  deploy:
+  - kapp:
+      rawOptions:
+      - --wait-timeout=5m
+      - --diff-changes=true
+      - --diff-mask=true
+      delete:
+        #! Force delete PVCs, since StatefulSet does not delete them
+        rawOptions:
+        - --apply-ignored=true
