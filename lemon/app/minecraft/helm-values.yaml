@@ -4,6 +4,7 @@ minecraftServer:
   difficulty: easy
   gameMode: creative
   overrideServerProperties: true
+  enforceSecureProfile: false
   serviceType: LoadBalancer
   externalTrafficPolicy: Local
   memory: 3072M
