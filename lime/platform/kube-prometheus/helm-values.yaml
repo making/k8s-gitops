@@ -20,11 +20,13 @@ coreDns:
 kubeProxy:
   enabled: false
 node-exporter:
+  kubeVersion: 1.31.3
   podAnnotations:
     prometheus.io/scrape: "true"
   serviceMonitor:
     enabled: false
 kube-state-metrics:
+  kubeVersion: 1.31.3
   podAnnotations:
     prometheus.io/scrape: "true"
   serviceMonitor:
