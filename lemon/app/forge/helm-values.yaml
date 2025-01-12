@@ -17,6 +17,7 @@ minecraftServer:
   - https://mediafilez.forgecdn.net/files/5654/821/Kleiders%20Custom%20Renderer%20API%207.2.0%201.20.1.jar
   #! - https://mediafilez.forgecdn.net/files/5834/748/chucky-1.0.1-forge-1.20.1.jar
   - https://mediafilez.forgecdn.net/files/5698/791/alexsmobs-1.22.9.jar
+  - https://mediafilez.forgecdn.net/files/6002/521/citadel-2.6.1-1.20.1.jar
   #! - client only https://mediafilez.forgecdn.net/files/5838/485/Neat-1.20.1-41-FORGE.jar
   #! - client only https://github.com/Korea-Minecraft-Forum/CocoaInput/releases/download/4.3.1-0/CocoaInput-1.20.1-forge-4.3.1-EXPERIMENTAL.jar
   overrideServerProperties: true
