@@ -1,3 +1,4 @@
+kubeVersion: 1.31.3
 operator:
   enabled: false
 prometheus:
