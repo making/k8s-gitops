@@ -21,6 +21,10 @@ spec:
       subPath: lemon/platform/zipkin
   syncPeriod: 24h
   template:
+  - sops:
+      age:
+        privateKeysSecretRef:
+          name: age-key
   - helmTemplate:
       name: zipkin
       namespace: zipkin
@@ -31,6 +35,8 @@ spec:
       paths:
       - "-"
       - 1/config
+      valuesFrom:
+      - path: 1/credentials.yaml
   deploy:
   - kapp:
       rawOptions:
