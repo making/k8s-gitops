@@ -216,6 +216,8 @@ spec:
       otlphttp/zipkin:
         endpoint: #@ data.values.zipkin.endpoint
         compression: gzip
+        tls:
+          insecure: #@ data.values.zipkin.tls.insecure
       prometheusremotewrite:
         endpoint: #@ data.values.prometheus.endpoint
         headers:
