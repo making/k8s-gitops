@@ -113,7 +113,7 @@ spec:
         - name: management.opentelemetry.resource-attributes.host.ip
           valueFrom:
             fieldRef:
-              fieldPath: status.hostIP
+              fieldPath: status.podIP
         - name: logging.structured.format.console
           value: ecs
         - name: info.env.hostname
