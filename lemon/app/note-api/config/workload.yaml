@@ -76,7 +76,7 @@ spec:
         - name: management.opentelemetry.resource-attributes.host.ip
           valueFrom:
             fieldRef:
-              fieldPath: status.hostIP
+              fieldPath: status.podIP
         - name: info.env.hostname
           value: ${HOSTNAME:}
         image: #@ data.values.image
