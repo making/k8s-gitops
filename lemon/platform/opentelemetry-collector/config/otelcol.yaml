@@ -181,6 +181,9 @@ spec:
           - IsMatch(attributes["uri"], ".*/readyz")
           - attributes["http.route"] == "/livez"
           - attributes["http.route"] == "/readyz"
+          - IsMatch(attributes["url.path"], "/actuator.*")
+          - attributes["url.path"] == "/livez"
+          - attributes["url.path"] == "/readyz"
           - attributes["user_agent.original"] == "kube-probe//"
           - attributes["user_agent"] == "Knative-Ingress-Probe"
           - IsMatch(attributes["user_agent"], "kube-probe/.*")
