@@ -5,7 +5,7 @@ minecraftServer:
   gameMode: creative
   overrideServerProperties: true
   enforceSecureProfile: false
-  serviceType: LoadBalancer
+  serviceType: ClusterIP
   externalTrafficPolicy: Local
   memory: 3072M
   rcon:
