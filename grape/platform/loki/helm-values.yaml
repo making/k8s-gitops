@@ -2,3 +2,7 @@ promtail:
   enabled: false
 gateway:
   enabled: false
+ingester:
+  persistence:
+    size: 8Gi
+    storageClass: ""

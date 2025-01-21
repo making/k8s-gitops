@@ -14,8 +14,19 @@ ingester:
       memory: 256Mi
     limits:
       memory: 512Mi
+  persistence:
+    size: 8Gi
+    storageClass: ""
 distributor:
   service:
     type: ClusterIP
+compactor:
+  persistence:
+    size: 8Gi
+    storageClass: ""
+querier:
+  persistence:
+    size: 8Gi
+    storageClass: ""
 vulture:
   enabled: false
