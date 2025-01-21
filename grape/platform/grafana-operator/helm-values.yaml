@@ -1,0 +1,57 @@
+grafana:
+  service:
+    type: ClusterIP
+extraDeploy:
+- apiVersion: grafana.integreatly.org/v1beta1
+  kind: GrafanaDatasource
+  metadata:
+    name: tempo
+    namespace: grafana
+  spec:
+    instanceSelector:
+      matchLabels:
+        app.kubernetes.io/instance: grafana
+    datasource:
+      name: tempo
+      type: tempo
+      access: proxy
+      basicAuth: false
+      url: http://tempo-grafana-tempo-query-frontend.tempo.svc.cluster.local:3200
+      editable: false
+      isDefault: false
+      jsonData:
+        tlsSkipVerify: false
+        timeInterval: "5s"
+        tracesToLogsV2:
+          datasourceUid: loki
+          spanStartTimeShift: "-3h"
+          spanEndTimeShift: "3h"
+          filterByTraceID: true
+          filterBySpanID: false
+- apiVersion: grafana.integreatly.org/v1beta1
+  kind: GrafanaDatasource
+  metadata:
+    name: loki
+    namespace: grafana
+  spec:
+    instanceSelector:
+      matchLabels:
+        app.kubernetes.io/instance: grafana
+    datasource:
+      name: loki
+      type: loki
+      access: proxy
+      basicAuth: false
+      url: http://loki-grafana-loki-query-frontend.loki.svc.cluster.local:3100
+      editable: false
+      isDefault: false
+      jsonData:
+        tlsSkipVerify: false
+        timeInterval: "5s"
+        maxLines: 50
+        derivedFields:
+        - datasourceUid: tempo
+          matcherType: label
+          matcherRegex: trace_id
+          name: traceId
+          url: ${__value.raw}

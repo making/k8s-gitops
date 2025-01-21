@@ -1,0 +1,4 @@
+promtail:
+  enabled: false
+gateway:
+  enabled: false

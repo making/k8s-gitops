@@ -1,0 +1,21 @@
+tempo:
+  traces:
+    jaeger:
+      grpc: false
+      thriftBinary: false
+      thriftCompact: false
+      thriftHttp: false
+    otlp:
+      http: true
+      grpc: true
+ingester:
+  resources:
+    requests:
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+distributor:
+  service:
+    type: ClusterIP
+vulture:
+  enabled: false

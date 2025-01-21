@@ -1,0 +1,48 @@
+service:
+  type: LoadBalancer
+serverBlock: |
+  server {
+    listen 8080;
+    server_name _;
+
+    location /v1/traces {
+      auth_basic "Restricted Access";
+      auth_basic_user_file /etc/nginx/auth/auth;
+
+      proxy_pass http://tempo-grafana-tempo-distributor.tempo.svc.cluster.local:4318;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /v1/logs {
+      auth_basic "Restricted Access";
+      auth_basic_user_file /etc/nginx/auth/auth;
+
+      # Path mapping: /v1/logs -> /otlp/v1/logs
+      rewrite ^/v1/logs(.*)$ /otlp/v1/logs$1 break;
+
+      proxy_pass http://loki-grafana-loki-distributor.loki.svc.cluster.local:3100;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+      proxy_pass http://grafana-grafana-operator-grafana-service.grafana.svc.cluster.local:3000;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+    }
+  }
+extraVolumeMounts:
+- name: auth-volume
+  mountPath: /etc/nginx/auth
+  readOnly: true
+extraVolumes:
+- name: auth-volume
+  secret:
+    secretName: nginx-basic-auth
