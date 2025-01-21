@@ -17,7 +17,7 @@ extraDeploy:
       access: proxy
       basicAuth: false
       url: http://tempo-grafana-tempo-query-frontend.tempo.svc.cluster.local:3200
-      editable: false
+      readOnly: true
       isDefault: false
       jsonData:
         tlsSkipVerify: false
@@ -43,7 +43,7 @@ extraDeploy:
       access: proxy
       basicAuth: false
       url: http://loki-grafana-loki-query-frontend.loki.svc.cluster.local:3100
-      editable: false
+      readOnly: true
       isDefault: false
       jsonData:
         tlsSkipVerify: false
@@ -55,3 +55,25 @@ extraDeploy:
           matcherRegex: trace_id
           name: traceId
           url: ${__value.raw}
+- apiVersion: grafana.integreatly.org/v1beta1
+  kind: GrafanaDatasource
+  metadata:
+    name: mimir
+    namespace: grafana
+  spec:
+    instanceSelector:
+      matchLabels:
+        app.kubernetes.io/instance: grafana
+    datasource:
+      name: mimir
+      type: prometheus
+      access: proxy
+      basicAuth: false
+      url: http://mimir-grafana-mimir-query-frontend.mimir.svc.cluster.local:8080/prometheus
+      isDefault: false
+      readOnly: false
+      jsonData:
+        exemplarTraceIdDestinations: [ ]
+        httpHeaderName1: X-Scope-OrgID
+        httpMethod: POST
+        defaultEditor: code
