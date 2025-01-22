@@ -2168,14 +2168,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(target_info{deployment_environment_name=~\"$deployment_environment_name\", k8s_cluster_name=\"$k8s_cluster_name\", k8s_namespace_name=~\"$k8s_namespace_name\", telemetry_sdk_language=\"java\"},job)",
+        "definition": "label_values(target_info{deployment_environment_name=~\"$deployment_environment_name\", k8s_cluster_name=~\"$k8s_cluster_name\", k8s_namespace_name=~\"$k8s_namespace_name\", telemetry_sdk_language=\"java\"},job)",
         "description": "",
         "label": "job",
         "name": "job",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(target_info{deployment_environment_name=~\"$deployment_environment_name\", k8s_cluster_name=\"$k8s_cluster_name\", k8s_namespace_name=~\"$k8s_namespace_name\", telemetry_sdk_language=\"java\"},job)",
+          "query": "label_values(target_info{deployment_environment_name=~\"$deployment_environment_name\", k8s_cluster_name=~\"$k8s_cluster_name\", k8s_namespace_name=~\"$k8s_namespace_name\", telemetry_sdk_language=\"java\"},job)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
