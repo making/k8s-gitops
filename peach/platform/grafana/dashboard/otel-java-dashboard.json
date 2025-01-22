@@ -2288,6 +2288,6 @@
   "timezone": "",
   "title": "OTel Java Dashboard",
   "uid": "otel-java",
-  "version": 8,
+  "version": 1,
   "weekStart": ""
 }
