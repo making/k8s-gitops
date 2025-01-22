@@ -1383,7 +1383,7 @@
               },
               "editorMode": "code",
               "expr": "60 * sum by (http_response_status_code) (rate(http_client_request_duration_seconds_count{job=~\"$job\", instance=~\"$instance\"}[5m]))",
-              "legendFormat": "__auto",
+              "legendFormat": "{{http_response_status_code}} {{server_address}}",
               "range": true,
               "refId": "A"
             }
@@ -1481,7 +1481,7 @@
                 "uid": "$datasource"
               },
               "editorMode": "code",
-              "expr": "sum by(instance) (rate(http_client_request_duration_seconds_count{job=~\"$job\", instance=~\"$instance\", http_response_status_code=~\"5.+\"}[5m])) / on(instance) sum by(instance) (rate(http_server_request_duration_seconds_count{job=~\"$job\", instance=~\"$instance\"}[5m]))",
+              "expr": "sum by(instance, server_address) (rate(http_client_request_duration_seconds_count{job=~\"$job\", instance=~\"$instance\", http_response_status_code=~\"5.+\"}[5m])) / on(instance) sum by(instance) (rate(http_server_request_duration_seconds_count{job=~\"$job\", instance=~\"$instance\"}[5m]))",
               "legendFormat": "__auto",
               "range": true,
               "refId": "A"
@@ -1577,10 +1577,10 @@
               },
               "editorMode": "code",
               "exemplar": true,
-              "expr": "(histogram_quantile($percentile, sum by(le, http_response_status_code) (rate(http_client_request_duration_seconds_bucket{job=~\"$job\", instance=~\"$instance\"}[5m]))))",
+              "expr": "(histogram_quantile($percentile, sum by(le, http_response_status_code, server_address) (rate(http_client_request_duration_seconds_bucket{job=~\"$job\", instance=~\"$instance\"}[5m]))))",
               "format": "time_series",
               "instant": false,
-              "legendFormat": "__auto",
+              "legendFormat": "{{http_response_status_code}} {{server_address}}",
               "range": true,
               "refId": "A"
             }
