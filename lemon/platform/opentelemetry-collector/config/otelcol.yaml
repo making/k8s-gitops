@@ -255,6 +255,7 @@ spec:
           processors:
           - memory_limiter
           - attributes
+          - resource
           - batch
           exporters:
           - prometheusremotewrite
