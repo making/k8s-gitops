@@ -15,7 +15,7 @@ spec:
   java:
     image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:2.12.0
     env:
-    - name: OTEL_EXPERIMENTAL_RESOURCE_DISABLED_KEYS
+    - name: OTEL_RESOURCE_DISABLED_KEYS
       value: process.command_args,process.command_line,process.executable.path,process.pid,os.type,os.description,host.arch,service.version,container.id,k8s.replicaset.name,k8s.deployment.name
     - name: OTEL_EXPORTER_OTLP_COMPRESSION
       value: gzip
