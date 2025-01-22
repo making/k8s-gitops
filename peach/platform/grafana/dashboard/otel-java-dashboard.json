@@ -2100,7 +2100,7 @@
         "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "$datasource"
         },
         "definition": "label_values(target_info{telemetry_sdk_language=\"java\"},deployment_environment_name)",
         "description": "",
@@ -2166,7 +2166,7 @@
         "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "$datasource"
         },
         "definition": "label_values(target_info{deployment_environment_name=~\"$deployment_environment_name\", k8s_cluster_name=\"$k8s_cluster_name\", k8s_namespace_name=~\"$k8s_namespace_name\", telemetry_sdk_language=\"java\"},job)",
         "description": "",
