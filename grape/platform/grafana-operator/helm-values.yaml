@@ -17,7 +17,6 @@ extraDeploy:
       access: proxy
       basicAuth: false
       url: http://tempo-grafana-tempo-query-frontend.tempo.svc.cluster.local:3200
-      readOnly: true
       isDefault: false
       jsonData:
         tlsSkipVerify: false
@@ -43,7 +42,6 @@ extraDeploy:
       access: proxy
       basicAuth: false
       url: http://loki-grafana-loki-query-frontend.loki.svc.cluster.local:3100
-      readOnly: true
       isDefault: false
       jsonData:
         tlsSkipVerify: false
@@ -71,9 +69,19 @@ extraDeploy:
       basicAuth: false
       url: http://mimir-grafana-mimir-query-frontend.mimir.svc.cluster.local:8080/prometheus
       isDefault: false
-      readOnly: false
       jsonData:
         exemplarTraceIdDestinations: [ ]
         httpHeaderName1: X-Scope-OrgID
         httpMethod: POST
         defaultEditor: code
+- apiVersion: grafana.integreatly.org/v1beta1
+  kind: GrafanaDashboard
+  metadata:
+    name: grafanadashboard-otel-java-dashboard
+    namespace: grafana
+  spec:
+    instanceSelector:
+      matchLabels:
+        app.kubernetes.io/instance: grafana
+    resyncPeriod: 60m
+    url: https://raw.githubusercontent.com/making/k8s-gitops/refs/heads/main/peach/platform/grafana/dashboard/otel-java-dashboard.json

@@ -50,6 +50,21 @@ serverBlock: |
       proxy_set_header X-Scope-OrgID $ensured_x_scope_orgid;
     }
 
+    location /v1/remote_write {
+      auth_basic "Restricted Access";
+      auth_basic_user_file /etc/nginx/auth/auth;
+
+      # Path mapping: /v1/remote_write -> /api/v1/push
+      rewrite ^/v1/remote_write(.*)$ /api/v1/push$1 break;
+
+      proxy_pass http://mimir-grafana-mimir-distributor.mimir:8080;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Scope-OrgID $ensured_x_scope_orgid;
+    }
+
     location / {
       proxy_pass http://grafana-grafana-operator-grafana-service.grafana.svc.cluster.local:3000;
       proxy_set_header Host $host;
