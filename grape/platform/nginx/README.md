@@ -1,8 +1,8 @@
 
 ```bash
-htpasswd -c auth myuser
+echo 'password' | htpasswd -c .htpasswd myuser -i
 kubectl create ns nginx
-kubectl create secret -n nginx generic nginx-basic-auth --from-file=auth
+kubectl create secret -n nginx generic nginx-basic-auth --from-file=.htpasswd
 
 helm upgrade --install --create-namespace \
   -n nginx \

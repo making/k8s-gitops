@@ -12,7 +12,7 @@ serverBlock: |
 
     location /v1/traces {
       auth_basic "Restricted Access";
-      auth_basic_user_file /etc/nginx/auth/auth;
+      auth_basic_user_file /etc/nginx/auth/.htpasswd;
 
       proxy_pass http://tempo-grafana-tempo-distributor.tempo.svc.cluster.local:4318;
       proxy_set_header Host $host;
@@ -23,7 +23,7 @@ serverBlock: |
 
     location /v1/logs {
       auth_basic "Restricted Access";
-      auth_basic_user_file /etc/nginx/auth/auth;
+      auth_basic_user_file /etc/nginx/auth/.htpasswd;
 
       # Path mapping: /v1/logs -> /otlp/v1/logs
       rewrite ^/v1/logs(.*)$ /otlp/v1/logs$1 break;
@@ -37,7 +37,7 @@ serverBlock: |
 
     location /v1/metrics {
       auth_basic "Restricted Access";
-      auth_basic_user_file /etc/nginx/auth/auth;
+      auth_basic_user_file /etc/nginx/auth/.htpasswd;
 
       # Path mapping: /v1/metrics -> /otlp/v1/metrics
       rewrite ^/v1/metrics(.*)$ /otlp/v1/metrics$1 break;
@@ -52,7 +52,7 @@ serverBlock: |
 
     location /v1/remote_write {
       auth_basic "Restricted Access";
-      auth_basic_user_file /etc/nginx/auth/auth;
+      auth_basic_user_file /etc/nginx/auth/.htpasswd;
 
       # Path mapping: /v1/remote_write -> /api/v1/push
       rewrite ^/v1/remote_write(.*)$ /api/v1/push$1 break;
