@@ -1,0 +1,20 @@
+#@ load("@ytt:data", "data")
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: otel-collector
+  namespace: opentelemetry
+spec:
+  virtualhost:
+    fqdn: otelcol.lemon.maki.lol
+    tls:
+      secretName: projectcontour/default-tls
+    ipAllowPolicy:
+    - cidr: #@ data.values.allowed_ip_cidr
+      source: Remote
+  routes:
+  - conditions:
+    - prefix: /
+    services:
+    - name: otel-collector
+      port: 4318
