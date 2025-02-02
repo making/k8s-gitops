@@ -91,6 +91,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
+        - name: logging.structured.format.console
+          value: ecs
         - name: spring.threads.virtual.enabled
           value: "true"
         image: #@ data.values.image
