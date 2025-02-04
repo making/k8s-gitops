@@ -38,11 +38,31 @@ spec:
               key: github-webhook-secret
               name: translation-config
         - name: management.otlp.logging.endpoint
-          value: https://httpbin.org/post
+          valueFrom:
+            secretKeyRef:
+              key: otlp-logs-endpoint
+              name: translation-config
+        - name: management.otlp.logging.headers.authorization
+          valueFrom:
+            secretKeyRef:
+              key: otlp-logs-header-authorization
+              name: translation-config
         - name: management.otlp.tracing.endpoint
-          value: https://httpbin.org/post
+          valueFrom:
+            secretKeyRef:
+              key: otlp-traces-endpoint
+              name: translation-config
+        - name: management.otlp.tracing.headers.authorization
+          valueFrom:
+            secretKeyRef:
+              key: otlp-traces-header-authorization
+              name: translation-config
         - name: management.opentelemetry.resource-attributes.k8s.pod.name
           value: ${HOSTNAME:}
+        - name: management.opentelemetry.resource-attributes.k8s.namespace.name
+          value: zje2gl28i8h
+        - name: management.opentelemetry.resource-attributes.k8s.cluster.name
+          value: zje2gl28i8h
         - name: logging.structured.format.console
           value: ecs
         - name: spring.threads.virtual.enabled
