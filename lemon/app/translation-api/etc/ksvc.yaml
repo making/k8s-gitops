@@ -1,0 +1,82 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: translation-api
+  labels:
+    app: translation-api
+    app.kubernetes.io/part-of: translation-api
+spec:
+  template:
+    metadata:
+      annotations:
+        github.com/revision: 2480658292b2b8c05bab4f9eea0f2b4c5517ec01
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+      - image: ghcr.io/categolj/translation-api:native
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: server.port
+          value: "8080"
+        - name: info.env.hostname
+          value: ${HOSTNAME:}
+        - name: entry.api-url
+          value: https://blog-api-blog.apps.ik.am
+        - name: spring.ai.openai.api-key
+          valueFrom:
+            secretKeyRef:
+              key: openai-api-key
+              name: translation-config
+        - name: github.access-token
+          valueFrom:
+            secretKeyRef:
+              key: github-access-token
+              name: translation-config
+        - name: github.webhook-secret
+          valueFrom:
+            secretKeyRef:
+              key: github-webhook-secret
+              name: translation-config
+        - name: management.otlp.logging.endpoint
+          value: https://httpbin.org/post
+        - name: management.otlp.tracing.endpoint
+          value: https://httpbin.org/post
+        - name: management.opentelemetry.resource-attributes.k8s.pod.name
+          value: ${HOSTNAME:}
+        - name: logging.structured.format.console
+          value: ecs
+        - name: spring.threads.virtual.enabled
+          value: "true"
+        ports:
+        - containerPort: 8080
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1002
+          seccompProfile:
+            type: RuntimeDefault
+        livenessProbe:
+          httpGet:
+            path: /livez
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+          periodSeconds: 10
+          timeoutSeconds: 1
+        startupProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+          failureThreshold: 20
+          periodSeconds: 5
+          timeoutSeconds: 1
