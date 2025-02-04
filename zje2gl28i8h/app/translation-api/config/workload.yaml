@@ -1,3 +1,4 @@
+#@ load("@ytt:data", "data")
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -9,13 +10,10 @@ spec:
   template:
     metadata:
       annotations:
-        github.com/revision: 2480658292b2b8c05bab4f9eea0f2b4c5517ec01
-        prometheus.io/path: /actuator/prometheus
-        prometheus.io/port: "8080"
-        prometheus.io/scrape: "true"
+        github.com/revision: #@ data.values.git_revision
     spec:
       containers:
-      - image: ghcr.io/categolj/translation-api:native
+      - image: #@ data.values.image
         imagePullPolicy: IfNotPresent
         env:
         - name: server.port
