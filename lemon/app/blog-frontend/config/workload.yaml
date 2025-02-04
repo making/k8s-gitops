@@ -71,7 +71,7 @@ spec:
         - name: comment-api.url
           value: http://comment-api.blog.svc.cluster.local
         - name: translation-api.url
-          value: http://translation-api.blog.svc.cluster.local
+          value: https://translation-api.zje2gl28i8h.jp-tok.codeengine.appdomain.cloud
         - name: note-api.url
           value: http://note-api.note.svc.cluster.local
         - name: counter-api.url
