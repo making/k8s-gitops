@@ -14,6 +14,7 @@ ytt -f zje2gl28i8h/app/translation-api/config/secret.yaml --data-values-file zje
 
 ```
 cd /tmp
+rm -rf translation-api
 git clone https://github.com/categolj/translation-api -b images 
 cd -
 
