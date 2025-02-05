@@ -2161,14 +2161,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(application_ready_time_seconds,app)",
+        "definition": "label_values(jvm_memory_used_bytes,app)",
         "includeAll": false,
         "label": "app",
         "name": "app",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(application_ready_time_seconds,app)",
+          "query": "label_values(jvm_memory_used_bytes,app)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -2183,13 +2183,13 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(application_ready_time_seconds{app=\"$app\"},cluster)",
+        "definition": "label_values(jvm_memory_used_bytes{app=\"$app\"},cluster)",
         "includeAll": false,
         "name": "cluster",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(application_ready_time_seconds{app=\"$app\"},cluster)",
+          "query": "label_values(jvm_memory_used_bytes{app=\"$app\"},cluster)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -2224,7 +2224,7 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(application_ready_time_seconds{cluster=~\"$cluster\", app=\"$app\"},namespace)",
+        "definition": "label_values(jvm_memory_used_bytes{cluster=~\"$cluster\", app=\"$app\"},namespace)",
         "includeAll": true,
         "label": "namespace",
         "multi": true,
@@ -2232,7 +2232,7 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(application_ready_time_seconds{cluster=~\"$cluster\", app=\"$app\"},namespace)",
+          "query": "label_values(jvm_memory_used_bytes{cluster=~\"$cluster\", app=\"$app\"},namespace)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
