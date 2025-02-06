@@ -11,6 +11,9 @@ spec:
     metadata:
       annotations:
         github.com/revision: #@ data.values.git_revision
+        autoscaling.knative.dev/maxScale: "1"
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/scale-down-delay: "0"
     spec:
       containers:
       - image: #@ data.values.image
