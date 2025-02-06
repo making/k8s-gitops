@@ -21,5 +21,5 @@ rm -rf counter-api
 git clone https://github.com/categolj/counter-api -b images 
 cd -
 
-ytt -f zje2gl28i8h/app/counter-api/config/workload.yaml -f zje2gl28i8h/app/counter-api/config/kapp-config.yaml --data-values-file /tmp/counter-api/image.yaml | kapp deploy -a counter-api -c -f - -y
+ytt -f zje2gl28i8h/app/counter-api/config/workload.yaml -f zje2gl28i8h/app/counter-api/config/kapp-config.yaml --data-values-file /tmp/counter-api/native_amd64.yaml | kapp deploy -a counter-api -c -f - -y
 ```
