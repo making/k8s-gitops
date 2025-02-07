@@ -14,7 +14,7 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: korifi-workloads-ingress-cert
+  name: korifi-api-ingress-cert
   namespace: korifi
 spec:
   dnsNames:
@@ -22,4 +22,4 @@ spec:
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
-  secretName: korifi-workloads-ingress-cert
+  secretName: korifi-api-ingress-cert
