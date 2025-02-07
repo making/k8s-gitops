@@ -78,12 +78,9 @@ spec:
           value: counter-api
         - name: management.metrics.tags.cluster
           value: zje2gl28i8h
+        #! HOSTNAME = pod name is a high cardinality tag under the serverless environment, so use K_REVISION instead.
         - name: management.metrics.tags.instance
-          value: ${HOSTNAME:}
-        - name: management.metrics.tags.namespace
-          value: zje2gl28i8h
-        - name: management.metrics.tags.pod
-          value: ${HOSTNAME:}
+          value: ${K_REVISION:}
         - name: management.opentelemetry.resource-attributes.k8s.pod.name
           value: ${HOSTNAME:}
         - name: management.opentelemetry.resource-attributes.k8s.namespace.name
