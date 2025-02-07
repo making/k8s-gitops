@@ -5,7 +5,7 @@ expose:
     secret:
       secretName: harbor-tls
   loadBalancer:
-    IP: 192.168.11.220
+    IP: 192.168.11.215
 externalURL: https://harbor.ik.am
 persistence:
   persistentVolumeClaim:
