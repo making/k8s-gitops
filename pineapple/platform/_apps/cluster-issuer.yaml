@@ -22,7 +22,6 @@ spec:
           name: age-key
   - ytt:
       paths:
-      - '-'
       - config
       valuesFrom:
       - path: credentials.yaml
