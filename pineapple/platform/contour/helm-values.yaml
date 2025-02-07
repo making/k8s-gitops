@@ -21,8 +21,8 @@ configInline:
   - "x_forwarded_for"
   gateway:
     gatewayRef:
-      name: contour
-      namespace: projectcontour
+      name: korifi
+      namespace: korifi-gateway
 contour:
   tlsExistingSecret: contourcert
 envoy:
