@@ -1,0 +1,43 @@
+configInline:
+  timeouts:
+    request-timeout: 180s
+  accesslog-format: json
+  json-fields:
+  - "@timestamp"
+  - "authority"
+  - "bytes_received"
+  - "bytes_sent"
+  - "traceparent=%REQ(TRACEPARENT)%"
+  - "duration"
+  - "method"
+  - "path"
+  - "protocol"
+  - "referer=%REQ(REFERER)%"
+  - "request_id"
+  - "requested_server_name"
+  - "response_code"
+  - "upstream_cluster"
+  - "user_agent"
+  - "x_forwarded_for"
+  tracing:
+    includePodDetail: false
+    serviceName: envoy
+  gateway:
+    gatewayRef:
+      name: contour
+      namespace: projectcontour
+contour:
+  tlsExistingSecret: contourcert
+envoy:
+  kind: deployment
+  replicaCount: 1
+  tlsExistingSecret: envoycert
+  service:
+    loadBalancerIP: 192.168.11.210
+  podAnnotations:
+    prometheus.io/path: /stats/prometheus
+    prometheus.io/port: "8002"
+    prometheus.io/scrape: "true"
+  podAntiAffinityPreset: soft
+gatewayAPI:
+  manageCRDs: true
