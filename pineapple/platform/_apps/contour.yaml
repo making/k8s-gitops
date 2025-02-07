@@ -33,8 +33,6 @@ spec:
       paths:
       - '-'
       - 1/config
-      valuesFrom:
-      - path: 1/credentials.yaml
   deploy:
   - kapp:
       rawOptions:
