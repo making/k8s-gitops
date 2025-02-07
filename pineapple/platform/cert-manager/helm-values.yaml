@@ -1,0 +1,4 @@
+installCRDs: true
+kubeVersion: 1.31.3
+metrics:
+  enabled: false
