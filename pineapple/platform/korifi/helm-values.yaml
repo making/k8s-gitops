@@ -1,6 +1,6 @@
 generateIngressCertificates: false
 rootNamespace: cf
-adminUserName: cf-admin
+adminUserName: admin
 api:
   apiServer:
     url: api.cf.ik.am
@@ -12,3 +12,6 @@ networking:
   gatewayClass: contour
 systemImagePullSecrets:
 - image-registry-credentials
+experimental:
+  managedServices:
+    enabled: true
