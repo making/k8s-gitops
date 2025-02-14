@@ -46,6 +46,8 @@ spec:
       serviceAccountName: k8s-oidc-exposer
       containers:
       - env:
+        - name: kubernetes.bearer-token
+          value: file:/var/run/secrets/kubernetes.io/serviceaccount/token
         - name: kubernetes.client-bundle-name
           value: k8s
         - name: spring.ssl.bundle.pem.k8s.truststore.certificate
