@@ -1,0 +1,111 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-oidc-exposer
+  namespace: kube-system
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: k8s-oidc-exposer
+    app.kubernetes.io/part-of: k8s-oidc-exposer
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: k8s-oidc-exposer
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-oidc-exposer
+  namespace: kube-system
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: k8s-oidc-exposer
+    app.kubernetes.io/part-of: k8s-oidc-exposer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-oidc-exposer
+  template:
+    metadata:
+      annotations:
+        github.com/revision: #@ data.values.git_revision
+      labels:
+        app: k8s-oidc-exposer
+        app.kubernetes.io/part-of: k8s-oidc-exposer
+    spec:
+      containers:
+      - env:
+        - name: kubernetes.client-bundle-name
+          value: k8s
+        - name: spring.ssl.bundle.pem.k8s.truststore.certificate
+          value: file:/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        - name: server.port
+          value: "8080"
+        - name: info.env.hostname
+          value: ${HOSTNAME:}
+        - name: logging.structured.format.console
+          value: ecs
+        - name: spring.threads.virtual.enabled
+          value: "true"
+        image: #@ data.values.image
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /livez
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+            scheme: HTTP
+        startupProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+            scheme: HTTP
+          failureThreshold: 20
+          periodSeconds: 5
+        name: workload
+        ports:
+        - containerPort: 8080
+          name: user-port
+          protocol: TCP
+        resources:
+          limits:
+            memory: 128Mi
+          requests:
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1002
+          seccompProfile:
+            type: RuntimeDefault
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: k8s-oidc-exposer
+              topologyKey: kubernetes.io/hostname
+            weight: 1
