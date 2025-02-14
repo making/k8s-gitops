@@ -15,7 +15,7 @@ spec:
   - git:
       url: https://github.com/categolj/k8s-oidc-exposer.git
       ref: origin/images
-  syncPeriod: 1d
+  syncPeriod: 24h
   template:
   - sops:
       age:
