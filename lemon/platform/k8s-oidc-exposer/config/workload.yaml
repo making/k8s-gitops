@@ -43,6 +43,7 @@ spec:
         app: k8s-oidc-exposer
         app.kubernetes.io/part-of: k8s-oidc-exposer
     spec:
+      serviceAccountName: k8s-oidc-exposer
       containers:
       - env:
         - name: kubernetes.client-bundle-name
