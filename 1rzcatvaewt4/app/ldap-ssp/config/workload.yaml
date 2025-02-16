@@ -1,0 +1,157 @@
+#@ load("@ytt:data", "data")
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ldap-ssp
+  labels:
+    app: ldap-ssp
+    app.kubernetes.io/part-of: ldap-ssp
+spec:
+  template:
+    metadata:
+      annotations:
+        github.com/revision: #@ data.values.git_revision
+        autoscaling.knative.dev/maxScale: "1"
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/scale-down-delay: "0"
+        autoscaling.knative.dev/window: "5m"
+    spec:
+      containers:
+      - image: #@ data.values.image
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: server.port
+          value: "8080"
+        - name: info.env.hostname
+          value: ${HOSTNAME:}
+        - name: spring.ldap.urls
+          valueFrom:
+            secretKeyRef:
+              key: ldap_url
+              name: ldap-ssp-config
+        - name: spring.ldap.username
+          valueFrom:
+            secretKeyRef:
+              key: ldap_username
+              name: ldap-ssp-config
+        - name: spring.ldap.password
+          valueFrom:
+            secretKeyRef:
+              key: ldap_password
+              name: ldap-ssp-config
+        - name: spring.ldap.base
+          valueFrom:
+            secretKeyRef:
+              key: ldap_base
+              name: ldap-ssp-config
+        - name: ldap.id-attribute
+          value: cn
+        - name: ldap.user-search-base
+          value: ou=people
+        - name: ldap.user-search-filter
+          value: (cn={0})
+        - name: sendgrid.url
+          value: https://api.sendgrid.com
+        - name: sendgrid.from
+          value: noreply@ik.am
+        - name: sendgrid.api-key
+          valueFrom:
+            secretKeyRef:
+              key: sendgrid_api_key
+              name: ldap-ssp-config
+        - name: ssp.external-url
+          valueFrom:
+            secretKeyRef:
+              key: ssp_external_url
+              name: ldap-ssp-config
+        - name: management.otlp.logging.endpoint
+          valueFrom:
+            secretKeyRef:
+              key: otlp-logs-endpoint
+              name: ldap-ssp-config
+        - name: management.otlp.logging.headers.authorization
+          valueFrom:
+            secretKeyRef:
+              key: otlp-logs-header-authorization
+              name: ldap-ssp-config
+        - name: management.otlp.tracing.endpoint
+          valueFrom:
+            secretKeyRef:
+              key: otlp-traces-endpoint
+              name: ldap-ssp-config
+        - name: management.otlp.tracing.headers.authorization
+          valueFrom:
+            secretKeyRef:
+              key: otlp-traces-header-authorization
+              name: ldap-ssp-config
+        - name: management.otlp.metrics.export.url
+          valueFrom:
+            secretKeyRef:
+              key: otlp-metrics-endpoint
+              name: ldap-ssp-config
+        - name: management.otlp.metrics.export.headers.authorization
+          valueFrom:
+            secretKeyRef:
+              key: otlp-metrics-header-authorization
+              name: ldap-ssp-config
+        - name: management.otlp.metrics.export.step
+          value: 10s
+        - name: management.otlp.metrics.export.base-time-unit
+          value: seconds
+        - name: management.metrics.tags.app
+          value: ${CE_APP}
+        - name: management.metrics.tags.cluster
+          value: ${CE_SUBDOMAIN}
+        #! HOSTNAME = pod name is a high cardinality tag under the serverless environment, so use K_REVISION instead.
+        - name: management.metrics.tags.instance
+          value: ${K_REVISION:}
+        - name: management.opentelemetry.resource-attributes.k8s.pod.name
+          value: ${HOSTNAME:}
+        - name: management.opentelemetry.resource-attributes.k8s.namespace.name
+          value: ${CE_SUBDOMAIN}
+        - name: management.opentelemetry.resource-attributes.k8s.cluster.name
+          value: ${CE_SUBDOMAIN}
+        - name: logging.structured.format.console
+          value: ecs
+        - name: spring.threads.virtual.enabled
+          value: "true"
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 125m
+            ephemeral-storage: 400M
+            memory: 250M
+          requests:
+            cpu: 125m
+            ephemeral-storage: 400M
+            memory: 250M
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1002
+          seccompProfile:
+            type: RuntimeDefault
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/livez
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readyz
+            port: 8080
+          periodSeconds: 10
+          timeoutSeconds: 1
+        startupProbe:
+          httpGet:
+            path: /actuator/health/readyz
+            port: 8080
+          failureThreshold: 20
+          periodSeconds: 5
+          timeoutSeconds: 1
