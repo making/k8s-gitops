@@ -13,7 +13,7 @@ env:
   LDAP_DOMAIN: ik.am
   LDAP_ORGANISATION: IK.AM
 ltb-passwd:
-  enabled: true
+  enabled: false
   ingress:
     enabled: false
     annotations:
