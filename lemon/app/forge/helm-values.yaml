@@ -22,6 +22,7 @@ minecraftServer:
   #! - client only https://github.com/Korea-Minecraft-Forum/CocoaInput/releases/download/4.3.1-0/CocoaInput-1.20.1-forge-4.3.1-EXPERIMENTAL.jar
   - https://mediafilez.forgecdn.net/files/4706/199/exoticbirds-1.20.1-1.0.0.jar
   - https://mediafilez.forgecdn.net/files/5950/151/%5B1.20.1%5D%20SecurityCraft%20v1.9.12.jar
+  - https://mediafilez.forgecdn.net/files/6107/443/JustEnoughGuns-0.11.1-1.20.1.jar
   overrideServerProperties: true
   enforceSecureProfile: true
   serviceType: LoadBalancer
