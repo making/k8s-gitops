@@ -14,7 +14,25 @@ spec:
       url: https://github.com/open-telemetry/opentelemetry-operator/releases/download/v0.114.0/opentelemetry-operator.yaml
   syncPeriod: 24h
   template:
-  - ytt: { }
+  - ytt:
+      inline:
+        paths:
+          overlay.yml: |
+            #@ load("@ytt:overlay", "overlay")
+            #@overlay/match by=overlay.subset({"kind":"Deployment","metadata":{"name":"opentelemetry-operator-controller-manager"}})
+            ---
+            spec:
+              template:
+                spec:
+                  containers:
+                  #@overlay/match by=overlay.all, expects="1+"
+                  - resources:
+                      #@overlay/match missing_ok=True
+                      #@overlay/remove
+                      limits:
+                      #@overlay/match missing_ok=True
+                      #@overlay/remove
+                      requests:
   deploy:
   - kapp:
       rawOptions:
