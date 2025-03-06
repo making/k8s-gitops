@@ -214,7 +214,7 @@ spec:
         endpoint: #@ data.values.zipkin.endpoint
         compression: gzip
       prometheusremotewrite:
-        endpoint: http://inlets-exit.raspberrypi.svc.cluster.local:6868/api/v1/write
+        endpoint: #@ data.values.prometheus.endpoint
         headers:
           authorization: #@ "Basic " + base64.encode(data.values.prometheus.username + ":" + data.values.prometheus.password)
         tls:
