@@ -20,9 +20,9 @@ spec:
           name: age-key
   - ytt:
       paths:
-      - 0/config
+      - config
       valuesFrom:
-      - path: 0/credentials.yaml
+      - path: credentials.yaml
   deploy:
   - kapp:
       rawOptions:
