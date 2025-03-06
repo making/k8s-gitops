@@ -361,8 +361,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "(\n  node_memory_MemTotal_bytes{instance=\"$instance\"}\n-\n  node_memory_MemFree_bytes{instance=\"$instance\"}\n-\n  node_memory_Buffers_bytes{instance=\"$instance\"}\n-\n  node_memory_Cached_bytes{instance=\"$instance\"}\n)\n",
@@ -384,8 +383,7 @@
         },
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "$datasource"
           },
           "expr": "node_memory_Cached_bytes{instance=\"$instance\"}",
           "format": "time_series",
@@ -953,6 +951,105 @@
       ],
       "title": "Network Transmitted",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 60
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 28
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "node_hwmon_temp_celsius{instance=\"$instance\"}",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 2,
+          "legendFormat": "{{sensor}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Hardware Temperature",
+      "type": "timeseries"
     }
   ],
   "refresh": "",
@@ -1016,6 +1113,6 @@
   "timezone": "browser",
   "title": "Node Exporter Dashboard",
   "uid": "node-exporter",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
