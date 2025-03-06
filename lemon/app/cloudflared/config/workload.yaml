@@ -15,11 +15,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      pod: cloudflared
+      app: cloudflared
   template:
     metadata:
       labels:
-        pod: cloudflared
+        app: cloudflared
     spec:
       containers:
       - args:
