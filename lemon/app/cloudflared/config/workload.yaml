@@ -27,6 +27,7 @@ spec:
         - tcp
         - --hostname
         - #@ data.values.public_hosts.minecraft
-        - --url 0.0.0.0:25565
+        - --url
+        - 0.0.0.0:25565
         image: cloudflare/cloudflared:latest
         name: cloudflared-minecraft
