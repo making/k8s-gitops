@@ -1,0 +1,35 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: cloudflared
+  namespace: app-install
+  annotations:
+    kapp.k14s.io/change-group: "{name}"
+spec:
+  serviceAccountName: kapp
+  fetch:
+  - git:
+      url: https://github.com/making/k8s-gitops.git
+      ref: origin/main
+      subPath: lemon/app/cloudflared
+  syncPeriod: 168h
+  template:
+  - sops:
+      age:
+        privateKeysSecretRef:
+          name: age-key
+  - ytt:
+      paths:
+      - 0/config
+      valuesFrom:
+      - path: 0/credentials.yaml
+  deploy:
+  - kapp:
+      rawOptions:
+      - --wait-timeout=5m
+      - --diff-changes=true
+      - --diff-mask=true
+      delete:
+        #! Force delete PVCs, since StatefulSet does not delete them
+        rawOptions:
+        - --apply-ignored=true
