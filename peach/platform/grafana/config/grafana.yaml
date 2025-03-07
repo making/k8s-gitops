@@ -53,7 +53,7 @@ spec:
             imagePullPolicy: IfNotPresent
             env:
             - name: GF_INSTALL_PLUGINS
-              value: https://github.com/motherduckdb/grafana-duckdb-datasource/releases/download/0.1.0-b/motherduck-duckdb-datasource-0.1.0.zip;motherduck-duckdb-datasource
+              value: https://github.com/motherduckdb/grafana-duckdb-datasource/releases/download/0.1.0/motherduck-duckdb-datasource-0.1.0.zip;motherduck-duckdb-datasource
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
