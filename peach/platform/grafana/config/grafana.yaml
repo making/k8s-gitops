@@ -51,6 +51,9 @@ spec:
           - name: grafana
             image: docker.io/bitnami/grafana:11.3.0-debian-12-r2
             imagePullPolicy: IfNotPresent
+            env:
+            - name: GF_INSTALL_PLUGINS
+              value: https://github.com/motherduckdb/grafana-duckdb-datasource/releases/download/0.1.0-b/motherduck-duckdb-datasource-0.1.0.zip;motherduck-duckdb-datasource
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -96,6 +99,7 @@ spec:
               mountPath: /etc/grafana-configmaps
               readOnly: false
   config:
+    allow_loading_unsigned_plugins: motherduck-duckdb-datasource
     analytics:
       check_for_updates: "false"
       reporting_enabled: "false"
