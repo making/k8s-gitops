@@ -173,7 +173,7 @@ spec:
           - batch
           exporters:
           - otlphttp/grafana_cloud
-          - awss3
+          #! - awss3
         logs/only-envoy:
           receivers:
           - filelog
