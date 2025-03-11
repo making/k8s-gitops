@@ -25,7 +25,6 @@ customLdifFiles:
     objectClass: organizationalUnit
     ou: groups
 phpldapadmin:
-  enabled: false
   ingress:
     enabled: true
     annotations:
