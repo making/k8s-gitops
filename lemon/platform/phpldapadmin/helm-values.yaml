@@ -9,4 +9,4 @@ service:
 env:
   PHPLDAPADMIN_HTTPS: "false"
   PHPLDAPADMIN_TRUST_PROXY_SSL: "true"
-  PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'ldap.ik.am': [{'server': [{'tls': 'true'}]}]}]"
+  PHPLDAPADMIN_LDAP_HOSTS: ldaps://ldap.ik.am
