@@ -10,3 +10,4 @@ env:
   PHPLDAPADMIN_HTTPS: "false"
   PHPLDAPADMIN_TRUST_PROXY_SSL: "true"
   PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'ldap.ik.am': [{'server': [{'tls': 'true'},{'port': 636}]}]}]"
+  PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: "never"
