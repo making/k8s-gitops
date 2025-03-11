@@ -51,7 +51,6 @@ data:
     
     backend http_backend
       mode tcp
-      transparent
       server contour contour-envoy.projectcontour.svc.cluster.local:80 check send-proxy-v2
 
     # HTTPS routing (443)
@@ -63,7 +62,6 @@ data:
     
     backend https_backend
       mode tcp
-      transparent
       server contour contour-envoy.projectcontour.svc.cluster.local:443 check send-proxy-v2
 
 ---
