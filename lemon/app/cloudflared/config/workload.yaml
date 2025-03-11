@@ -34,22 +34,3 @@ spec:
         ports:
         - name: minecraft
           containerPort: 25565
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
-    oci-network-load-balancer.oraclecloud.com/security-list-management-mode: All
-    oci.oraclecloud.com/load-balancer-type: nlb
-  name: cloudflared
-  namespace: cloudflared
-spec:
-  externalTrafficPolicy: Local
-  ports:
-  - name: minecraft
-    port: 25565
-    targetPort: minecraft
-  selector:
-    app: cloudflared
-  type: LoadBalancer
