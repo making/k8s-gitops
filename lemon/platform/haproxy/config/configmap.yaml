@@ -27,10 +27,13 @@ data:
       bind *:8636
       mode tcp
       option tcplog
+      no option http-server-close
+      no option http-pretend-keepalive
       default_backend ldaps_backend
 
     backend ldaps_backend
       mode tcp
+      option persist
       server openldap openldap-stack-ha.openldap.svc.cluster.local:636 check
 
     # Minecraft/Cloudflared routing (25565)
