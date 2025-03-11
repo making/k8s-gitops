@@ -46,20 +46,26 @@ data:
     frontend http_frontend
       bind *:8080
       mode tcp
+t      option tcplog
       default_backend http_backend
     
     backend http_backend
       mode tcp
+      option preserve-source
+      source usesrc clientip
       server contour contour-envoy.projectcontour.svc.cluster.local:80 check
 
     # HTTPS routing (443)
     frontend https_frontend
       bind *:8443
       mode tcp
+      option tcplog
       default_backend https_backend
     
     backend https_backend
       mode tcp
+      option preserve-source
+      source usesrc clientip
       server contour contour-envoy.projectcontour.svc.cluster.local:443 check
 
 ---
