@@ -46,6 +46,7 @@ data:
     frontend http_frontend
       bind *:8080
       mode tcp
+      option tcplog
       default_backend http_backend
     
     backend http_backend
@@ -56,6 +57,7 @@ data:
     frontend https_frontend
       bind *:8443
       mode tcp
+      option tcplog
       default_backend https_backend
     
     backend https_backend
