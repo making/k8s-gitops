@@ -46,7 +46,7 @@ data:
     frontend http_frontend
       bind *:8080
       mode tcp
-t      option tcplog
+      option tcplog
       default_backend http_backend
     
     backend http_backend
