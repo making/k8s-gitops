@@ -5,10 +5,10 @@ metadata:
   name: openldap-tls
 spec:
   dnsNames:
-  - ldap.lemon.maki.lol
+  - ldap.ik.am
   issuerRef:
     kind: ClusterIssuer
-    name: letsencrypt
+    name: letsencrypt-ik-am
   secretName: openldap-tls
 
 #@overlay/match by=overlay.subset({"kind": "StatefulSet", "metadata": {"name": "openldap-stack-ha"}})
