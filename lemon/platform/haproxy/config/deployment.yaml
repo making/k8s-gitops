@@ -23,6 +23,8 @@ spec:
           name: http
         - containerPort: 8443
           name: https
+        - containerPort: 636
+          name: ldaps
         volumeMounts:
         - name: haproxy-config
           mountPath: /usr/local/etc/haproxy/haproxy.cfg
@@ -34,6 +36,15 @@ spec:
           limits:
             cpu: 500m
             memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 99
+          seccompProfile:
+            type: RuntimeDefault
         livenessProbe:
           tcpSocket:
             port: 8443
@@ -44,6 +55,15 @@ spec:
             port: 8443
           initialDelaySeconds: 5
           periodSeconds: 10
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: haproxy
+              topologyKey: kubernetes.io/hostname
+            weight: 1
       volumes:
       - name: haproxy-config
         configMap:

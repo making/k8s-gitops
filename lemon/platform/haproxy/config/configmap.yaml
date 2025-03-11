@@ -22,15 +22,15 @@ data:
       timeout client  50s
       timeout server  50s
 
-    # # LDAPS routing (636)
-    # frontend ldaps_frontend
-    #   bind *:636
-    #   mode tcp
-    #   default_backend ldaps_backend
+    # LDAPS routing (636)
+    frontend ldaps_frontend
+      bind *:636
+      mode tcp
+      default_backend ldaps_backend
 
-    # backend ldaps_backend
-    #   mode tcp
-    #   server openldap openldap-stack-ha.openldap.svc.cluster.local:636 check
+    backend ldaps_backend
+      mode tcp
+      server openldap openldap-stack-ha.openldap.svc.cluster.local:636 check
 
     # Minecraft/Cloudflared routing (25565)
     frontend minecraft_frontend
