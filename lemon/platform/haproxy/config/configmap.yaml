@@ -51,9 +51,8 @@ data:
     
     backend http_backend
       mode tcp
-      option preserve-source
-      source usesrc clientip
-      server contour contour-envoy.projectcontour.svc.cluster.local:80 check
+      transparent
+      server contour contour-envoy.projectcontour.svc.cluster.local:80 check send-proxy-v2
 
     # HTTPS routing (443)
     frontend https_frontend
@@ -64,8 +63,7 @@ data:
     
     backend https_backend
       mode tcp
-      option preserve-source
-      source usesrc clientip
-      server contour contour-envoy.projectcontour.svc.cluster.local:443 check
+      transparent
+      server contour contour-envoy.projectcontour.svc.cluster.local:443 check send-proxy-v2
 
 ---
