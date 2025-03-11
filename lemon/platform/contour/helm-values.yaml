@@ -32,6 +32,7 @@ envoy:
   replicaCount: 2
   tlsExistingSecret: envoycert
   service:
+    type: ClusterIP
     externalTrafficPolicy: Local
     annotations:
       oci.oraclecloud.com/load-balancer-type: "nlb"
