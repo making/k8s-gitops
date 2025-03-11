@@ -1,0 +1,50 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Secret
+metadata:
+  name: loki
+  namespace: grafana
+stringData:
+  username: #@ data.values.loki.username
+  password: #@ data.values.loki.password
+type: Opaque
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: loki
+  namespace: grafana
+spec:
+  valuesFrom:
+  - targetPath: basicAuthUser
+    valueFrom:
+      secretKeyRef:
+        name: loki
+        key: username
+  - targetPath: secureJsonData.basicAuthPassword
+    valueFrom:
+      secretKeyRef:
+        name: loki
+        key: password
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: grafana
+  datasource:
+    name: loki
+    type: loki
+    access: proxy
+    basicAuth: true
+    url: #@ data.values.loki.url
+    isDefault: false
+    basicAuthUser: ${username}
+    jsonData:
+      tlsSkipVerify: false
+      timeInterval: "5s"
+      maxLines: 50
+      derivedFields:
+      - datasourceUid: tempo
+        matcherRegex: '"traceId":"(\w+)"'
+        name: traceId
+        url: ${__value.raw}
+    secureJsonData:
+      basicAuthPassword: ${password}

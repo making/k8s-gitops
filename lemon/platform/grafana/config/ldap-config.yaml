@@ -1,0 +1,36 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ldap-config
+  namespace: grafana
+stringData:
+  #@yaml/text-templated-strings
+  ldap.toml: |
+    verbose_logging = true
+    [[servers]]
+    host = "(@= data.values.ldap.host @)"
+    port = (@= data.values.ldap.port @)
+    use_ssl = true
+    start_tls = false
+    ssl_skip_verify = true
+    bind_dn = "(@= data.values.ldap.bind_dn @)"
+    bind_password = "(@= data.values.ldap.bind_password @)"
+    search_filter = "(@= data.values.ldap.search_filter @)"
+    search_base_dns = ["(@= data.values.ldap.search_base_dn @)"]
+    group_search_filter = "(@= data.values.ldap.group_search_filter @)"
+    group_search_base_dns = ["(@= data.values.ldap.group_search_base_dns @)"]
+    group_search_filter_user_attribute = "DN"
+    [servers.attributes]
+    name = "givenName"
+    surname = "sn"
+    username = "mail"
+    member_of = "memberOf"
+    email = "mail"
+    [[servers.group_mappings]]
+    group_dn = "(@= data.values.ldap.admin_group_dn @)"
+    org_role = "Admin"
+    grafana_admin = true
+    [[servers.group_mappings]]
+    group_dn = "(@= data.values.ldap.viewer_group_dn @)"
+    org_role = "Viewer"
