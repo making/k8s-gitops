@@ -3,8 +3,13 @@ kind: Service
 metadata:
   name: haproxy
   namespace: haproxy
+  annotations:
+    oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
+    oci-network-load-balancer.oraclecloud.com/security-list-management-mode: All
+    oci.oraclecloud.com/load-balancer-type: nlb
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   ports:
   - name: ldaps
     port: 636
