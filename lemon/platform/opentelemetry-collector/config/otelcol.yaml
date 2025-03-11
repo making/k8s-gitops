@@ -6,6 +6,21 @@ metadata:
   name: otel
   namespace: opentelemetry
 spec:
+  env:
+  - name: K8S_NODE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
+  - name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        name: otel-creds
+        key: aws_access_key_id
+  - name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: otel-creds
+        key: aws_secret_access_key
   config:
     receivers:
       otlp:
