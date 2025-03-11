@@ -34,7 +34,7 @@ data:
       mode tcp
       option persist
       option tcpka
-      server openldap openldap-stack-ha.openldap.svc.cluster.local:636 check
+      server openldap openldap-stack-ha.openldap.svc.cluster.local:636 check ssl verify none
 
     # Minecraft/Cloudflared routing (25565)
     frontend minecraft_frontend
