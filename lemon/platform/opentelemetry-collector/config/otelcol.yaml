@@ -171,7 +171,7 @@ spec:
         #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/filterprocessor
         error_mode: ignore
         metrics:
-          datapoint:
+          metric:
           - attributes["uri"] == "/livez"
           - attributes["uri"] == "/readyz"
           - attributes["uri"] == "/aboutme"
