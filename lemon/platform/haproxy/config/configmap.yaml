@@ -13,6 +13,8 @@ data:
       user haproxy
       group haproxy
       daemon
+    
+    # ACL definitions for log filtering from specific IP ranges
 
     defaults
       log     global
@@ -21,13 +23,20 @@ data:
       timeout connect 5s
       timeout client  50s
       timeout server  50s
+    
+    # Common log filtering settings
 
-    # # LDAPS routing (636)
+    # LDAPS routing (636) - to be implemented later
     # frontend ldaps_frontend
     #   bind *:636
     #   mode tcp
+    #   
+    #   # Exclude access from 10.0.10.0/24 from logs
+    #   acl network_internal src 10.0.10.0/24
+    #   no log if network_internal
+    #   
     #   default_backend ldaps_backend
-
+    #
     # backend ldaps_backend
     #   mode tcp
     #   server openldap openldap-stack-ha.openldap.svc.cluster.local:636 check
@@ -36,6 +45,11 @@ data:
     frontend minecraft_frontend
       bind *:25565
       mode tcp
+    
+      # Exclude access from 10.0.10.0/24 from logs
+      acl network_internal src 10.0.10.0/24
+      no log if network_internal
+    
       default_backend minecraft_backend
     
     backend minecraft_backend
