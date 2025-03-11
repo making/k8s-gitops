@@ -25,7 +25,7 @@ spec:
     protocol: TCP
   - name: ldaps
     port: 636
-    targetPort: 636
+    targetPort: 8636
     protocol: TCP
   selector:
     app: haproxy

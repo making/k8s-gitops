@@ -24,7 +24,7 @@ data:
 
     # LDAPS routing (636)
     frontend ldaps_frontend
-      bind *:636
+      bind *:8636
       mode tcp
       default_backend ldaps_backend
 
