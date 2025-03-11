@@ -83,6 +83,9 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
+        #! https://stackoverflow.com/a/57070517 for pgbouncer
+        - name: spring.datasource.hikari.data-source-properties.prepareThreshold
+          value: "0"
         image: #@ data.values.image
         imagePullPolicy: IfNotPresent
         livenessProbe:
