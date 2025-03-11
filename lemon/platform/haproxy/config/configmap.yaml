@@ -33,7 +33,7 @@ data:
     #   
     #   # Exclude access from 10.0.10.0/24 from logs
     #   acl network_internal src 10.0.10.0/24
-    #   no log if network_internal
+    #   log global if !network_internal
     #   
     #   default_backend ldaps_backend
     #
@@ -48,7 +48,7 @@ data:
     
       # Exclude access from 10.0.10.0/24 from logs
       acl network_internal src 10.0.10.0/24
-      no log if network_internal
+      log global if !network_internal
     
       default_backend minecraft_backend
     
