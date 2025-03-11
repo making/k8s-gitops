@@ -17,14 +17,12 @@ spec:
       - name: haproxy
         image: haproxy:3.1
         ports:
-        - containerPort: 80
-          name: http
-        - containerPort: 443
-          name: https
-        - containerPort: 636
-          name: ldaps
         - containerPort: 25565
           name: minecraft
+        - containerPort: 8080
+          name: http
+        - containerPort: 8443
+          name: https
         volumeMounts:
         - name: haproxy-config
           mountPath: /usr/local/etc/haproxy/haproxy.cfg
@@ -38,12 +36,12 @@ spec:
             memory: 256Mi
         livenessProbe:
           tcpSocket:
-            port: 443
+            port: 8443
           initialDelaySeconds: 5
           periodSeconds: 10
         readinessProbe:
           tcpSocket:
-            port: 443
+            port: 8443
           initialDelaySeconds: 5
           periodSeconds: 10
       volumes:

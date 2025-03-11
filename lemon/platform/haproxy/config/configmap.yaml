@@ -44,7 +44,7 @@ data:
 
     # HTTP routing (80)
     frontend http_frontend
-      bind *:80
+      bind *:8080
       mode tcp
       default_backend http_backend
     
@@ -54,10 +54,12 @@ data:
 
     # HTTPS routing (443)
     frontend https_frontend
-      bind *:443
+      bind *:8443
       mode tcp
       default_backend https_backend
     
     backend https_backend
       mode tcp
       server contour contour-envoy.projectcontour.svc.cluster.local:443 check
+
+---
