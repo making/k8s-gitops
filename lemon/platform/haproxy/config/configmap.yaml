@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: haproxy-config
+  namespace: haproxy
+data:
+  haproxy.cfg: |
+    global
+      log stdout format raw local0
+      maxconn 4096
+      user haproxy
+      group haproxy
+      daemon
+
+    defaults
+      log     global
+      mode    tcp
+      option  dontlognull
+      timeout connect 5s
+      timeout client  50s
+      timeout server  50s
+
+    # LDAPS routing (636)
+    frontend ldaps_frontend
+      bind *:636
+      mode tcp
+      default_backend ldaps_backend
+
+    backend ldaps_backend
+      mode tcp
+      server openldap openldap-stack-ha.openldap.svc.cluster.local:636 check
+
+    # Minecraft/Cloudflared routing (25565)
+    frontend minecraft_frontend
+      bind *:25565
+      mode tcp
+      default_backend minecraft_backend
+    
+    backend minecraft_backend
+      mode tcp
+      server cloudflared cloudflared.cloudflared.svc.cluster.local:25565 check
