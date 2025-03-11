@@ -25,6 +25,8 @@ configInline:
     serviceName: envoy
 contour:
   tlsExistingSecret: contourcert
+  extraArgs:
+  - --use-proxy-protocol
 envoy:
   kind: deployment
   replicaCount: 2
