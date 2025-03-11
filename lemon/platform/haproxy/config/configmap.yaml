@@ -3,6 +3,8 @@ kind: ConfigMap
 metadata:
   name: haproxy-config
   namespace: haproxy
+  annotations:
+    kapp.k14s.io/versioned: ""
 data:
   haproxy.cfg: |
     global
@@ -39,3 +41,5 @@ data:
     backend minecraft_backend
       mode tcp
       server cloudflared cloudflared.cloudflared.svc.cluster.local:25565 check
+
+
