@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    projectcontour.io/tls-cert-namespace: projectcontour
+  labels:
+    app: phpldapadmin
+  name: phpldapadmin
+spec:
+  rules:
+  - host: phpldapadmin.ik.am
+    http:
+      paths:
+      - backend:
+          service:
+            name: phpldapadmin
+            port:
+              name: http
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - phpldapadmin.ik.am
+    secretName: default-tls-ik-am
