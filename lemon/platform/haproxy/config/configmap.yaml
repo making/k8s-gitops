@@ -13,7 +13,7 @@ data:
       user haproxy
       group haproxy
       daemon
-      
+    
     # ACL definitions for log filtering from specific IP ranges
 
     defaults
@@ -23,18 +23,18 @@ data:
       timeout connect 5s
       timeout client  50s
       timeout server  50s
-      
+    
     # Common log filtering settings
 
     # LDAPS routing (636) - to be implemented later
     # frontend ldaps_frontend
     #   bind *:636
     #   mode tcp
-    #   
-    #   # Using log-format with condition to filter logs
     #   option tcplog
-    #   log-format "%ci:%cp [%t] %ft %b/%s %Tw/%Tc/%Tt %B %ts %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r"
-    #   log-filter "src != 10.0.10.0/24"
+    #   
+    #   # Using simpler approach for log filtering
+    #   # Option 1: Turn off logging completely for this frontend
+    #   no log
     #   
     #   default_backend ldaps_backend
     #
@@ -46,14 +46,14 @@ data:
     frontend minecraft_frontend
       bind *:25565
       mode tcp
-      
-      # Using log-format with condition to filter logs
       option tcplog
-      log-format "%ci:%cp [%t] %ft %b/%s %Tw/%Tc/%Tt %B %ts %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r"
-      log-filter "src != 10.0.10.0/24"
-      
+    
+      # Using simpler approach for log filtering
+      # Option 1: Turn off logging completely for this frontend
+      no log
+    
       default_backend minecraft_backend
-      
+    
     backend minecraft_backend
       mode tcp
       server cloudflared cloudflared.cloudflared.svc.cluster.local:25565 check
