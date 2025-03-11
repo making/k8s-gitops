@@ -42,4 +42,22 @@ data:
       mode tcp
       server cloudflared cloudflared.cloudflared.svc.cluster.local:25565 check
 
+    # HTTP routing (80)
+    frontend http_frontend
+      bind *:80
+      mode tcp
+      default_backend http_backend
+    
+    backend http_backend
+      mode tcp
+      server contour contour-envoy.projectcontour.svc.cluster.local:80 check
 
+    # HTTPS routing (443)
+    frontend https_frontend
+      bind *:443
+      mode tcp
+      default_backend https_backend
+    
+    backend https_backend
+      mode tcp
+      server contour contour-envoy.projectcontour.svc.cluster.local:443 check

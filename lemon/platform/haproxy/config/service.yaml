@@ -11,6 +11,14 @@ spec:
   type: LoadBalancer
   externalTrafficPolicy: Local
   ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: 443
+    protocol: TCP
   - name: ldaps
     port: 636
     targetPort: 636

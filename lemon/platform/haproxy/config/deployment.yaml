@@ -4,7 +4,7 @@ metadata:
   name: haproxy
   namespace: haproxy
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: haproxy
@@ -17,6 +17,10 @@ spec:
       - name: haproxy
         image: haproxy:3.1
         ports:
+        - containerPort: 80
+          name: http
+        - containerPort: 443
+          name: https
         - containerPort: 636
           name: ldaps
         - containerPort: 25565
@@ -34,12 +38,12 @@ spec:
             memory: 256Mi
         livenessProbe:
           tcpSocket:
-            port: 25565
+            port: 443
           initialDelaySeconds: 5
           periodSeconds: 10
         readinessProbe:
           tcpSocket:
-            port: 25565
+            port: 443
           initialDelaySeconds: 5
           periodSeconds: 10
       volumes:
