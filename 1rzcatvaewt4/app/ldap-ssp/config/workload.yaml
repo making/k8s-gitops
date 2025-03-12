@@ -50,6 +50,8 @@ spec:
           value: ou=people
         - name: ldap.user-search-filter
           value: (cn={0})
+        - name: ldap.email-pattern
+          value: "*%s"
         - name: sendgrid.url
           value: https://api.sendgrid.com
         - name: sendgrid.from
