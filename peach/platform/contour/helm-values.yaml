@@ -36,6 +36,7 @@ envoy:
   replicaCount: 1
   tlsExistingSecret: envoycert
   service:
+    type: ClusterIP
     annotations:
       service.beta.kubernetes.io/vultr-loadbalancer-proxy-protocol: "true"
   podAnnotations:
