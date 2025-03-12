@@ -22,6 +22,17 @@ data:
       timeout client  50s
       timeout server  50s
 
+    # LDAP routing (389)
+    frontend ldap_frontend
+      bind *:8389
+      mode tcp
+      option tcplog
+      default_backend ldap_backend
+
+    backend ldap_backend
+      mode tcp
+      server openldap openldap-stack-ha.openldap.svc.cluster.local:389 check
+
     # LDAPS routing (636)
     frontend ldaps_frontend
       bind *:8636

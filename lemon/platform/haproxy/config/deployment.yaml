@@ -23,6 +23,8 @@ spec:
           name: http
         - containerPort: 8443
           name: https
+        - containerPort: 8389
+          name: ldap
         - containerPort: 8636
           name: ldaps
         volumeMounts:
