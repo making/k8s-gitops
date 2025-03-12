@@ -42,14 +42,3 @@ spec:
     kind: ClusterIssuer
     name: letsencrypt
   secretName: default-tls
----
-apiVersion: projectcontour.io/v1
-kind: TLSCertificateDelegation
-metadata:
-  name: contour-delegation
-  namespace: projectcontour
-spec:
-  delegations:
-  - secretName: default-tls
-    targetNamespaces:
-    - "*"

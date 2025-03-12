@@ -1,0 +1,23 @@
+---
+apiVersion: projectcontour.io/v1
+kind: TLSCertificateDelegation
+metadata:
+  name: contour-delegation
+  namespace: projectcontour
+spec:
+  delegations:
+  - secretName: default-tls
+    targetNamespaces:
+    - "*"
+---
+apiVersion: projectcontour.io/v1
+kind: TLSCertificateDelegation
+metadata:
+  name: contour-delegation-ik-am
+  namespace: projectcontour
+spec:
+  delegations:
+  - secretName: default-tls-ik-am
+    targetNamespaces:
+    - "*"
+---
