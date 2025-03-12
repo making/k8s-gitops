@@ -1,0 +1,18 @@
+#@ for name in ['synology', 'inlets.gw']:
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: #@ name.replace('.', '-')
+  namespace: inlets
+spec:
+  virtualhost:
+    fqdn: #@ "{}.ik.am".format(name)
+    tls:
+      secretName: projectcontour/default-tls-ik-am
+  routes:
+  - services:
+    - name: inlets-exit
+      port: 6868
+    enableWebsockets: true
+#@ end
