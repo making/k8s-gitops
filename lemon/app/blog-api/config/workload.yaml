@@ -125,9 +125,9 @@ spec:
         - name: info.env.hostname
           value: ${HOSTNAME:}
         - name: spring.datasource.hikari.maximum-pool-size
-          value: "4"
+          value: "3"
         - name: spring.datasource.hikari.minimum-idle
-          value: "2"
+          value: "1"
         #! #! https://stackoverflow.com/a/57070517 for pgbouncer
         #! - name: spring.datasource.hikari.data-source-properties.prepareThreshold
         #!   value: "0"
