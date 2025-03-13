@@ -1,0 +1,126 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-db
+  namespace: note
+  labels:
+    app.kubernetes.io/part-of: backup-db
+spec:
+  schedule: "30 15 * * ?"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    metadata:
+      labels:
+        app.kubernetes.io/part-of: backup-db
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/part-of: backup-db
+        spec:
+          containers:
+          - env:
+            - name: SPRING_APPLICATION_NAME
+              value: backup-db-note
+            - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
+              value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+            - name: MANAGEMENT_OTLP_LOGS_ENDPOINT
+              value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+            - name: JAVA_TOOL_OPTIONS
+              value: -Dmanagement.health.probes.enabled="false"
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: access_key
+                  name: backup-s3
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: access_secret
+                  name: backup-s3
+            - name: AWS_REGION
+              valueFrom:
+                secretKeyRef:
+                  key: region
+                  name: backup-s3
+            - name: S3_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: backup-s3
+            - name: S3_BUCKET
+              value: pg-dump-to-s3
+            - name: PGDUMP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: note-db
+            - name: S3_FILEPREFIX
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: PGDUMP_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: note-db
+            - name: PGDUMP_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: port
+                  name: note-db
+            - name: PGDUMP_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: database
+                  name: note-db
+            - name: PGDUMP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: note-db
+            - name: ALERT_ENABLED
+              value: "true"
+            - name: ALERT_TYPE
+              value: slack
+            - name: ALERT_SLACK_CHANNEL
+              value: alert
+            - name: ALERT_SLACK_USERNAME
+              value: spring-batch
+            - name: ALERT_SLACK_ICONURL
+              value: https://github.com/making/pg-dump-to-s3/assets/106908/5becaa51-11be-4ca5-8763-cd9a5e1014ce
+            - name: ALERT_WEBHOOKURL
+              valueFrom:
+                secretKeyRef:
+                  key: slack_webhook_url
+                  name: backup-s3
+            image: ghcr.io/making/pg-dump-to-s3:15
+            name: workload
+            resources: { }
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+              runAsNonRoot: true
+              runAsUser: 1000
+              seccompProfile:
+                type: RuntimeDefault
+          serviceAccountName: default
+          restartPolicy: Never
+---
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backup-s3
+  namespace: note
+type: Opaque
+stringData:
+  host: #@ data.values.s3.host
+  region: "apac"
+  access_key: #@ data.values.s3.access_key
+  access_secret: #@ data.values.s3.access_secret
