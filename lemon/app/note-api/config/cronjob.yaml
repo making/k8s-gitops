@@ -124,3 +124,4 @@ stringData:
   region: "apac"
   access_key: #@ data.values.s3.access_key
   access_secret: #@ data.values.s3.access_secret
+  slack_webhook_url: "https://httpbin.org/post"
