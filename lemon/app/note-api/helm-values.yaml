@@ -1,0 +1,12 @@
+global:
+  postgresql:
+    auth:
+      username: note
+      database: note
+      existingSecret: note-db
+      secretKeys:
+        adminPasswordKey: password
+        userPasswordKey: password
+primary:
+  persistence:
+    size: 8Gi

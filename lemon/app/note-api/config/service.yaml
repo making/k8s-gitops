@@ -13,11 +13,11 @@ type: servicebinding.io/postgresql
 stringData:
   type: "postgresql"
   host: #@ data.values.note_db.host
-  port: "6543"
+  port: "5432"
   username: #@ data.values.note_db.username
   password: #@ data.values.note_db.password
   database: "postgres"
-  sslmode: "require"
+  #! sslmode: "require"
 ---
 apiVersion: v1
 kind: Secret
