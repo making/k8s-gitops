@@ -124,7 +124,7 @@ spec:
           value: ecs
         - name: info.env.hostname
           value: ${HOSTNAME:}
-        - name: spring.datasource.hikari.maximum-pool-siz
+        - name: spring.datasource.hikari.maximum-pool-size
           value: "4"
         - name: spring.datasource.hikari.minimum-idle
           value: "2"
