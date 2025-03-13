@@ -99,9 +99,9 @@ spec:
           value: "2"
         - name: spring.datasource.hikari.data-source-properties.socketTimeout
           value: "10"
-        #! #! https://stackoverflow.com/a/57070517 for pgbouncer
-        #! - name: spring.datasource.hikari.data-source-properties.prepareThreshold
-        #!   value: "0"
+        #! https://stackoverflow.com/a/57070517 for pgbouncer
+        - name: spring.datasource.hikari.data-source-properties.prepareThreshold
+          value: "0"
         image: #@ data.values.image
         imagePullPolicy: IfNotPresent
         livenessProbe:
