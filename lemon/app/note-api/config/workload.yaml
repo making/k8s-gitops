@@ -84,9 +84,9 @@ spec:
             fieldRef:
               fieldPath: status.podIP
         - name: spring.datasource.hikari.maximum-pool-size
-          value: "4"
+          value: "3"
         - name: spring.datasource.hikari.minimum-idle
-          value: "2"
+          value: "1"
         - name: spring.datasource.hikari.login-timeout
           value: "2"
         - name: spring.datasource.hikari.connection-timeout
