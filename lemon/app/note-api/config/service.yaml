@@ -17,7 +17,7 @@ stringData:
   username: #@ data.values.note_db.username
   password: #@ data.values.note_db.password
   database: "postgres"
-  #! sslmode: "require"
+  sslmode: "require"
 ---
 apiVersion: v1
 kind: Secret
