@@ -21,27 +21,27 @@ spec:
   - git:
       url: https://github.com/categolj/note-api.git
       ref: origin/images
-  - helmChart:
-      name: postgresql
-      version: 16.5.0
-      repository:
-        url: oci://registry-1.docker.io/bitnamicharts
+  #! - helmChart:
+  #!     name: postgresql
+  #!     version: 16.5.0
+  #!     repository:
+  #!       url: oci://registry-1.docker.io/bitnamicharts
   syncPeriod: 10m
   template:
   - sops:
       age:
         privateKeysSecretRef:
           name: age-key
-  - helmTemplate:
-      name: note-db
-      namespace: note
-      path: "2"
-      valuesFrom:
-      - path: 0/helm-values.yaml
+  #! - helmTemplate:
+  #!     name: note-db
+  #!     namespace: note
+  #!     path: "2"
+  #!     valuesFrom:
+  #!     - path: 0/helm-values.yaml
   - ytt:
       paths:
       - 0/config
-      - '-'
+      #! - '-'
       valuesFrom:
       - path: 0/credentials.yaml
       - path: 0/values.yaml
