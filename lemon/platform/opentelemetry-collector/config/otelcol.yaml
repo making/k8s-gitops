@@ -267,7 +267,6 @@ spec:
           - otlphttp/grafana_cloud
           - otlphttp/hdx
           - otlp/uptrace
-          - otlphttp/uptrace
         metrics:
           receivers:
           - otlp
@@ -279,7 +278,6 @@ spec:
           - batch
           exporters:
           - prometheusremotewrite
-          - otlphttp/uptrace
         logs:
           receivers:
           - otlp
@@ -290,4 +288,3 @@ spec:
           - batch
           exporters:
           - otlphttp/lognroll
-          - otlphttp/uptrace
