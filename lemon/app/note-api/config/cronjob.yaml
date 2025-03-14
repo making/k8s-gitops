@@ -23,6 +23,8 @@ spec:
         spec:
           containers:
           - env:
+            - name: pg-dump.additional-args
+              value: -n,public,--no-acl,--no-owner
             - name: SPRING_APPLICATION_NAME
               value: backup-db-note
             - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
