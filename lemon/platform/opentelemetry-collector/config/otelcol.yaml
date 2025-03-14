@@ -238,7 +238,7 @@ spec:
         tls:
           insecure: #@ data.values.zipkin.tls.insecure
       otlphttp/uptrace:
-        endpint: #@ data.values.uptrace_sm.endpoint
+        endpoint: #@ data.values.uptrace_sm.endpoint
         headers:
           uptrace-dsn: #@ data.values.uptrace_sm.uptrace_dsn
         compression: gzip
