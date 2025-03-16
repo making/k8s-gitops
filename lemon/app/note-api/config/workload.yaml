@@ -101,6 +101,8 @@ spec:
           value: "10"
         - name: spring.datasource.hikari.max-lifetime
           value: "300000"
+        - name: spring.datasource.hikari.idle-timeout
+          value: "240000"
         - name: spring.datasource.hikari.keepalive-time
           value: "240000"
         - name: spring.datasource.hikari.validation-timeout
