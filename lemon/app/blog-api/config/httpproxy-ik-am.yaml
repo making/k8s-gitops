@@ -6,6 +6,13 @@ metadata:
 spec:
   virtualhost:
     fqdn: api.ik.am
+    corsPolicy:
+      allowOrigin:
+      - "*"
+      allowMethods:
+      - GET
+      - POST
+      maxAge: "60m"
     tls:
       secretName: projectcontour/default-tls-ik-am
   routes:
