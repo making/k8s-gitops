@@ -10,8 +10,9 @@ spec:
       allowOrigin:
       - "*"
       allowMethods:
-      - GET
       - POST
+      allowHeaders:
+      - content-type
       maxAge: "60m"
     tls:
       secretName: projectcontour/default-tls-ik-am
