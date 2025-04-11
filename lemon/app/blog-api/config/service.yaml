@@ -18,3 +18,19 @@ stringData:
   password: #@ data.values.blog_db.password
   database: "blog"
   sslmode: "require"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: job-db
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: service
+  labels:
+    app: job-db
+    app.kubernetes.io/part-of: blog-api
+type: Opaque
+stringData:
+  url: #@ data.values.job_db.url
+  username: #@ data.values.job_db.username
+  password: #@ data.values.job_db.password
