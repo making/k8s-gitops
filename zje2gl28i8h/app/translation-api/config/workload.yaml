@@ -14,6 +14,7 @@ spec:
         autoscaling.knative.dev/maxScale: "1"
         autoscaling.knative.dev/minScale: "0"
         autoscaling.knative.dev/scale-down-delay: "0"
+        autoscaling.knative.dev/window: "5m"
     spec:
       containers:
       - image: #@ data.values.image
@@ -29,6 +30,21 @@ spec:
           valueFrom:
             secretKeyRef:
               key: openai-api-key
+              name: translation-config
+        - name: spring.ai.openai.base-url
+          valueFrom:
+            secretKeyRef:
+              key: openai-base-url
+              name: translation-config
+        - name: spring.ai.openai.chat.completions-path
+          valueFrom:
+            secretKeyRef:
+              key: openai-chat-completions-path
+              name: translation-config
+        - name: spring.ai.openai.chat.options.model
+          valueFrom:
+            secretKeyRef:
+              key: openai-chat-options-model
               name: translation-config
         - name: github.access-token
           valueFrom:

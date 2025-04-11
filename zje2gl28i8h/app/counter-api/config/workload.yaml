@@ -14,6 +14,7 @@ spec:
         autoscaling.knative.dev/maxScale: "1"
         autoscaling.knative.dev/minScale: "0"
         autoscaling.knative.dev/scale-down-delay: "0"
+        autoscaling.knative.dev/window: "5m"
     spec:
       containers:
       - image: #@ data.values.image
