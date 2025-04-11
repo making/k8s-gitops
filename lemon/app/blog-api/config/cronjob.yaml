@@ -15,6 +15,7 @@ spec:
       labels:
         app.kubernetes.io/part-of: backup-db
     spec:
+      activeDeadlineSeconds: 300
       backoffLimit: 0
       template:
         metadata:
