@@ -25,11 +25,11 @@ spec:
           - env:
             - name: pg-dump.additional-args
               value: -n,public,--no-acl,--no-owner
-            - name: SPRING_APPLICATION_NAME
+            - name: spring.application.name
               value: backup-db-blog
-            - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
+            - name: management.otlp.tracing.endpoint
               value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
-            - name: MANAGEMENT_OTLP_LOGS_ENDPOINT
+            - name: management.otlp.logging.endpoint
               value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
             - name: JAVA_TOOL_OPTIONS
               value: -Dmanagement.health.probes.enabled="false"
