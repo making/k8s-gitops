@@ -9,12 +9,13 @@ spec:
   schedule: "30 15 * * ?"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 3
-  concurrencyPolicy: Forbid
+  concurrencyPolicy: Replace
   jobTemplate:
     metadata:
       labels:
         app.kubernetes.io/part-of: backup-db
     spec:
+      activeDeadlineSeconds: 300
       backoffLimit: 0
       template:
         metadata:
@@ -25,11 +26,28 @@ spec:
           - env:
             - name: pg-dump.additional-args
               value: -n,public,--no-acl,--no-owner
-            - name: SPRING_APPLICATION_NAME
+            - name: spring.application.name
               value: backup-db-note
-            - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
+            - name: spring.datasource.driver-class-name
+              value: org.postgresql.Driver
+            - name: spring.datasource.url
+              valueFrom:
+                secretKeyRef:
+                  key: url
+                  name: job-db
+            - name: spring.datasource.username
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: job-db
+            - name: spring.datasource.password
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: job-db
+            - name: management.otlp.tracing.endpoint
               value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
-            - name: MANAGEMENT_OTLP_LOGS_ENDPOINT
+            - name: management.otlp.logging.endpoint
               value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
             - name: JAVA_TOOL_OPTIONS
               value: -Dmanagement.health.probes.enabled="false"
@@ -112,7 +130,7 @@ spec:
               seccompProfile:
                 type: RuntimeDefault
           serviceAccountName: default
-          restartPolicy: Never
+          restartPolicy: OnFailure
 ---
 #@ load("@ytt:data", "data")
 apiVersion: v1
