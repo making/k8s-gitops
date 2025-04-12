@@ -40,12 +40,12 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: job-db
-  namespace: blog
+  namespace: note
   annotations:
     kapp.k14s.io/change-group: service
   labels:
     app: job-db
-    app.kubernetes.io/part-of: blog-api
+    app.kubernetes.io/part-of: note-api
 type: Opaque
 stringData:
   url: #@ data.values.job_db.url
