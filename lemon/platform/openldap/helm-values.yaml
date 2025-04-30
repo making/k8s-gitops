@@ -3,7 +3,7 @@ customTLS:
   enabled: true
   secret: openldap-tls
 service:
-  type: LoadBalancer
+  type: ClusterIP
   annotations:
     oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
     oci-network-load-balancer.oraclecloud.com/security-list-management-mode: All
