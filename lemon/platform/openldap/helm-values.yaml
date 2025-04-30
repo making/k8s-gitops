@@ -3,7 +3,11 @@ customTLS:
   enabled: true
   secret: openldap-tls
 service:
-  type: ClusterIP
+  type: LoadBalancer
+  annotations:
+    oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
+    oci-network-load-balancer.oraclecloud.com/security-list-management-mode: All
+    oci.oraclecloud.com/load-balancer-type: nlb
   ldapPortNodePort: 30389
   sslLdapPortNodePort: 30636
 persistence:
