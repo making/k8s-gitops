@@ -50,7 +50,7 @@ spec:
             - name: management.otlp.logging.endpoint
               value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
             - name: JAVA_TOOL_OPTIONS
-              value: -Dmanagement.health.probes.enabled="false"
+              value: -Dmanagement.health.probes.enabled="false" -Duser.country=JP -Duser.language=ja -Duser.timezone=Asia/Tokyo
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -118,6 +118,8 @@ spec:
                   key: slack_webhook_url
                   name: backup-s3
             image: ghcr.io/making/pg-dump-to-s3:15
+            args:
+            - target=note-db
             name: workload
             resources: { }
             securityContext:
