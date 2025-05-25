@@ -1,4 +1,12 @@
 #@ load("@ytt:data", "data")
+kind: Secret
+apiVersion: v1
+metadata:
+  name: azuredns-config
+  namespace: cert-manager
+stringData:
+  client-secret: #@ data.values.azure.client_secret
+---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
