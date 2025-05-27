@@ -1,4 +1,25 @@
 #@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-api
+  namespace: blog
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: counter-api
+    app.kubernetes.io/part-of: counter-api
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: counter-api
+  type: ClusterIP
+  sessionAffinity: None
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
