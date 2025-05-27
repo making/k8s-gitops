@@ -1,0 +1,13 @@
+#@ load("@ytt:data", "data")
+#@ if/end data.values.pdb:
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: spring-batch-dashboard
+  namespace: spring-batch
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: spring-batch-dashboard
