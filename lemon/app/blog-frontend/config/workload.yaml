@@ -75,7 +75,7 @@ spec:
         - name: note-api.url
           value: http://note-api.note.svc.cluster.local
         - name: counter-api.url
-          value:  https://counter-api.blog.svc.cluster.local:8080/counter
+          value:  https://counter-api.blog.svc.cluster.local/counter
         - name: counter-api.ip-black-list
           value: #@ ",".join(data.values.ip_blacklist)
         - name: management.otlp.logging.endpoint
