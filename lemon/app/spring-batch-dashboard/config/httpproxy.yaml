@@ -7,7 +7,7 @@ spec:
   virtualhost:
     fqdn: spring-batch-dashboard.ik.am
     tls:
-      secretName: projectcontour/default-tls
+      secretName: projectcontour/default-tls-ik-am
   routes:
   - services:
     - name: spring-batch-dashboard
