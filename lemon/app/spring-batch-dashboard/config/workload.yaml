@@ -58,7 +58,7 @@ spec:
           value: #@ data.values.spring_security_user_name
         - name: spring.security.user.password
           value: #@ data.values.spring_security_user_password
-        - name: logging.structured.format.dashboard
+        - name: logging.structured.format.console
           value: ecs
         - name: spring.datasource.hikari.maximum-pool-size
           value: "3"
@@ -109,9 +109,9 @@ spec:
           protocol: TCP
         resources:
           limits:
-            memory: 512Mi
+            memory: 250Mi
           requests:
-            memory: 512Mi
+            memory: 250Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
