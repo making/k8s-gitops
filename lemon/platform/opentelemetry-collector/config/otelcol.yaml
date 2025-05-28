@@ -220,6 +220,11 @@ spec:
         headers:
           authorization: #@ "Bearer " + data.values.lognroll.token
         compression: gzip
+      otlphttp/otlp_sink:
+        endpoint: https://otlp-sink.maki.lol
+        headers:
+          authorization: #@ "Basic " + base64.encode(data.values.otlp_sink.username + ":" + data.values.otlp_sink.password)
+        compression: gzip
       otlphttp/hdx:
         endpoint: https://in-otel.hyperdx.io
         headers:
@@ -288,3 +293,4 @@ spec:
           - batch
           exporters:
           - otlphttp/lognroll
+          - otlphttp/otlp_sink
