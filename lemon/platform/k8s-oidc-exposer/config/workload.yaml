@@ -51,6 +51,8 @@ spec:
           value: #@ "base64:" + base64.encode(data.values.jwt_public_key)
         - name: jwt.private-key
           value: #@ "base64:" + base64.encode(data.values.jwt_private_key)
+        - name: kubernetes.api-server-url
+          value: https://kubernetes.default.svc.cluster.local
         - name: kubernetes.bearer-token
           value: file:/var/run/secrets/kubernetes.io/serviceaccount/token
         - name: kubernetes.client-bundle-name
