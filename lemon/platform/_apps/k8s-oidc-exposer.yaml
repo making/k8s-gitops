@@ -26,6 +26,7 @@ spec:
       - 0/config
       valuesFrom:
       - path: 1/native_aarch64.yaml
+      - path: 0/credentials.yaml
   deploy:
   - kapp:
       rawOptions:
