@@ -5,9 +5,9 @@ metadata:
   namespace: kube-system
 spec:
   virtualhost:
-    fqdn: k8s-oidc-exposer.lemon.maki.lol
+    fqdn: k8s-oidc-exposer.ik.am
     tls:
-      secretName: projectcontour/default-tls
+      secretName: projectcontour/default-tls-ik-am
   routes:
   - services:
     - name: k8s-oidc-exposer
