@@ -47,15 +47,15 @@ spec:
       serviceAccountName: k8s-jwt-exchanger
       containers:
       - env:
-        - name: jwt.public-key
+        - name: reissuer.jwt.public-key
           value: file:/etc/keys/pub.pem
-        - name: jwt.private-key
+        - name: reissuer.jwt.private-key
           value: file:/etc/keys/key.pem
-        - name: kubernetes.api-server-url
+        - name: reissuer.oidc.api-server-url
           value: https://kubernetes.default.svc.cluster.local
-        - name: kubernetes.bearer-token
+        - name: reissuer.oidc.bearer-token
           value: file:/var/run/secrets/kubernetes.io/serviceaccount/token
-        - name: kubernetes.client-bundle-name
+        - name: reissuer.oidc.client-bundle-name
           value: k8s
         - name: spring.ssl.bundle.pem.k8s.truststore.certificate
           value: file:/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
