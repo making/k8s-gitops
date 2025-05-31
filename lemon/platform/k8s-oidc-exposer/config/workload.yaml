@@ -48,9 +48,9 @@ spec:
       containers:
       - env:
         - name: jwt.public-key
-          value: "file:///etc/keys/key.pem"
+          value: file:/etc/keys/key.pem
         - name: jwt.private-key
-          value: "file:///etc/keys/pub.pem"
+          value: file:/etc/keys/pub.pem
         - name: kubernetes.api-server-url
           value: https://kubernetes.default.svc.cluster.local
         - name: kubernetes.bearer-token
