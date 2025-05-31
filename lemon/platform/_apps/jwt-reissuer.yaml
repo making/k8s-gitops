@@ -1,7 +1,7 @@
 apiVersion: kappctrl.k14s.io/v1alpha1
 kind: App
 metadata:
-  name: k8s-jwt-exchanger
+  name: jwt-reissuer
   namespace: app-install
   annotations:
     kapp.k14s.io/change-group: "{name}"
@@ -13,9 +13,9 @@ spec:
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
-      subPath: lemon/platform/k8s-jwt-exchanger
+      subPath: lemon/platform/jwt-reissuer
   - git:
-      url: https://github.com/categolj/k8s-jwt-exchanger.git
+      url: https://github.com/categolj/jwt-reissuer.git
       ref: origin/images
   syncPeriod: 24h
   template:
