@@ -51,6 +51,8 @@ spec:
           value: file:/etc/keys/pub.pem
         - name: reissuer.jwt.private-key
           value: file:/etc/keys/key.pem
+        - name: reissuer.oidc.issuer-uri
+          value: https://kubernetes.default.svc.cluster.local
         - name: reissuer.oidc.api-server-url
           value: https://kubernetes.default.svc.cluster.local
         - name: reissuer.oidc.bearer-token
