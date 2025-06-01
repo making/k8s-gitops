@@ -1,0 +1,57 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+#@overlay/match by=overlay.subset({"kind": "Deployment"}), expects="0+"
+---
+spec:
+  #@overlay/match-child-defaults missing_ok=True
+  template:
+    spec:
+      volumes:
+      - name: shared-token
+        emptyDir: { }
+      containers:
+      #@overlay/match by="name"
+      - name: workload
+        env:
+        - name: AWS_REGION
+          value: ap-northeast-1
+        - name: AWS_ROLE_ARN
+          value: #@ data.values.aws_role_arn
+        - name: AWS_WEB_IDENTITY_TOKEN_FILE
+          value: /var/irsa/token
+        - name: AWS_ROLE_SESSION_NAME
+          value: #@ data.values.aws_role_session_name
+        - name: spring.cloud.aws.credentials.sts.role-arn
+          value: #@ data.values.aws_role_arn
+        - name: spring.cloud.aws.credentials.sts.web-identity-token-file
+          value: /var/irsa/token
+        - name: spring.cloud.aws.credentials.sts.role-session-name
+          value: #@ data.values.aws_role_session_name
+        - name: spring.cloud.aws.credentials.sts.async-credentials-update
+          value: "true"
+        volumeMounts:
+        - name: shared-token
+          mountPath: /var/irsa
+      #@overlay/match by="name"
+      - name: token-refresher
+        image: curlimages/curl:latest
+        command: [ "/bin/sh" ]
+        args:
+        - -c
+        - |
+          while true; do
+            echo "$(date): Refreshing token..."
+            curl -s --fail -XPOST https://${JWT_REISSUER_DOMAIN}/token -H "Authorization: Bearer $(cat /run/secrets/kubernetes.io/serviceaccount/token)" -o /var/irsa/token
+            if [ $? -eq 0 ]; then
+              echo "$(date): Token refreshed successfully"
+            else
+              echo "$(date): Failed to refresh token"
+            fi
+            sleep 7200 # Sleep for 2 hours before refreshing again
+          done
+        env:
+        - name: JWT_REISSUER_DOMAIN
+          value: #@ data.values.jwt_reissuer_domain
+        volumeMounts:
+        - name: shared-token
+          mountPath: /var/irsa
