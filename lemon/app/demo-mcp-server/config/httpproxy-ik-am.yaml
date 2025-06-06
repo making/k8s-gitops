@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: demo-mcp-server-ik-am
+  namespace: demo
+spec:
+  virtualhost:
+    fqdn: demo-mcp-server.ik.am
+    tls:
+      secretName: projectcontour/default-tls-ik-am
+  routes:
+  - services:
+    - name: demo-mcp-server
+      port: 80

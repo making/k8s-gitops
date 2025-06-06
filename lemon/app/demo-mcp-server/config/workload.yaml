@@ -1,0 +1,86 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-mcp-server
+  namespace: demo
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: demo-mcp-server
+    app.kubernetes.io/part-of: demo-mcp-server
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: demo-mcp-server
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-mcp-server
+  namespace: demo
+  annotations:
+    kapp.k14s.io/change-group: workload
+  labels:
+    app: demo-mcp-server
+    app.kubernetes.io/part-of: demo-mcp-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-mcp-server
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "false"
+        github.com/revision: #@ data.values.git_revision
+      labels:
+        app: demo-mcp-server
+        app.kubernetes.io/part-of: demo-mcp-server
+    spec:
+      containers:
+      - env:
+        - name: logging.structured.format.console
+          value: ecs
+        - name: info.env.hostname
+          value: ${HOSTNAME:}
+        - name: googlechat.webhook-url
+          value: #@ data.values.googlechat_webhook_url
+        image: #@ data.values.image
+        imagePullPolicy: IfNotPresent
+        name: workload
+        ports:
+        - containerPort: 8080
+          name: user-port
+          protocol: TCP
+        resources:
+          limits:
+            memory: 256Mi
+          requests:
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1002
+          seccompProfile:
+            type: RuntimeDefault
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: demo-mcp-server
+              topologyKey: kubernetes.io/hostname
+            weight: 1
