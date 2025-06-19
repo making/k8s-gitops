@@ -19,8 +19,9 @@ coreDns:
   enabled: false
 kubeProxy:
   enabled: false
-node-exporter:
-  enabled: false
+exporters:
+  node-exporter:
+    enabled: false
 kube-state-metrics:
   kubeVersion: 1.33.0
   podAnnotations:
