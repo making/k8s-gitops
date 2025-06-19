@@ -158,7 +158,7 @@ spec:
         tls:
           #! insecure: true
           insecure_skip_verify: true
-        compression: gzip
+        compression: snappy
       debug:
         verbosity: detailed
     service:
