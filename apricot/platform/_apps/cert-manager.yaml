@@ -1,0 +1,41 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: cert-manager
+  namespace: app-install
+  annotations:
+    kapp.k14s.io/change-group: "{name}"
+spec:
+  serviceAccountName: kapp
+  fetch:
+  - helmChart:
+      name: cert-manager
+      version: 1.5.6
+      repository:
+        url: oci://registry-1.docker.io/bitnamicharts
+  - git:
+      url: https://github.com/making/k8s-gitops.git
+      ref: origin/main
+      subPath: apricot/platform/cert-manager
+  syncPeriod: 24h
+  template:
+  - helmTemplate:
+      name: cert-manager
+      namespace: cert-manager
+      path: "0"
+      valuesFrom:
+      - path: 1/helm-values.yaml
+  - ytt:
+      paths:
+      - "-"
+      - 1/config
+  deploy:
+  - kapp:
+      rawOptions:
+      - --wait-timeout=5m
+      - --diff-changes=true
+      - --diff-mask=true
+      delete:
+        #! Force delete PVCs, since StatefulSet does not delete them
+        rawOptions:
+        - --apply-ignored=true
