@@ -26,5 +26,7 @@ kube-state-metrics:
   kubeVersion: 1.33.0
   podAnnotations:
     prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: /metrics
   serviceMonitor:
     enabled: false
