@@ -1,0 +1,29 @@
+kubeVersion: 1.33.0
+operator:
+  enabled: false
+prometheus:
+  enabled: false
+alertmanager:
+  enabled: false
+kubelet:
+  enabled: false
+blackboxExporter:
+  enabled: false
+kubeApiServer:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+coreDns:
+  enabled: false
+kubeProxy:
+  enabled: false
+node-exporter:
+  enabled: false
+kube-state-metrics:
+  kubeVersion: 1.33.0
+  podAnnotations:
+    prometheus.io/scrape: "true"
+  serviceMonitor:
+    enabled: false
