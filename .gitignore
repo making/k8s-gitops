@@ -4,3 +4,4 @@ credentials.yaml
 key.txt
 auth
 .htpasswd
+*.mdb
