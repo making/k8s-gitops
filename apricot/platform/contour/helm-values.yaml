@@ -1,0 +1,39 @@
+configInline:
+  timeouts:
+    request-timeout: 180s
+  accesslog-format: json
+  json-fields:
+  - "@timestamp"
+  - "authority"
+  - "bytes_received"
+  - "bytes_sent"
+  - "traceparent=%REQ(TRACEPARENT)%"
+  - "duration"
+  - "method"
+  - "path"
+  - "protocol"
+  - "referer=%REQ(REFERER)%"
+  - "request_id"
+  - "requested_server_name"
+  - "response_code"
+  - "upstream_cluster"
+  - "user_agent"
+  - "x_forwarded_for"
+  tracing:
+    includePodDetail: false
+    extensionService: opentelemetry/otel-collector
+    serviceName: envoy
+contour:
+  tlsExistingSecret: contourcert
+envoy:
+  kind: deployment
+  replicaCount: 2
+  tlsExistingSecret: envoycert
+  service:
+    type: ClusterIP
+    externalTrafficPolicy: Local
+  podAnnotations:
+    prometheus.io/path: /stats/prometheus
+    prometheus.io/port: "8002"
+    prometheus.io/scrape: "true"
+  podAntiAffinityPreset: soft
