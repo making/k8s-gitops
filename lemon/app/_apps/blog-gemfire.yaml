@@ -16,7 +16,7 @@ spec:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
       subPath: lemon/app/blog-gemfire
-  syncPeriod: 10m
+  syncPeriod: 24h
   template:
   - sops:
       age:
@@ -24,9 +24,9 @@ spec:
           name: age-key
   - ytt:
       paths:
-      - 0/config
+      - config
       valuesFrom:
-      - path: 0/credentials.yaml
+      - path: credentials.yaml
   - kbld:
       paths:
       - '-'
