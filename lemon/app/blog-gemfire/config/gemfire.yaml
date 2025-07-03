@@ -1,0 +1,24 @@
+apiVersion: gemfire.vmware.com/v1
+kind: GemFireCluster
+metadata:
+  name: blog-gemfire
+  namespace: blog
+spec:
+  image: ghcr.io/making/pivotal-gemfire/vmware-gemfire:10.1.3
+  imagePullSecrets:
+  - name: gemfire-registry-secret
+  clusterConfiguration:
+    cacheXMLConfigMap:
+      name: blog-cache-xml
+  persistentVolumeClaim:
+    storageClassName: nfs
+    deleteOnShutdown: true
+  locators:
+    replicas: 2
+  servers:
+    replicas: 2
+    resources:
+      requests:
+        memory: 512Mi
+      limits:
+        memory: 512Mi
