@@ -15,10 +15,15 @@ spec:
     deleteOnShutdown: true
   locators:
     replicas: 2
+    resources:
+      requests:
+        memory: 1Gi
+      limits:
+        memory: 1Gi
   servers:
     replicas: 2
     resources:
       requests:
-        memory: 512Mi
+        memory: 1Gi
       limits:
-        memory: 512Mi
+        memory: 1Gi
