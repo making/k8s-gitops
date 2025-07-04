@@ -51,7 +51,7 @@ deployment:
         secretKeyRef:
           key: users-0
           name: blog-gemfire-api-config
-    LOG_TENANT_USERS_1:
+    BLOG_TENANT_USERS_1:
       valueFrom:
         secretKeyRef:
           key: users-1
