@@ -10,6 +10,7 @@ spec:
   #! clusterConfiguration:
   #!   cacheXMLConfigMap:
   #!     name: blog-cache-xml
+  antiAffinityPolicy: Cluster
   persistentVolumeClaim:
     storageClassName: nfs
     deleteOnShutdown: true
