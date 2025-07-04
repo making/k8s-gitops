@@ -10,6 +10,12 @@ data:
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://geode.apache.org/schema/cache http://geode.apache.org/schema/cache/cache-1.0.xsd"
            version="1.0">
+        <disk-store name="pdxmetadata">
+            <disk-dirs>
+                <disk-dir>/data/pdxmetadata</disk-dir>
+            </disk-dirs>
+        </disk-store>
+        <pdx disk-store-name="pdxmetadata" persistent="true" read-serialized="true"/>
         <region name="Entry">
             <region-attributes refid="PARTITION_PERSISTENT"/>
             <index name="idx_tenant_updated_at"
