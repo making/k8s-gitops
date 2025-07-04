@@ -23,7 +23,7 @@ spec:
   virtualhost:
     fqdn: blog-gemfire-locator.ik.am
     tls:
-      secretName: projectcontour//default-tls-ik-am
+      secretName: projectcontour/default-tls-ik-am
     ipAllowPolicy:
     - cidr: #@ data.values.allowed_ip_cidr
       source: Remote
