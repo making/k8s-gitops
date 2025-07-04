@@ -1,0 +1,58 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: blog-api-gemfire
+  namespace: app-install
+  annotations:
+    kapp.k14s.io/change-group: "{name}"
+    kapp.k14s.io/change-rule.create-order.1: "upsert after upserting blog-api"
+    kapp.k14s.io/change-rule.delete-order.1: "delete before deleting blog-api"
+    kapp.k14s.io/change-rule.create-order.2: "upsert after upserting blog-gemfire"
+    kapp.k14s.io/change-rule.delete-order.2: "delete before deleting blog-gemfire"
+spec:
+  serviceAccountName: kapp
+  fetch:
+  - helmChart:
+      name: stakater
+      version: "6.2.1"
+      repository:
+        url: https://stakater.github.io/stakater-charts
+  - git:
+      url: https://github.com/making/k8s-gitops.git
+      ref: origin/main
+      subPath: lemon/app/blog-api-gemfire
+  - git:
+      url: https://github.com/categolj/blog-api-gemfire.git
+      ref: origin/images
+  syncPeriod: 10m
+  template:
+  - sops:
+      age:
+        privateKeysSecretRef:
+          name: age-key
+  - helmTemplate:
+      name: blog-api-gemfire
+      namespace: blog
+      path: "0"
+      valuesFrom:
+      - path: 1/helm-values.yaml
+  - ytt:
+      paths:
+      - "-"
+      - 1/config
+      valuesFrom:
+      - path: 1/credentials.yaml
+      - path: 2/jvm_aarch64.yaml
+  - kbld:
+      paths:
+      - '-'
+  deploy:
+  - kapp:
+      rawOptions:
+      - --wait-timeout=5m
+      - --diff-changes=true
+      - --diff-mask=true
+      delete:
+        #! Force delete PVCs, since StatefulSet does not delete them
+        rawOptions:
+        - --apply-ignored=true
