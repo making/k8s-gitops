@@ -113,6 +113,8 @@ deployment:
           fieldPath: status.podIP
     logging.structured.format.console:
       value: ecs
+    logging.level.am.ik.blog.entry.gemfire.SearchCriteriaToOql:
+      value: trace
     info.env.hostname:
       value: ${HOSTNAME:}
   volumeMounts:
