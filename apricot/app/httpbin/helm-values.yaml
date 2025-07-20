@@ -38,6 +38,7 @@ extraObjects:
   kind: HTTPProxy
   metadata:
     name: httpbin
+    namespace: default
     labels:
       app.kubernetes.io/part-of: httpbin
   spec:
