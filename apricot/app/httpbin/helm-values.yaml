@@ -1,0 +1,32 @@
+applicationName: httpbin
+deployment:
+  image:
+    repository: kennethreitz/httpbin
+    tag: latest
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 80
+    protocol: TCP
+  resources:
+    limits:
+      cpu:
+      memory: 128Mi
+    requests:
+      cpu:
+      memory: 128Mi
+service:
+  ports: [ { "name": "http","port": 80,"protocol": "TCP","targetPort": 80 } ]
+ingress:
+  enabled: true
+  annotations:
+    projectcontour.io/tls-cert-namespace: projectcontour
+  hosts:
+  - host: httpbin.lan.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - httpbin.lan.ik.am
+    secretName: default-tls
