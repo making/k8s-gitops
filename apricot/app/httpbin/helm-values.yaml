@@ -15,6 +15,8 @@ deployment:
     requests:
       cpu:
       memory: 128Mi
+  containerSecurityContext:
+    runAsNonRoot: false
 service:
   ports: [ { "name": "http","port": 80,"protocol": "TCP","targetPort": 80 } ]
 ingress:
