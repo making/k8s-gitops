@@ -16,7 +16,7 @@ deployment:
     logging.structured.format.console:
       value: ecs
     logging.level.am.ik.envoy:
-      value: debug
+      value: info
     logging.level.io.grpc:
       value: info
     spring.grpc.server.keep-alive.permit-without-calls:
