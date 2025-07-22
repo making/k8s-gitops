@@ -55,6 +55,9 @@ deployment:
               app.kubernetes.io/part-of: envoy-external-authz
           topologyKey: kubernetes.io/hostname
         weight: 1
+service:
+  annotations:
+    projectcontour.io/upstream-protocol.h2c: http
 ingress:
   enabled: true
   annotations:
