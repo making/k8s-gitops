@@ -15,14 +15,14 @@ deployment:
   env:
     logging.structured.format.console:
       value: ecs
-    spring.ssl.bundle.pem.self-signed.keystore.certificate:
-      value: file:/certs/tls.crt
-    spring.ssl.bundle.pem.self-signed.keystore.private-key:
-      value: file:/certs/tls.key
-    server.ssl.bundle:
-      value: self-signed
-    server.forward-headers-strategy:
-      value: framework
+    #! spring.ssl.bundle.pem.self-signed.keystore.certificate:
+    #!   value: file:/certs/tls.crt
+    #! spring.ssl.bundle.pem.self-signed.keystore.private-key:
+    #!   value: file:/certs/tls.key
+    #! spring.ssl.bundle.pem.self-signed.reload-on-update:
+    #!   value: "true"
+    #! server.ssl.bundle:
+    #!   value: self-signed
   volumeMounts:
     cert-volume:
       mountPath: /certs
@@ -40,17 +40,15 @@ deployment:
   livenessProbe:
     enabled: true
     httpGet:
-      #! path: /actuator/health/liveness
-      path: /actuator/health
+      path: /actuator/health/liveness
       port: 8080
-      scheme: HTTPS
+      scheme: HTTP
   readinessProbe:
     enabled: true
     httpGet:
-      #! path: /actuator/health/readiness
-      path: /actuator/health
+      path: /actuator/health/readiness
       port: 8080
-      scheme: HTTPS
+      scheme: HTTP
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -72,7 +70,7 @@ deployment:
         weight: 1
 service:
   annotations:
-    projectcontour.io/upstream-protocol.h2: http
+    projectcontour.io/upstream-protocol.h2c: http
 ingress:
   enabled: true
   annotations:
@@ -114,7 +112,7 @@ extraObjects:
     name: envoy-external-authz
     namespace: projectcontour
   spec:
-    protocol: h2
+    protocol: h2c
     services:
     - name: envoy-external-authz
       port: 8080
