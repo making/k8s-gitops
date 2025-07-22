@@ -19,6 +19,10 @@ deployment:
       value: debug
     logging.level.io.grpc:
       value: trace
+    spring.grpc.server.keep-alive.permit-without-calls:
+      value: "true"
+    spring.grpc.server.keep-alive.time:
+      value: 5s
     #! spring.ssl.bundle.pem.self-signed.keystore.certificate:
     #!   value: file:/certs/tls.crt
     #! spring.ssl.bundle.pem.self-signed.keystore.private-key:
