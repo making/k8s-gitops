@@ -16,7 +16,7 @@ deployment:
     logging.structured.format.console:
       value: ecs
     logging.level.am.ik.envoy:
-      value: trace
+      value: debug
     #! spring.ssl.bundle.pem.self-signed.keystore.certificate:
     #!   value: file:/certs/tls.crt
     #! spring.ssl.bundle.pem.self-signed.keystore.private-key:
