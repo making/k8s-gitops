@@ -67,5 +67,5 @@ ingress:
   tls:
   - hosts:
     - envoy-external-authz.lan.ik.am
-    secretName: default-tls-ik-am
+    secretName: default-tls
 ---
