@@ -55,7 +55,7 @@ deployment:
     enabled: true
     grpc:
       port: 8080
-    initialDelaySeconds: 5
+    initialDelaySeconds: 10
     periodSeconds: 5
   containerSecurityContext:
     allowPrivilegeEscalation: false
