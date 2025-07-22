@@ -60,12 +60,12 @@ ingress:
   annotations:
     projectcontour.io/tls-cert-namespace: projectcontour
   hosts:
-  - host: envoy-external-authz.ik.am
+  - host: envoy-external-authz.lan.ik.am
     paths:
     - path: /
       pathType: Prefix
   tls:
   - hosts:
-    - envoy-external-authz.ik.am
+    - envoy-external-authz.lan.ik.am
     secretName: default-tls-ik-am
 ---
