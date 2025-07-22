@@ -19,18 +19,16 @@ deployment:
       value: info
     logging.level.io.grpc:
       value: info
-    spring.grpc.server.keep-alive.permit-without-calls:
+    spring.ssl.bundle.pem.self-signed.keystore.certificate:
+      value: file:/certs/tls.crt
+    spring.ssl.bundle.pem.self-signed.keystore.private-key:
+      value: file:/certs/tls.key
+    spring.ssl.bundle.pem.self-signed.reload-on-update:
       value: "true"
-    spring.grpc.server.keep-alive.time:
-      value: 5s
-    #! spring.ssl.bundle.pem.self-signed.keystore.certificate:
-    #!   value: file:/certs/tls.crt
-    #! spring.ssl.bundle.pem.self-signed.keystore.private-key:
-    #!   value: file:/certs/tls.key
-    #! spring.ssl.bundle.pem.self-signed.reload-on-update:
-    #!   value: "true"
-    #! server.ssl.bundle:
-    #!   value: self-signed
+    server.ssl.bundle:
+      value: self-signed
+    spring.grpc.server.ssl.bundle:
+      value: self-signed
   volumeMounts:
     cert-volume:
       mountPath: /certs
@@ -41,16 +39,16 @@ deployment:
   resources:
     limits:
       cpu:
-      memory: 768Mi
+      memory: 250Mi
     requests:
       cpu:
-      memory: 768Mi
+      memory: 250Mi
   livenessProbe:
     enabled: true
     httpGet:
       path: /actuator/health/liveness
       port: 8081
-      scheme: HTTP
+      scheme: HTTPS
   readinessProbe:
     enabled: true
     grpc:
@@ -78,7 +76,7 @@ deployment:
         weight: 1
 service:
   annotations:
-    projectcontour.io/upstream-protocol.h2c: http
+    projectcontour.io/upstream-protocol.h2: http
 ingress:
   enabled: true
   annotations:
@@ -120,7 +118,7 @@ extraObjects:
     name: envoy-external-authz
     namespace: projectcontour
   spec:
-    protocol: h2c
+    protocol: h2
     services:
     - name: envoy-external-authz
       port: 8080
