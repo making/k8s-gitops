@@ -43,13 +43,13 @@ deployment:
     enabled: true
     httpGet:
       path: /actuator/health/liveness
-      port: 8080
+      port: 8081
       scheme: HTTP
   readinessProbe:
     enabled: true
     httpGet:
       path: /actuator/health/readiness
-      port: 8080
+      port: 8081
       scheme: HTTP
   containerSecurityContext:
     allowPrivilegeEscalation: false
