@@ -51,10 +51,10 @@ deployment:
       scheme: HTTPS
   readinessProbe:
     enabled: true
-    grpc:
-      port: 8080
-    initialDelaySeconds: 10
-    periodSeconds: 5
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8081
+      scheme: HTTPS
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
