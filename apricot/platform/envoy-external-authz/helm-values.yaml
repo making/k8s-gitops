@@ -55,7 +55,7 @@ deployment:
     enabled: true
     grpc:
       port: 8080
-      service: grpc.health.v1.Health
+      service: ""
     initialDelaySeconds: 10
     periodSeconds: 5
   containerSecurityContext:
