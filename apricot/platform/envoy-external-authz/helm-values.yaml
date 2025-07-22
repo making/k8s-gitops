@@ -71,4 +71,13 @@ ingress:
   - hosts:
     - envoy-external-authz.lan.ik.am
     secretName: default-tls
----
+certificate:
+  enabled: true
+  secretName: envoy-external-authz-tls
+  dnsNames:
+  - envoy-external-authz
+  - envoy-external-authz.projectcontour
+  - envoy-external-authz.projectcontour.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: contour-selfsigned-ca-issuer
