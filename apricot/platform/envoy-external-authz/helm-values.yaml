@@ -106,3 +106,13 @@ extraObjects:
       name: contour-ca-issuer
     renewBefore: 360h0m0s
     secretName: envoy-external-authz-tls
+- apiVersion: projectcontour.io/v1alpha1
+  kind: ExtensionService
+  metadata:
+    name: envoy-external-authz
+    namespace: projectcontour
+  spec:
+    protocol: h2
+    services:
+    - name: envoy-external-authz
+      port: 8080
