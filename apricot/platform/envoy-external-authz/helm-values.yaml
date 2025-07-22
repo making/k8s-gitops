@@ -1,0 +1,69 @@
+---
+applicationName: envoy-external-authz
+deployment:
+  replicas: 1
+  image:
+    repository: ghcr.io/making/envoy-external-authz
+    tag: native
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: envoy-external-authz
+  env:
+    logging.structured.format.console:
+      value: ecs
+  resources:
+    limits:
+      cpu:
+      memory: 250Mi
+    requests:
+      cpu:
+      memory: 250Mi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+      scheme: HTTP
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+      scheme: HTTP
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: envoy-external-authz
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+ingress:
+  enabled: true
+  annotations:
+    projectcontour.io/tls-cert-namespace: projectcontour
+  hosts:
+  - host: envoy-external-authz.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - envoy-external-authz.ik.am
+    secretName: default-tls-ik-am
+---
