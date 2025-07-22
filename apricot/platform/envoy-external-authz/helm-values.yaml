@@ -25,13 +25,15 @@ deployment:
   livenessProbe:
     enabled: true
     httpGet:
-      path: /actuator/health/liveness
+      #! path: /actuator/health/liveness
+      path: /actuator/health
       port: 8080
       scheme: HTTP
   readinessProbe:
     enabled: true
     httpGet:
-      path: /actuator/health/readiness
+      #! path: /actuator/health/readiness
+      path: /actuator/health
       port: 8080
       scheme: HTTP
   containerSecurityContext:
