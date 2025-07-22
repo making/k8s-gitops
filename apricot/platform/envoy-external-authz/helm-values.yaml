@@ -71,13 +71,25 @@ ingress:
   - hosts:
     - envoy-external-authz.lan.ik.am
     secretName: default-tls
-certificate:
-  enabled: true
-  secretName: envoy-external-authz-tls
-  dnsNames:
-  - envoy-external-authz
-  - envoy-external-authz.projectcontour
-  - envoy-external-authz.projectcontour.svc.cluster.local
-  issuerRef:
-    kind: Issuer
-    name: contour-selfsigned-ca-issuer
+extraObjects:
+- apiVersion: cert-manager.io/v1
+  kind: Certificate
+  metadata:
+    name: envoy-external-authz-tls
+    namespace: projectcontour
+  labels:
+    app.kubernetes.io/part-of: envoy-external-authz
+  spec:
+    commonName: envoy-external-authz
+    dnsNames:
+    - envoy-external-authz
+    - envoy-external-authz.projectcontour
+    - envoy-external-authz.projectcontour.svc
+    - envoy-external-authz.projectcontour.svc.cluster.local
+    duration: 8760h0m0s
+    issuerRef:
+      group: cert-manager.io
+      kind: Issuer
+      name: contour-ca-issuer
+    renewBefore: 360h0m0s
+    secretName: envoy-external-authz-tls
