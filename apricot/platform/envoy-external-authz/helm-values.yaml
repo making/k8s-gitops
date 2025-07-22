@@ -21,6 +21,8 @@ deployment:
       value: file:/certs/tls.key
     server.ssl.bundle:
       value: self-signed
+    server.forward-headers-strategy:
+      value: framework
   volumeMounts:
     cert-volume:
       mountPath: /certs
