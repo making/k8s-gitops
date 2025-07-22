@@ -15,6 +15,19 @@ deployment:
   env:
     logging.structured.format.console:
       value: ecs
+    spring.ssl.bundle.pem.self-signed.keystore.certificate:
+      value: file:/certs/tls.crt
+    spring.ssl.bundle.pem.self-signed.keystore.private-key:
+      value: file:/certs/tls.key
+    server.ssl.bundle:
+      value: self-signed
+  volumeMounts:
+    cert-volume:
+      mountPath: /certs
+  volumes:
+    cert-volume:
+      secret:
+        secretName: envoy-external-authz-tls
   resources:
     limits:
       cpu:
@@ -57,7 +70,7 @@ deployment:
         weight: 1
 service:
   annotations:
-    projectcontour.io/upstream-protocol.h2c: http
+    projectcontour.io/upstream-protocol.h2: http
 ingress:
   enabled: true
   annotations:
