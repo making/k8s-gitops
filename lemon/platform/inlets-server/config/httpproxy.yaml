@@ -21,4 +21,6 @@ spec:
     - name: inlets-exit
       port: 6868
     enableWebsockets: true
+    timeoutPolicy:
+      response: 300s
 #@ end
