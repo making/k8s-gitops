@@ -10,6 +10,12 @@ spec:
     fqdn: #@ "{}.ik.am".format(name)
     tls:
       secretName: projectcontour/default-tls-ik-am
+    #@ if name == 'openai.synology':
+    authorization:
+      extensionRef:
+        name: envoy-external-authz
+        namespace: projectcontour
+    #@ end
   routes:
   - services:
     - name: inlets-exit
