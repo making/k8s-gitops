@@ -20,7 +20,7 @@ deployment:
     logging.level.io.grpc:
       value: info
     envoy.authz.users:
-      value: "api:{bcrypt}$2a$10$TrQbR.vqHLwVEzk0y6Z5/OCanNH80Q6fXE3X5Dvld7g.PA50kPTSS"
+      value: ":{bcrypt}$2a$10$TrQbR.vqHLwVEzk0y6Z5/OCanNH80Q6fXE3X5Dvld7g.PA50kPTSS"
     spring.ssl.bundle.pem.self-signed.keystore.certificate:
       value: file:/certs/tls.crt
     spring.ssl.bundle.pem.self-signed.keystore.private-key:
