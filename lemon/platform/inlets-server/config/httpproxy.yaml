@@ -1,4 +1,4 @@
-#@ for name in ['synology', 'inlets.gw', 'openai.synology.ik.am']:
+#@ for name in ['synology', 'inlets.gw', 'openai.synology']:
 ---
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
