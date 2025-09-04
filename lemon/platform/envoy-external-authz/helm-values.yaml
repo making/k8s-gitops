@@ -1,0 +1,126 @@
+---
+applicationName: envoy-external-authz
+deployment:
+  replicas: 1
+  image:
+    repository: ghcr.io/making/envoy-external-authz
+    tag: native
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: envoy-external-authz
+  env:
+    logging.structured.format.console:
+      value: ecs
+    logging.level.am.ik.envoy:
+      value: info
+    logging.level.io.grpc:
+      value: info
+    envoy.authz.bearer-tokens:
+      value: "{bcrypt}$2a$10$TrQbR.vqHLwVEzk0y6Z5/OCanNH80Q6fXE3X5Dvld7g.PA50kPTSS"
+    spring.ssl.bundle.pem.self-signed.keystore.certificate:
+      value: file:/certs/tls.crt
+    spring.ssl.bundle.pem.self-signed.keystore.private-key:
+      value: file:/certs/tls.key
+    spring.ssl.bundle.pem.self-signed.reload-on-update:
+      value: "true"
+    server.ssl.bundle:
+      value: self-signed
+    spring.grpc.server.ssl.bundle:
+      value: self-signed
+  volumeMounts:
+    cert-volume:
+      mountPath: /certs
+  volumes:
+    cert-volume:
+      secret:
+        secretName: envoy-external-authz-tls
+  resources:
+    limits:
+      cpu:
+      memory: 250Mi
+    requests:
+      cpu:
+      memory: 250Mi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8081
+      scheme: HTTPS
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8081
+      scheme: HTTPS
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: envoy-external-authz
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+service:
+  annotations:
+    projectcontour.io/upstream-protocol.h2: http
+ingress:
+  enabled: true
+  annotations:
+    projectcontour.io/tls-cert-namespace: projectcontour
+  hosts:
+  - host: envoy-external-authz.lan.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - envoy-external-authz.lan.ik.am
+    secretName: default-tls
+extraObjects:
+- apiVersion: cert-manager.io/v1
+  kind: Certificate
+  metadata:
+    name: envoy-external-authz-tls
+    namespace: projectcontour
+  labels:
+    app.kubernetes.io/part-of: envoy-external-authz
+  spec:
+    commonName: envoy-external-authz
+    dnsNames:
+    - envoy-external-authz
+    - envoy-external-authz.projectcontour
+    - envoy-external-authz.projectcontour.svc
+    - envoy-external-authz.projectcontour.svc.cluster.local
+    duration: 8760h0m0s
+    issuerRef:
+      group: cert-manager.io
+      kind: Issuer
+      name: contour-ca-issuer
+    renewBefore: 360h0m0s
+    secretName: envoy-external-authz-tls
+- apiVersion: projectcontour.io/v1alpha1
+  kind: ExtensionService
+  metadata:
+    name: envoy-external-authz
+    namespace: projectcontour
+  spec:
+    protocol: h2
+    services:
+    - name: envoy-external-authz
+      port: 8080
