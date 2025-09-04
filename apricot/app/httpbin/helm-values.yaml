@@ -56,3 +56,5 @@ extraObjects:
       services:
       - name: httpbin
         port: 80
+      timeoutPolicy:
+        response: 300s
