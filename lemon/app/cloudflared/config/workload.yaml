@@ -59,7 +59,7 @@ spec:
     targetPort: minecraft
   - name: mc-vanilla
     port: 35565
-    targetPort: minecraft
+    targetPort: mc-vanilla
   selector:
     app: cloudflared
   type: ClusterIP
