@@ -34,6 +34,18 @@ spec:
         ports:
         - name: minecraft
           containerPort: 25565
+      - args:
+        - access
+        - tcp
+        - --hostname
+        - #@ data.values.public_hosts.minecraft
+        - --url
+        - 0.0.0.0:35565
+        image: cloudflare/cloudflared:latest
+        name: cloudflared-minecraft-vanilla
+        ports:
+        - name: minecraft-vanilla
+          containerPort: 35565
 ---
 apiVersion: v1
 kind: Service
@@ -44,6 +56,9 @@ spec:
   ports:
   - name: minecraft
     port: 25565
+    targetPort: minecraft
+  - name: minecraft-vanilla
+    port: 35565
     targetPort: minecraft
   selector:
     app: cloudflared
