@@ -42,9 +42,9 @@ spec:
         - --url
         - 0.0.0.0:35565
         image: cloudflare/cloudflared:latest
-        name: cloudflared-minecraft-vanilla
+        name: cloudflared-mc-vanilla
         ports:
-        - name: minecraft-vanilla
+        - name: mc-vanilla
           containerPort: 35565
 ---
 apiVersion: v1
@@ -57,7 +57,7 @@ spec:
   - name: minecraft
     port: 25565
     targetPort: minecraft
-  - name: minecraft-vanilla
+  - name: mc-vanilla
     port: 35565
     targetPort: minecraft
   selector:
