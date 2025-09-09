@@ -38,7 +38,7 @@ spec:
         - access
         - tcp
         - --hostname
-        - #@ data.values.public_hosts.minecraft
+        - #@ data.values.public_hosts.mc_vanilla
         - --url
         - 0.0.0.0:35565
         image: cloudflare/cloudflared:latest
