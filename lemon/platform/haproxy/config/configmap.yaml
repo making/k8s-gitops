@@ -55,6 +55,17 @@ data:
       mode tcp
       server cloudflared cloudflared.cloudflared.svc.cluster.local:25565 check
 
+    # Minecraft Vanilla/Cloudflared routing (25565)
+    frontend mc_vanilla_frontend
+      bind *:35565
+      mode tcp
+      option tcplog
+      default_backend mc_vanilla_backend
+    
+    backend mc_vanilla_backend
+      mode tcp
+      server cloudflared cloudflared.cloudflared.svc.cluster.local:35565 check
+
     # HTTP routing (80)
     frontend http_frontend
       bind *:8080

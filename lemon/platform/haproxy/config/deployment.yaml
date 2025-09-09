@@ -19,6 +19,8 @@ spec:
         ports:
         - containerPort: 25565
           name: minecraft
+        - containerPort: 35565
+          name: mc-vanilla
         - containerPort: 8080
           name: http
         - containerPort: 8443

@@ -15,6 +15,10 @@ spec:
     port: 25565
     targetPort: 25565
     protocol: TCP
+  - name: mc-vanilla
+    port: 35565
+    targetPort: 35565
+    protocol: TCP
   - name: http
     port: 80
     targetPort: 8080
