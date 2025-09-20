@@ -68,7 +68,8 @@ spec:
           value: ${HOSTNAME:}
         - name: blog-api.url
           #! value: http://blog-api.blog.svc.cluster.local
-          value: http://blog-api-gemfire.blog.svc.cluster.local:8080
+          #! value: http://blog-api-gemfire.blog.svc.cluster.local:8080
+          value: http://entry-api.blog.svc.cluster.local
         - name: comment-api.url
           value: http://comment-api.blog.svc.cluster.local
         - name: translation-api.url
