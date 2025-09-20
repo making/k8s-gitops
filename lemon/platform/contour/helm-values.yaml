@@ -1,3 +1,6 @@
+global:
+  security:
+    allowInsecureImages: true
 configInline:
   timeouts:
     request-timeout: 180s
@@ -27,6 +30,8 @@ contour:
   tlsExistingSecret: contourcert
   extraArgs:
   - --use-proxy-protocol
+  image:
+    repository: bitnamilegacy/contour
 envoy:
   kind: deployment
   replicaCount: 2
@@ -43,3 +48,8 @@ envoy:
     prometheus.io/port: "8002"
     prometheus.io/scrape: "true"
   podAntiAffinityPreset: soft
+  image:
+    repository: bitnamilegacy/envoy
+defaultBackend:
+  image:
+    repository: bitnamilegacy/nginx
