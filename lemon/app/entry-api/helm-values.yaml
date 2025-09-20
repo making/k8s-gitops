@@ -162,12 +162,12 @@ ingress:
   annotations:
     projectcontour.io/tls-cert-namespace: projectcontour
   hosts:
-  - host: entry.ik.am
+  - host: entry-api.ik.am
     paths:
     - path: /
       pathType: Prefix
   tls:
   - hosts:
-    - entry.ik.am
+    - entry-api.ik.am
     secretName: default-tls-ik-am
 ---
