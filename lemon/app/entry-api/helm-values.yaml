@@ -81,6 +81,20 @@ deployment:
         secretKeyRef:
           key: github-webhook-secret-en
           name: entry-api-config
+    blog.github.tenants.[note.ik.am].content-owner:
+      value: making
+    blog.github.tenants.[note.ik.am].content-repo:
+      value: note.ik.am
+    blog.github.tenants.[note.ik.am].access-token:
+      valueFrom:
+        secretKeyRef:
+          key: github-access-token-note
+          name: entry-api-config
+    blog.github.tenants.[note.ik.am].webhook-secret:
+      valueFrom:
+        secretKeyRef:
+          key: github-webhook-secret-note
+          name: entry-api-config
     management.otlp.tracing.endpoint:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
     management.otlp.tracing.export.enabled:
