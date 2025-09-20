@@ -14,7 +14,7 @@ spec:
   fetch:
   - helmChart:
       name: contour
-      version: 19.3.2
+      version: 21.1.4
       repository:
         url: oci://registry-1.docker.io/bitnamicharts
   - git:
