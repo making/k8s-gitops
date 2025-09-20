@@ -1,13 +1,27 @@
+global:
+  security:
+    allowInsecureImages: true
 operator:
   enabled: false
+  image:
+    repository: bitnamilegacy/prometheus-operator
 prometheus:
   enabled: false
+  image:
+    repository: bitnamilegacy/prometheus
+  thanos:
+    image:
+      repository: bitnamilegacy/thanos
 alertmanager:
   enabled: false
+  image:
+    repository: bitnamilegacy/alertmanager
 kubelet:
   enabled: false
 blackboxExporter:
   enabled: false
+  image:
+    repository: bitnamilegacy/blackbox-exporter
 kubeApiServer:
   enabled: false
 kubeControllerManager:
@@ -23,8 +37,12 @@ node-exporter:
     prometheus.io/scrape: "true"
   serviceMonitor:
     enabled: false
+  image:
+    repository: bitnamilegacy/node-exporter
 kube-state-metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
   serviceMonitor:
     enabled: false
+  image:
+    repository: bitnamilegacy/kube-state-metrics
