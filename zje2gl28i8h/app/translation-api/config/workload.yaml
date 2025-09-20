@@ -25,7 +25,7 @@ spec:
         - name: info.env.hostname
           value: ${HOSTNAME:}
         - name: entry.api-url
-          value: https://blog-api-blog.apps.ik.am
+          value: https://entry-api.ik.am
         - name: spring.ai.openai.api-key
           valueFrom:
             secretKeyRef:
