@@ -21,6 +21,8 @@ deployment:
       value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=32M -XX:MaxMetaspaceSize=96M -Xss512k -Dfile.encoding=UTF-8 -Duser.country=JP -Duser.language=ja -Duser.timezone=Asia/Tokyo
     BPL_JVM_THREAD_COUNT:
       value: "28"
+    spring.profiles.active:
+      value: dsql
     spring.datasource.url:
       valueFrom:
         secretKeyRef:
