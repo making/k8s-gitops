@@ -1,0 +1,157 @@
+---
+applicationName: entry-api
+deployment:
+  replicas: 1
+  image:
+    repository: ghcr.io/categolj/entry-api
+    tag: jvm
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: entry-api
+  additionalPodAnnotations:
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
+  env:
+    JAVA_TOOL_OPTIONS:
+      value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=32M -XX:MaxMetaspaceSize=96M -Xss512k -Dfile.encoding=UTF-8 -Duser.country=JP -Duser.language=ja -Duser.timezone=Asia/Tokyo
+    BPL_JVM_THREAD_COUNT:
+      value: "28"
+    spring.datasource.url:
+      valueFrom:
+        secretKeyRef:
+          key: spring-datasource-url
+          name: entry-api-config
+    spring.datasource.username:
+      valueFrom:
+        secretKeyRef:
+          key: spring-datasource-username
+          name: entry-api-config
+    spring.security.user.password:
+      valueFrom:
+        secretKeyRef:
+          key: admin-password
+          name: entry-api-config
+    BLOG_TENANT_USERS_0:
+      valueFrom:
+        secretKeyRef:
+          key: users-0
+          name: entry-api-config
+    BLOG_TENANT_USERS_1:
+      valueFrom:
+        secretKeyRef:
+          key: users-1
+          name: entry-api-config
+    BLOG_TENANT_USERS_2:
+      valueFrom:
+        secretKeyRef:
+          key: users-2
+          name: entry-api-config
+    blog.github.content-owner:
+      value: making
+    blog.github.content-repo:
+      value: blog.ik.am
+    blog.github.access-token:
+      valueFrom:
+        secretKeyRef:
+          key: github-access-token
+          name: entry-api-config
+    blog.github.webhook-secret:
+      valueFrom:
+        secretKeyRef:
+          key: github-webhook-secret
+          name: entry-api-config
+    blog.github.tenants.en.content-owner:
+      value: making
+    blog.github.tenants.en.content-repo:
+      value: ik.am_en
+    blog.github.tenants.en.access-token:
+      valueFrom:
+        secretKeyRef:
+          key: github-access-token-en
+          name: entry-api-config
+    blog.github.tenants.en.webhook-secret:
+      valueFrom:
+        secretKeyRef:
+          key: github-webhook-secret-en
+          name: entry-api-config
+    management.otlp.tracing.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+    management.otlp.tracing.export.enabled:
+      value: "true"
+    management.opentelemetry.resource-attributes.k8s.pod.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    management.opentelemetry.resource-attributes.k8s.namespace.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    management.opentelemetry.resource-attributes.k8s.node.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    management.opentelemetry.resource-attributes.host.ip:
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+    logging.structured.format.console:
+      value: ecs
+    info.env.hostname:
+      value: ${HOSTNAME:}
+  resources:
+    limits:
+      cpu:
+      memory: 512Mi
+    requests:
+      cpu:
+      memory: 512Mi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+      scheme: HTTP
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+      scheme: HTTP
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: entry-api
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+ingress:
+  enabled: true
+  annotations:
+    projectcontour.io/tls-cert-namespace: projectcontour
+  hosts:
+  - host: entry.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - entry.ik.am
+    secretName: default-tls-ik-am
+---
