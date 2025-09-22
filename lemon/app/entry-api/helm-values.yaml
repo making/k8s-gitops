@@ -99,6 +99,10 @@ deployment:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
     management.otlp.tracing.export.enabled:
       value: "true"
+    management.opentelemetry.logging.export.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+    management.opentelemetry.logging.export.enabled:
+      value: "true"
     management.opentelemetry.resource-attributes.k8s.pod.name:
       valueFrom:
         fieldRef:
