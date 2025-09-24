@@ -126,6 +126,8 @@ deployment:
           fieldPath: status.podIP
     logging.structured.format.console:
       value: ecs
+    logging.level.net.ttddyy.dsproxy.listener.logging.SLF4JQueryLoggingListener:
+      value: info
     info.env.hostname:
       value: ${HOSTNAME:}
   resources:
