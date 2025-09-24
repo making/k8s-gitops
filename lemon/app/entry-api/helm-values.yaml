@@ -22,7 +22,7 @@ deployment:
     BPL_JVM_THREAD_COUNT:
       value: "28"
     spring.profiles.active:
-      value: dsql
+      value: "dsql,redis"
     spring.datasource.url:
       valueFrom:
         secretKeyRef:
@@ -32,6 +32,11 @@ deployment:
       valueFrom:
         secretKeyRef:
           key: spring-datasource-username
+          name: entry-api-config
+    spring.data.redis.url:
+      valueFrom:
+        secretKeyRef:
+          key: spring-data-redis-url
           name: entry-api-config
     spring.security.user.password:
       valueFrom:
