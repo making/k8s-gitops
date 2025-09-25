@@ -28,7 +28,7 @@ spec:
         privateKeysSecretRef:
           name: age-key
   - helmTemplate:
-      name: redis
+      name: entry-redis
       namespace: blog
       path: "0"
       valuesFrom:
