@@ -1,0 +1,15 @@
+image:
+  repository: bitnamilegacy/redis
+  tag: 6.2.9-debian-11-r0
+master:
+  persistence:
+    storageClass: nfs
+replica:
+  replicaCount: 1
+  persistence:
+    storageClass: nfs
+auth:
+  existingSecret: entry-redis
+  existingSecretPasswordKey: password
+serviceBindings:
+  enabled: true

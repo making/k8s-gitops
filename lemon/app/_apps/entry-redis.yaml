@@ -1,51 +1,44 @@
 apiVersion: kappctrl.k14s.io/v1alpha1
 kind: App
 metadata:
-  name: entry-api
+  name: entry-redis
   namespace: app-install
   annotations:
     kapp.k14s.io/change-group: "{name}"
     kapp.k14s.io/change-rule.create-order.1: "upsert after upserting blog-api"
     kapp.k14s.io/change-rule.delete-order.1: "delete before deleting blog-api"
-    kapp.k14s.io/change-rule.create-order.2: "upsert after upserting entry-redis"
-    kapp.k14s.io/change-rule.delete-order.2: "delete before deleting entry-redis"
+    kapp.k14s.io/change-rule.create-order.2: "upsert after upserting nfs-server-provisioner"
+    kapp.k14s.io/change-rule.delete-order.2: "delete before deleting nfs-server-provisioner"
 spec:
   serviceAccountName: kapp
   fetch:
   - helmChart:
-      name: application
-      version: "6.8.0"
+      name: redis
+      version: 23.0.2
       repository:
-        url: https://stakater.github.io/stakater-charts
+        url: oci://registry-1.docker.io/bitnamicharts
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
-      subPath: lemon/app/entry-api
-  - git:
-      url: https://github.com/categolj/entry-api.git
-      ref: origin/images
-  syncPeriod: 10m
+      subPath: lemon/app/entry-redis
+  syncPeriod: 24h
   template:
   - sops:
       age:
         privateKeysSecretRef:
           name: age-key
   - helmTemplate:
-      name: entry-api
+      name: redis
       namespace: blog
       path: "0"
       valuesFrom:
       - path: 1/helm-values.yaml
   - ytt:
       paths:
-      - "-"
+      - '-'
       - 1/config
       valuesFrom:
       - path: 1/credentials.yaml
-      - path: 2/jvm_aarch64.yaml
-  - kbld:
-      paths:
-      - '-'
   deploy:
   - kapp:
       rawOptions:
