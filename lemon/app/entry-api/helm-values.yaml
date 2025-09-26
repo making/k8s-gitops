@@ -43,6 +43,8 @@ deployment:
         secretKeyRef:
           key: admin-password
           name: entry-api-config
+    management.observations.enable.spring.security:
+      value: "true"
     BLOG_TENANT_USERS_0:
       valueFrom:
         secretKeyRef:
