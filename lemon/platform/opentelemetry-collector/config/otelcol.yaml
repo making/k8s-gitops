@@ -221,7 +221,7 @@ spec:
           authorization: #@ "Bearer " + data.values.lognroll.token
         compression: gzip
       otlphttp/otlp_sink:
-        endpoint: https://otlp-sink.maki.lol
+        endpoint: https://otlp-sink.maki.lol/otlp
         headers:
           authorization: #@ "Basic " + base64.encode(data.values.otlp_sink.username + ":" + data.values.otlp_sink.password)
         compression: gzip
