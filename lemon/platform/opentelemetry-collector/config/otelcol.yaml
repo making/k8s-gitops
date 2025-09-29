@@ -247,6 +247,11 @@ spec:
         headers:
           uptrace-dsn: #@ data.values.uptrace_sm.uptrace_dsn
         compression: gzip
+      otlphttp/betterstack:
+        endpoint: #@ data.values.betterstack.endpoint
+        headers:
+          Authorization: #@ "Bearer " + data.values.betterstack.api_key
+        compression: gzip
       prometheusremotewrite:
         endpoint: #@ data.values.prometheus.endpoint
         headers:
@@ -272,6 +277,7 @@ spec:
           - otlphttp/grafana_cloud
           - otlphttp/hdx
           - otlp/uptrace
+          - otlphttp/betterstack
         metrics:
           receivers:
           - otlp
@@ -294,3 +300,4 @@ spec:
           exporters:
           - otlphttp/lognroll
           - otlphttp/otlp_sink
+          - otlphttp/betterstack
