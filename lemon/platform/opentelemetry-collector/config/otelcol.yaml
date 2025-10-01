@@ -298,6 +298,6 @@ spec:
           - resource
           - batch
           exporters:
-          - otlphttp/lognroll
+          - otlphttp/grafana_cloud
           - otlphttp/otlp_sink
           - otlphttp/betterstack
