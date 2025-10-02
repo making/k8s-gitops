@@ -6,7 +6,7 @@ metadata:
   name: otel
   namespace: opentelemetry
 spec:
-  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.136.0
+  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.127.0
   env:
   - name: K8S_NODE_NAME
     valueFrom:
