@@ -5,7 +5,7 @@ configInline:
   timeouts:
     request-timeout: 180s
   accesslog-format: json
-  debug: true
+  debug: false
   json-fields:
   - "@timestamp"
   - "authority"
