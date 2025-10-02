@@ -23,6 +23,12 @@ configInline:
   - "upstream_cluster"
   - "user_agent"
   - "x_forwarded_for"
+  - "response_flags"
+  - "response_code_details"
+  - "upstream_host"
+  - "upstream_transport_failure_reason"
+  - "downstream_local_address"
+  - "downstream_remote_address"
   tracing:
     includePodDetail: false
     extensionService: opentelemetry/otel-collector
