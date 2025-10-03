@@ -1,0 +1,36 @@
+args: [ "start" ]
+extraEnv: |
+  - name: KC_HOSTNAME_STRICT
+    value: "false"
+  - name: KC_LOG_CONSOLE_OUTPUT
+    value: json
+  - name: KC_LOG_CONSOLE_JSON_FORMAT
+    value: ecs
+  - name: JAVA_OPTS_APPEND
+    value: >-
+      -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
+extraEnvFrom: |
+  - secretRef:
+      name: keycloak-config
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9000"
+database:
+  vendor: postgres
+cache:
+  stack: jdbc-ping
+proxy:
+  mode: xforwarded
+ingress:
+  enabled: true
+  annotations:
+    projectcontour.io/tls-cert-namespace: projectcontour
+  rules:
+  - host: keycloak.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - keycloak.ik.am
+    secretName: default-tls-ik-am
