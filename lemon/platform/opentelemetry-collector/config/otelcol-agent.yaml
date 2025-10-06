@@ -144,7 +144,7 @@ spec:
           endpoint: #@ data.values.s3.endpoint
           region: #@ data.values.s3.region
           s3_bucket: logs
-          s3_partition: hour
+          s3_partition_format: "year=%Y/month=%m/day=%d/hour=%H"
           s3_force_path_style: true
           compression: gzip
         marshaler: otlp_json
