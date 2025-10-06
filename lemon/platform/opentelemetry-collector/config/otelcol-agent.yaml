@@ -75,7 +75,7 @@ spec:
         error_mode: ignore
         logs:
           log_record:
-          - resource.attributes["k8s.container.name"] != "envoy" && resource.attributes["k8s.container.name"] != "keycloak"
+          - resource.attributes["k8s.container.name"] != "envoy" and resource.attributes["k8s.container.name"] != "keycloak"
       filter/selected:
         error_mode: ignore
         logs:
