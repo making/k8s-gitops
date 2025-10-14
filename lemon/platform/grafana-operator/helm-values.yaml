@@ -1,6 +1,3 @@
-global:
-  security:
-    allowInsecureImages: true
 grafana:
   enabled: false
   image:
