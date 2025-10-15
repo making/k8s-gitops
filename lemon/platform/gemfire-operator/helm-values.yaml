@@ -1,2 +1,0 @@
-controllerImage: ghcr.io/making/tanzu-gemfire-for-kubernetes/gemfire-controller:2.5.0
-imagePullSecretName: gemfire-registry-secret
