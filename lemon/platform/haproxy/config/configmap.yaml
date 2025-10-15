@@ -42,7 +42,7 @@ data:
 
     backend ldaps_backend
       mode tcp
-      server openldap openldap-stack-ha.openldap.svc.cluster.local:636 check
+      server openldap openldap-stack-ha.openldap.svc.cluster.local:636 check inter 5s fall 3 rise 2
 
     # Minecraft/Cloudflared routing (25565)
     frontend minecraft_frontend
