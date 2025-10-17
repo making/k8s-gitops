@@ -44,7 +44,7 @@ spec:
       - --wait-timeout=5m
       - --diff-changes=true
       - --diff-mask=true
-      delete:
-        #! Force delete PVCs, since StatefulSet does not delete them
-        rawOptions:
-        - --apply-ignored=true
+      #! delete:
+      #!   #! Force delete PVCs, since StatefulSet does not delete them
+      #!   rawOptions:
+      #!   - --apply-ignored=true
