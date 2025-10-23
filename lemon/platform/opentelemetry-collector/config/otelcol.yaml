@@ -372,5 +372,5 @@ spec:
           - batch
           exporters:
           - otlphttp/grafana_cloud
-          - otlphttp/otlp_sink
+          #! - otlphttp/otlp_sink
           - otlphttp/betterstack
