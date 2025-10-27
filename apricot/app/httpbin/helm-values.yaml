@@ -46,10 +46,10 @@ extraObjects:
       fqdn: httpbin.lan.ik.am
       tls:
         secretName: projectcontour/default-tls
-      authorization:
-        extensionRef:
-          name: envoy-external-authz
-          namespace: projectcontour
+      #! authorization:
+      #!   extensionRef:
+      #!     name: envoy-external-authz
+      #!     namespace: projectcontour
     routes:
     - conditions:
       - prefix: /
