@@ -281,7 +281,7 @@ spec:
           authorization: #@ "Bearer " + data.values.lognroll.token
         compression: gzip
       otlphttp/otlp_sink:
-        endpoint: https://otlp-sink.maki.lol/otlp
+        endpoint: #@ data.values.otlp_sink.endpoint
         headers:
           authorization: #@ "Basic " + base64.encode(data.values.otlp_sink.username + ":" + data.values.otlp_sink.password)
         compression: gzip
@@ -372,5 +372,5 @@ spec:
           - batch
           exporters:
           - otlphttp/grafana_cloud
-          #! - otlphttp/otlp_sink
+          - otlphttp/otlp_sink
           - otlphttp/betterstack
