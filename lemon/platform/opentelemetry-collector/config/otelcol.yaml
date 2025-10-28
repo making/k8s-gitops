@@ -277,7 +277,7 @@ spec:
           authorization: #@ "Basic " + base64.encode(data.values.grafala_cloud_otlp.username + ":" + data.values.grafala_cloud_otlp.password)
         compression: gzip
       otlphttp/lognroll:
-        endpoint: https://lognroll.fly.dev
+        endpoint: #@ data.values.lognroll.endpoint
         headers:
           authorization: #@ "Bearer " + data.values.lognroll.token
         compression: gzip
