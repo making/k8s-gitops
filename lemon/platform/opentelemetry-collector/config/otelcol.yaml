@@ -189,6 +189,7 @@ spec:
           - IsMatch(attributes["upstream_cluster"], "raspberrypi/.*")
           - IsMatch(attributes["upstream_cluster"], "zipkin/.*")
           - IsMatch(attributes["http.url"], "https://grafana.*")
+          - IsMatch(attributes["http.url"], ".*/v1/logs")
           - IsMatch(attributes["http.url"], ".*://zipkin.*")
           - IsMatch(attributes["http.url"], ".*/livez")
           - IsMatch(attributes["http.url"], ".*/readyz")
