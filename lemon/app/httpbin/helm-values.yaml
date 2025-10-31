@@ -1,7 +1,7 @@
 applicationName: httpbin
 deployment:
   image:
-    repository: kennethreitz/httpbin
+    repository: arnaudlacour/httpbin
     tag: latest
     pullPolicy: Always
   ports:
