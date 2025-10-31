@@ -18,7 +18,7 @@ spec:
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
-      subPath: apricot/app/httpbin
+      subPath: lemon/app/httpbin
   syncPeriod: 600h
   template:
   - sops:
