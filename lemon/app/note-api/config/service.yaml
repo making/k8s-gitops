@@ -18,6 +18,7 @@ stringData:
   password: #@ data.values.note_db.password
   database: "postgres"
   sslmode: "require"
+  jdbc-url: #@ "jdbc:postgresql://{}:{}/{}?sslmode=require".format(data.values.note_db.host, "5432", "postgres")
 ---
 apiVersion: v1
 kind: Secret

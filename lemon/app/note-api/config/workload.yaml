@@ -53,18 +53,47 @@ spec:
           value: -XX:ActiveProcessorCount=2 -XX:MaxMetaspaceSize=128M -XX:ReservedCodeCacheSize=32M -Xss512k -Dfile.encoding=UTF-8 -Dmanagement.endpoint.health.probes.add-additional-paths=true -Dmanagement.endpoint.health.show-details=always -Dmanagement.endpoints.web.exposure.include=info,health,prometheus -Dmanagement.health.probes.enabled=true -Dserver.port=8080 -Duser.country=JP -Duser.language=ja -Duser.timezone=Asia/Tokyo
         - name: BPL_JVM_THREAD_COUNT
           value: "28"
+        - name: BPL_SPRING_CLOUD_BINDINGS_DISABLED
+          value: "true"
         - name: entry.api-url
-          value: ${k8s.bindings.note-config.entry-api-url}
+          valueFrom:
+            secretKeyRef:
+              name: note-config
+              key: entry-api-url
         - name: entry.client-id
-          value: ${k8s.bindings.note-config.entry-api-client-id}
+          valueFrom:
+            secretKeyRef:
+              name: note-config
+              key: entry-api-client-id
         - name: entry.client-secret
-          value: ${k8s.bindings.note-config.entry-api-client-secret}
+          valueFrom:
+            secretKeyRef:
+              name: note-config
+              key: entry-api-client-secret
         - name: rsa.private-key
           value: file:/bindings/note-config/rsa-private-key.pem
         - name: rsa.public-key
           value: file:/bindings/note-config/rsa-public-key.pem
+        - name: spring.datasource.url
+          valueFrom:
+            secretKeyRef:
+              name: note-db
+              key: jdbc-url
+        - name: spring.datasource.username
+          valueFrom:
+            secretKeyRef:
+              name: note-db
+              key: username
+        - name: spring.datasource.password
+          valueFrom:
+            secretKeyRef:
+              name: note-db
+              key: password
         - name: spring.sendgrid.api-key
-          value: ${k8s.bindings.note-config.sendgrid-api-key}
+          valueFrom:
+            secretKeyRef:
+              name: note-config
+              key: sendgrid-api-key
         - name: management.zipkin.tracing.endpoint
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
         - name: management.tracing.export.zipkin.endpoint
