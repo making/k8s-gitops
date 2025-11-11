@@ -84,7 +84,11 @@ spec:
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
         - name: management.opentelemetry.logging.export.endpoint
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+        - name: management.opentelemetry.logging.export.otlp.endpoint
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
         - name: management.otlp.tracing.endpoint
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+        - name: management.opentelemetry.tracing.export.otlp.endpoint
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
         - name: management.opentelemetry.resource-attributes.k8s.pod.name
           valueFrom:
