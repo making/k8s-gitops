@@ -71,9 +71,9 @@ spec:
               name: note-config
               key: entry-api-client-secret
         - name: rsa.private-key
-          value: file:/bindings/note-config/rsa-private-key.pem
+          value: file:/note-config/rsa-private-key.pem
         - name: rsa.public-key
-          value: file:/bindings/note-config/rsa-public-key.pem
+          value: file:/note-config/rsa-public-key.pem
         - name: spring.datasource.url
           valueFrom:
             secretKeyRef:
@@ -175,6 +175,9 @@ spec:
             memory: 512Mi
           requests:
             memory: 512Mi
+        volumeMounts:
+          - mountPath: /note-config
+            name: note-config
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -193,3 +196,7 @@ spec:
                   app: note-api
               topologyKey: kubernetes.io/hostname
             weight: 1
+      volumes:
+      - name: note-config
+        secret:
+          secretName: note-config
