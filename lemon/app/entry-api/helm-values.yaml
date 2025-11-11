@@ -102,14 +102,14 @@ deployment:
           name: entry-api-config
     management.observations.enable.spring.security:
       value: "false"
-    management.otlp.tracing.endpoint:
+    management.opentelemetry.tracing.export.otlp.endpoint:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
-    management.otlp.tracing.export.enabled:
-      value: "true"
-    management.opentelemetry.logging.export.endpoint:
+    management.opentelemetry.tracing.export.otlp.compression:
+      value: gzip
+    management.opentelemetry.logging.export.otlp.endpoint:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
-    management.opentelemetry.logging.export.enabled:
-      value: "true"
+    management.opentelemetry.logging.export.otlp.compression:
+      value: gzip
     management.opentelemetry.resource-attributes.k8s.pod.name:
       valueFrom:
         fieldRef:
