@@ -66,6 +66,15 @@ spec:
             secretKeyRef:
               key: jdbc-password
               name: counter-config
+        - name: management.opentelemetry.tracing.export.otlp.endpoint
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+        - name: management.opentelemetry.tracing.export.otlp.compression
+          value: gzip
+        - name: management.opentelemetry.logging.export.otlp.endpoint
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+        - name: management.opentelemetry.logging.export.otlp.compression
+          value: gzip
+        #! <<deprecated
         - name: management.otlp.logging.endpoint
           valueFrom:
             secretKeyRef:
@@ -86,16 +95,9 @@ spec:
             secretKeyRef:
               key: otlp-traces-header-authorization
               name: counter-config
+        #! deprecated>>
         - name: management.otlp.metrics.export.url
-          valueFrom:
-            secretKeyRef:
-              key: otlp-metrics-endpoint
-              name: counter-config
-        - name: management.otlp.metrics.export.headers.authorization
-          valueFrom:
-            secretKeyRef:
-              key: otlp-metrics-header-authorization
-              name: counter-config
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/metrics
         - name: management.otlp.metrics.export.step
           value: 10s
         - name: management.otlp.metrics.export.base-time-unit
