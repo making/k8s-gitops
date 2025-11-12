@@ -57,7 +57,7 @@ spec:
         - name: info.env.hostname
           value: ${HOSTNAME:}
         - name: entry.api-url
-          value: http://entry-api.blog.svc.cluster.local
+          value: http://entry-api.blog.svc.cluster.local:8080
         - name: spring.ai.openai.api-key
           valueFrom:
             secretKeyRef:
