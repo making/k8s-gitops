@@ -5,9 +5,9 @@ metadata:
   namespace: blog
 spec:
   virtualhost:
-    fqdn: translation-api.lemon.maki.lol
+    fqdn: translation-api.ik.am
     tls:
-      secretName: projectcontour/default-tls
+      secretName: projectcontour/default-tls-ik-am
   routes:
   - services:
     - name: translation-api

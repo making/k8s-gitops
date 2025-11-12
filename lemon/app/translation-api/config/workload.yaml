@@ -57,11 +57,26 @@ spec:
         - name: info.env.hostname
           value: ${HOSTNAME:}
         - name: entry.api-url
-          value: http://blog-api.blog.svc.cluster.local
+          value: http://entry-api.blog.svc.cluster.local
         - name: spring.ai.openai.api-key
           valueFrom:
             secretKeyRef:
               key: openai-api-key
+              name: translation-config
+        - name: spring.ai.openai.base-url
+          valueFrom:
+            secretKeyRef:
+              key: openai-base-url
+              name: translation-config
+        - name: spring.ai.openai.chat.completions-path
+          valueFrom:
+            secretKeyRef:
+              key: openai-chat-completions-path
+              name: translation-config
+        - name: spring.ai.openai.chat.options.model
+          valueFrom:
+            secretKeyRef:
+              key: openai-chat-options-model
               name: translation-config
         - name: github.access-token
           valueFrom:
@@ -77,6 +92,18 @@ spec:
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
         - name: management.otlp.tracing.endpoint
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+        - name: management.otlp.metrics.export.url
+          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/metrics
+        - name: management.otlp.metrics.export.base-time-unit
+          value: seconds
+        - name: management.metrics.tags.app
+          value: translation-api
+        - name: management.metrics.tags.instance
+          value: ${HOSTNAME:}
+        - name: spring.http.client.factory
+          value: jdk
+        - name: spring.http.client.read-timeout
+          value: 5m
         - name: management.opentelemetry.resource-attributes.k8s.pod.name
           valueFrom:
             fieldRef:
@@ -128,9 +155,9 @@ spec:
           protocol: TCP
         resources:
           limits:
-            memory: 416Mi
+            memory: 250Mi
           requests:
-            memory: 416Mi
+            memory: 250Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -149,15 +176,3 @@ spec:
                   app: translation-api
               topologyKey: kubernetes.io/hostname
             weight: 1
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: translation-config
-  namespace: blog
-type: Opaque
-stringData:
-  type: "translation-api"
-  openai-api-key: #@ data.values.openai_api_key
-  github-access-token: #@ data.values.github_access_token
-  github-webhook-secret: #@ data.values.github_webhook_secret
