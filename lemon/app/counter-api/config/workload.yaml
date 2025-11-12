@@ -74,38 +74,12 @@ spec:
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
         - name: management.opentelemetry.logging.export.otlp.compression
           value: gzip
-        #! <<deprecated
-        - name: management.otlp.logging.endpoint
-          valueFrom:
-            secretKeyRef:
-              key: otlp-logs-endpoint
-              name: counter-config
-        - name: management.otlp.logging.headers.authorization
-          valueFrom:
-            secretKeyRef:
-              key: otlp-logs-header-authorization
-              name: counter-config
-        - name: management.otlp.tracing.endpoint
-          valueFrom:
-            secretKeyRef:
-              key: otlp-traces-endpoint
-              name: counter-config
-        - name: management.otlp.tracing.headers.authorization
-          valueFrom:
-            secretKeyRef:
-              key: otlp-traces-header-authorization
-              name: counter-config
-        #! deprecated>>
         - name: management.otlp.metrics.export.url
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/metrics
-        - name: management.otlp.metrics.export.step
-          value: 10s
         - name: management.otlp.metrics.export.base-time-unit
           value: seconds
         - name: management.metrics.tags.app
           value: counter-api
-        - name: management.metrics.tags.cluster
-          value: lemon
         - name: management.metrics.tags.instance
           value: ${HOSTNAME:}
         - name: management.opentelemetry.resource-attributes.k8s.pod.name
