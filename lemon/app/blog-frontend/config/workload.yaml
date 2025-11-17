@@ -81,16 +81,14 @@ spec:
           value:  http://counter-api.blog.svc.cluster.local/counter
         - name: counter-api.ip-black-list
           value: #@ ",".join(data.values.ip_blacklist)
-        - name: management.otlp.logging.endpoint
-          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
-        - name: management.opentelemetry.logging.export.endpoint
-          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
         - name: management.opentelemetry.logging.export.otlp.endpoint
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
-        - name: management.otlp.tracing.endpoint
-          value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+        - name: management.opentelemetry.logging.export.otlp.compression
+          value: gzip
         - name: management.opentelemetry.tracing.export.otlp.endpoint
           value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+        - name: management.opentelemetry.tracing.export.otlp.compression
+          value: gzip
         - name: management.opentelemetry.resource-attributes.k8s.pod.name
           valueFrom:
             fieldRef:
