@@ -1,0 +1,10 @@
+#@ load("@ytt:overlay", "overlay")
+#@overlay/match by=overlay.subset({"kind": "StatefulSet", "metadata": {"name": "openldap-stack-ha"}})
+---
+spec:
+  #@overlay/match missing_ok=True
+  annotations:
+    #@overlay/match missing_ok=True
+    secret.reloader.stakater.com/reload: "openldap-tls"
+    #@overlay/match missing_ok=True
+    reloader.stakater.com/rollout-strategy: "restart"
