@@ -29,6 +29,7 @@ spec:
       path: "0"
       valuesFrom:
       - path: 1/helm-values.yaml
+      - path: 1/credentials.yaml
   - ytt:
       paths:
       - '-'
