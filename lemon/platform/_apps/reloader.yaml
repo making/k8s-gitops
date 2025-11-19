@@ -1,0 +1,45 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: reloader
+  namespace: app-install
+  annotations:
+    kapp.k14s.io/change-group: "{name}"
+spec:
+  serviceAccountName: kapp
+  fetch:
+  - helmChart:
+      name: reloader
+      version: "2.2.5"
+      repository:
+        url: https://stakater.github.io/stakater-charts
+  - git:
+      url: https://github.com/making/k8s-gitops.git
+      ref: origin/main
+      subPath: lemon/platform/reloader
+  syncPeriod: 168h
+  template:
+  - sops:
+      age:
+        privateKeysSecretRef:
+          name: age-key
+  - helmTemplate:
+      name: reloader
+      namespace: reloader
+      path: "0"
+      valuesFrom:
+      - path: 1/helm-values.yaml
+  - ytt:
+      paths:
+      - '-'
+      - 1/config
+  deploy:
+  - kapp:
+      rawOptions:
+      - --wait-timeout=5m
+      - --diff-changes=true
+      - --diff-mask=true
+      delete:
+        #! Force delete PVCs, since StatefulSet does not delete them
+        rawOptions:
+        - --apply-ignored=true
