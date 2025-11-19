@@ -1,7 +1,7 @@
 #@ load("@ytt:overlay", "overlay")
 #@overlay/match by=overlay.subset({"kind": "StatefulSet", "metadata": {"name": "openldap-stack-ha"}})
 ---
-spec:
+metadata:
   #@overlay/match missing_ok=True
   annotations:
     #@overlay/match missing_ok=True
