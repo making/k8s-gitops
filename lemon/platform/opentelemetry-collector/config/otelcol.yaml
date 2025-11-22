@@ -163,11 +163,9 @@ spec:
           timestamp:
             parse_from: attributes.time
             layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+          severity:
+            parse_from: attributes.type
           parse_from: body
-        - type: add_attributes
-          attributes:
-            severity_text: "info"
-            severity_number: 1
     processors:
       memory_limiter:
         check_interval: 1s
