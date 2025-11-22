@@ -35,5 +35,9 @@ spec:
     port: 636
     targetPort: 8636
     protocol: TCP
+  - name: vault-audit
+    port: 9090
+    targetPort: 9090
+    protocol: TCP
   selector:
     app: haproxy

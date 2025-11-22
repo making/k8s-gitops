@@ -66,6 +66,17 @@ data:
       mode tcp
       server cloudflared cloudflared.cloudflared.svc.cluster.local:35565 check
 
+    # Minecraft otelcol/vault_audit routing (9090)
+    frontend otelcol_vault_audit_frontend
+      bind *:9090
+      mode tcp
+      option tcplog
+      default_backend otelcol_vault_audit_backend
+    
+    backend otelcol_vault_audit_backend
+      mode tcp
+      server otelcol_vault_audit otel-collector.opentelemetry.svc.cluster.local:9090 check
+
     # HTTP routing (80)
     frontend http_frontend
       bind *:8080
