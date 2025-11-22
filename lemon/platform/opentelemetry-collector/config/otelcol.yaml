@@ -158,14 +158,14 @@ spec:
         max_log_size: 10MiB
         multiline:
           line_end_pattern: '\n'
-        #! operators:
-        #! - type: json_parser
-        #!   timestamp:
-        #!     parse_from: attributes.time
-        #!     layout: '%Y-%m-%dT%H:%M:%S.%LZ'
-        #!   severity:
-        #!     parse_from: attributes.type
-        #!   parse_from: body
+        operators:
+        - type: json_parser
+          timestamp:
+            parse_from: attributes.time
+            layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+          severity:
+            parse_from: attributes.type
+          parse_from: body
     processors:
       memory_limiter:
         check_interval: 1s
