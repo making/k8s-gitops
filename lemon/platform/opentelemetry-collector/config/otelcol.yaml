@@ -409,8 +409,3 @@ spec:
           exporters:
           - otlphttp/grafana_cloud
           - otlphttp/otlp_sink
-        logs/vault_audit_debug:
-          receivers:
-          - tcplog/vault_audit
-          exporters:
-          - debug
