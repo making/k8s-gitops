@@ -232,6 +232,11 @@ spec:
         logs:
           log_record:
           - IsMatch(resource.attributes["k8s.container.name"], ".*-minecraft") and (severity_text == "DEBUG" or severity_text == "TRACE")
+      filter/vault_audit:
+        error_mode: ignore
+        logs:
+          log_record:
+          - not (IsMatch(attributes["request.path"], "auth/.*"))
       transform/syslog:
         error_mode: ignore
         log_statements:
@@ -397,7 +402,7 @@ spec:
           receivers:
           - tcplog/vault_audit
           processors:
-          - batch
+          - filter/vault_audit
           - memory_limiter
           - resource
           - resource/vault_audit
