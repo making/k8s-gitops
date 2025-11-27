@@ -7,6 +7,14 @@ logs:
   access:
     enabled: true
     format: json
+tracing:
+  otlp:
+    enabled: true
+    http:
+      enabled: true
+      endpoint: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+      tls:
+        insecureSkipVerify: true
 ingressRoute:
   dashboard:
     enabled: true
