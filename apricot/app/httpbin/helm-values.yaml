@@ -22,17 +22,17 @@ service:
   ports: [ { "name": "http","port": 80,"protocol": "TCP","targetPort": 80 } ]
 ingress:
   enabled: true
-  #! annotations:
-  #!   projectcontour.io/tls-cert-namespace: projectcontour
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
   hosts:
   - host: httpbin.lan.ik.am
     paths:
     - path: /
       pathType: Prefix
-#!  tls:
-#!  - hosts:
-#!    - httpbin.lan.ik.am
-#!    secretName: default-tls
+  tls:
+  - hosts:
+    - httpbin.lan.ik.am
+    secretName: httpbin-tls
 #! extraObjects:
 #! - apiVersion: projectcontour.io/v1
 #!   kind: HTTPProxy
