@@ -3,3 +3,5 @@ metrics:
   enabled: false
 global:
   imageRegistry: public.ecr.aws
+  security:
+    allowInsecureImages: true

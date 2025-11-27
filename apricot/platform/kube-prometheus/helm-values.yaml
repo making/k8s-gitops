@@ -1,5 +1,7 @@
 global:
   imageRegistry: public.ecr.aws
+  security:
+    allowInsecureImages: true
 kubeVersion: 1.34.2
 operator:
   enabled: false
