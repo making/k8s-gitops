@@ -1,7 +1,7 @@
-applicationName: httpbin
+applicationName: whoami
 deployment:
   image:
-    repository: kennethreitz/httpbin
+    repository: traefik/whoami
     tag: latest
     pullPolicy: Always
   ports:
@@ -11,10 +11,10 @@ deployment:
   resources:
     limits:
       cpu:
-      memory: 128Mi
+      memory: 64Mi
     requests:
       cpu:
-      memory: 128Mi
+      memory: 64Mi
   containerSecurityContext:
     runAsNonRoot: false
     readOnlyRootFilesystem: false
@@ -26,36 +26,11 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt
     traefik.ingress.kubernetes.io/router.middlewares: traefik-headers-middleware@kubernetescrd
   hosts:
-  - host: httpbin.lan.ik.am
+  - host: whoami.lan.ik.am
     paths:
     - path: /
       pathType: Prefix
   tls:
   - hosts:
-    - httpbin.lan.ik.am
-    secretName: httpbin-tls
-#! extraObjects:
-#! - apiVersion: projectcontour.io/v1
-#!   kind: HTTPProxy
-#!   metadata:
-#!     name: httpbin
-#!     namespace: default
-#!     labels:
-#!       app.kubernetes.io/part-of: httpbin
-#!   spec:
-#!     virtualhost:
-#!       fqdn: httpbin.lan.ik.am
-#!       tls:
-#!         secretName: projectcontour/default-tls
-#!       #! authorization:
-#!       #!   extensionRef:
-#!       #!     name: envoy-external-authz
-#!       #!     namespace: projectcontour
-#!     routes:
-#!     - conditions:
-#!       - prefix: /
-#!       services:
-#!       - name: httpbin
-#!         port: 80
-#!       timeoutPolicy:
-#!         response: 300s
+    - whoami.lan.ik.am
+    secretName: whoami-tls
