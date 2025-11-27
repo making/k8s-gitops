@@ -33,28 +33,28 @@ ingress:
   - hosts:
     - httpbin.lan.ik.am
     secretName: default-tls
-extraObjects:
-- apiVersion: projectcontour.io/v1
-  kind: HTTPProxy
-  metadata:
-    name: httpbin
-    namespace: default
-    labels:
-      app.kubernetes.io/part-of: httpbin
-  spec:
-    virtualhost:
-      fqdn: httpbin.lan.ik.am
-      tls:
-        secretName: projectcontour/default-tls
-      #! authorization:
-      #!   extensionRef:
-      #!     name: envoy-external-authz
-      #!     namespace: projectcontour
-    routes:
-    - conditions:
-      - prefix: /
-      services:
-      - name: httpbin
-        port: 80
-      timeoutPolicy:
-        response: 300s
+#! extraObjects:
+#! - apiVersion: projectcontour.io/v1
+#!   kind: HTTPProxy
+#!   metadata:
+#!     name: httpbin
+#!     namespace: default
+#!     labels:
+#!       app.kubernetes.io/part-of: httpbin
+#!   spec:
+#!     virtualhost:
+#!       fqdn: httpbin.lan.ik.am
+#!       tls:
+#!         secretName: projectcontour/default-tls
+#!       #! authorization:
+#!       #!   extensionRef:
+#!       #!     name: envoy-external-authz
+#!       #!     namespace: projectcontour
+#!     routes:
+#!     - conditions:
+#!       - prefix: /
+#!       services:
+#!       - name: httpbin
+#!         port: 80
+#!       timeoutPolicy:
+#!         response: 300s
