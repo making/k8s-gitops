@@ -15,6 +15,11 @@ tracing:
       endpoint: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
       tls:
         insecureSkipVerify: true
+experimental:
+  plugins:
+    example:
+      moduleName: github.com/traefik/plugindemo
+      version: v0.2.1
 ingressRoute:
   dashboard:
     enabled: true
@@ -41,3 +46,13 @@ extraObjects:
   spec:
     basicAuth:
       secret: dashboard-auth-secret
+- apiVersion: traefik.io/v1alpha1
+  kind: Middleware
+  metadata:
+    name: headers-middleware
+    namespace: traefik
+  spec:
+    plugin:
+      example:
+        headers:
+          Foo: Bar
