@@ -10,7 +10,7 @@ spec:
   fetch:
   - helmChart:
       name: cert-manager
-      version: 1.5.6
+      version: 1.5.14
       repository:
         url: oci://registry-1.docker.io/bitnamicharts
   - git:
