@@ -10,7 +10,7 @@ logs:
 ingressRoute:
   dashboard:
     enabled: true
-    matchRule: Host(\`dashboard.lan.ik.am\`)
+    matchRule: Host(`dashboard.lan.ik.am`)
     entryPoints:
     - websecure
     middlewares:
