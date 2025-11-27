@@ -173,3 +173,10 @@ spec:
           - batch
           exporters:
           - prometheusremotewrite
+        traces:
+          receivers:
+          - otlp
+          processors:
+          - attributes
+          exporters:
+          - debug
