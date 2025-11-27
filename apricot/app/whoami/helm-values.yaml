@@ -1,0 +1,61 @@
+applicationName: httpbin
+deployment:
+  image:
+    repository: kennethreitz/httpbin
+    tag: latest
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 80
+    protocol: TCP
+  resources:
+    limits:
+      cpu:
+      memory: 128Mi
+    requests:
+      cpu:
+      memory: 128Mi
+  containerSecurityContext:
+    runAsNonRoot: false
+    readOnlyRootFilesystem: false
+service:
+  ports: [ { "name": "http","port": 80,"protocol": "TCP","targetPort": 80 } ]
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-headers-middleware@kubernetescrd
+  hosts:
+  - host: httpbin.lan.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - httpbin.lan.ik.am
+    secretName: httpbin-tls
+#! extraObjects:
+#! - apiVersion: projectcontour.io/v1
+#!   kind: HTTPProxy
+#!   metadata:
+#!     name: httpbin
+#!     namespace: default
+#!     labels:
+#!       app.kubernetes.io/part-of: httpbin
+#!   spec:
+#!     virtualhost:
+#!       fqdn: httpbin.lan.ik.am
+#!       tls:
+#!         secretName: projectcontour/default-tls
+#!       #! authorization:
+#!       #!   extensionRef:
+#!       #!     name: envoy-external-authz
+#!       #!     namespace: projectcontour
+#!     routes:
+#!     - conditions:
+#!       - prefix: /
+#!       services:
+#!       - name: httpbin
+#!         port: 80
+#!       timeoutPolicy:
+#!         response: 300s
