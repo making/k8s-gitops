@@ -7,7 +7,29 @@ logs:
   access:
     enabled: true
     format: json
-gateway:
-  enabled: false
-gatewayClass:
-  enabled: false
+ingressRoute:
+  dashboard:
+    enabled: true
+    matchRule: Host(\`dashboard.lan.ik.am\`)
+    entryPoints:
+    - websecure
+    middlewares:
+    - name: dashboard-auth
+extraObjects:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: dashboard-auth-secret
+    namespace: traefik
+  type: kubernetes.io/basic-auth
+  stringData:
+    username: admin
+    password: changeme
+- apiVersion: traefik.io/v1alpha1
+  kind: Middleware
+  metadata:
+    name: dashboard-auth
+    namespace: traefik
+  spec:
+    basicAuth:
+      secret: dashboard-auth-secret
