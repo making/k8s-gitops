@@ -7,3 +7,7 @@ logs:
   access:
     enabled: true
     format: json
+gateway:
+  enabled: false
+gatewayClass:
+  enabled: false
