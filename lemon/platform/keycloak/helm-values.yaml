@@ -23,6 +23,7 @@ proxy:
   mode: xforwarded
 ingress:
   enabled: true
+  ingressClassName: contour
   annotations:
     projectcontour.io/tls-cert-namespace: projectcontour
   rules:

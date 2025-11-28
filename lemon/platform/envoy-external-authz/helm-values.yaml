@@ -81,6 +81,7 @@ service:
     projectcontour.io/upstream-protocol.h2: http
 ingress:
   enabled: true
+  ingressClassName: contour
   annotations:
     projectcontour.io/tls-cert-namespace: projectcontour
   hosts:
