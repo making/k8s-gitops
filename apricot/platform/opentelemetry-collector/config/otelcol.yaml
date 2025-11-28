@@ -144,7 +144,11 @@ spec:
         attributes:
         - key: k8s.cluster.name
           value: #@ data.values.cluster
-          action: upsert
+          action: insert
+        - pattern: process\..+
+          action: delete
+        - pattern: os\..+
+          action: delete
       attributes:
         actions:
         - key: cluster
