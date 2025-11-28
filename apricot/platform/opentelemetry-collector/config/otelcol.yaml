@@ -180,3 +180,10 @@ spec:
           - attributes
           exporters:
           - debug
+        logs:
+          receivers:
+          - otlp
+          processors:
+          - attributes
+          exporters:
+          - debug
