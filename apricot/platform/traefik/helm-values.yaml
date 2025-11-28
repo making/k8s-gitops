@@ -7,6 +7,13 @@ logs:
   access:
     enabled: true
     format: json
+    otlp:
+      enabled: true
+      http:
+        enabled: true
+        endpoint: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+        tls:
+          insecureSkipVerify: true
 tracing:
   otlp:
     enabled: true
@@ -20,6 +27,7 @@ experimental:
     example:
       moduleName: github.com/traefik/plugindemo
       version: v0.2.2
+  otlpLogs: true
 ingressRoute:
   dashboard:
     enabled: true
