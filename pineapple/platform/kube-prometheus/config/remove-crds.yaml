@@ -1,3 +1,0 @@
-#@ load("@ytt:overlay", "overlay")
-#@overlay/match by=overlay.subset({"kind":"CustomResourceDefinition"}), expects="1+"
----
