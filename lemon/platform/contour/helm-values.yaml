@@ -47,7 +47,7 @@ envoy:
   tlsExistingSecret: envoycert
   service:
     type: ClusterIP
-    externalTrafficPolicy: Local
+    #! externalTrafficPolicy: Local
     annotations:
       oci.oraclecloud.com/load-balancer-type: "nlb"
       oci-network-load-balancer.oraclecloud.com/is-preserve-source: "true"
