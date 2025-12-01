@@ -14,9 +14,11 @@ spec:
   fetch:
   - helmChart:
       name: contour
-      version: 19.3.2
+      version: 22.2.1
       repository:
-        url: oci://registry-1.docker.io/bitnamicharts
+        url: oci://registry.synology.ik.am/bitnamicharts/contour
+        secretRef:
+          name: regsecret
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main

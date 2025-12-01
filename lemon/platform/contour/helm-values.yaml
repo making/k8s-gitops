@@ -1,4 +1,6 @@
 global:
+  imagePullSecrets:
+  - regsecret
   security:
     allowInsecureImages: true
 configInline:
