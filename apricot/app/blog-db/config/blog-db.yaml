@@ -18,3 +18,10 @@ spec:
       requests:
         cpu: 512m
         memory: 1024Mi
+    metrics:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
