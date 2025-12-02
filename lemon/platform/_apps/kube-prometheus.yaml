@@ -5,14 +5,18 @@ metadata:
   namespace: app-install
   annotations:
     kapp.k14s.io/change-group: "{name}"
+    kapp.k14s.io/change-rule.create-order.1: "upsert after upserting regsecret"
+    kapp.k14s.io/change-rule.delete-order.1: "delete before deleting regsecret"
 spec:
   serviceAccountName: kapp
   fetch:
   - helmChart:
       name: kube-prometheus
-      version: 10.0.4
+      version: 11.5.1
       repository:
-        url: oci://registry-1.docker.io/bitnamicharts
+        url: oci://registry.maki.lol/bitnamicharts
+        secretRef:
+          name: regsecret
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
