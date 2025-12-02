@@ -24,7 +24,7 @@ deployment:
     spring.config.import:
       value: configtree:/workspace/config/,optional:classpath:git.properties,optional:classpath:META-INF/build-info.properties
     spring.datasource.url:
-      value: jdbc:postgresql://${spring.datasource.host}:${spring.datasource.port}/${spring.datasource.database}
+      value: jdbc:postgresql://${spring.datasource.instancename}.${spring.datasource.namespace}.svc.cluster.local:5432/${spring.datasource.dbname}
     spring.datasource.hikari.data-source-properties.sslmode:
       value: require
     spring.security.user.password:
@@ -128,7 +128,7 @@ deployment:
   volumes:
     entry-db:
       secret:
-        secretName: entry-db-app-user-db-secret
+        secretName: entry-db-db-secret
   resources:
     limits:
       cpu:
