@@ -21,7 +21,7 @@ spec:
   - git:
       url: https://github.com/categolj/blog-api.git
       ref: origin/images
-  syncPeriod: 10m
+  syncPeriod: 240h
   template:
   - sops:
       age:
