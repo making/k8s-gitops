@@ -155,6 +155,16 @@ spec:
           value: #@ data.values.cluster
           action: insert
     exporters:
+      otlphttp/grafana_cloud:
+        endpoint: https://otlp-gateway-prod-us-central-0.grafana.net/otlp
+        headers:
+          authorization: #@ "Basic " + base64.encode(data.values.grafala_cloud_otlp.username + ":" + data.values.grafala_cloud_otlp.password)
+        compression: gzip
+      otlphttp/lognroll:
+        endpoint: #@ data.values.lognroll.endpoint
+        headers:
+          authorization: #@ "Bearer " + data.values.lognroll.token
+        compression: gzip
       prometheusremotewrite:
         endpoint: #@ data.values.prometheus.endpoint
         headers:
@@ -184,11 +194,12 @@ spec:
           processors:
           - resource
           exporters:
-          - debug
+          - otlphttp/grafana_cloud
         logs:
           receivers:
           - otlp
           processors:
           - resource
           exporters:
-          - debug
+          - otlphttp/lognroll
+          - otlphttp/grafana_cloud
