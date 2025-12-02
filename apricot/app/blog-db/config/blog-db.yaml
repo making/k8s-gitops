@@ -14,14 +14,14 @@ spec:
     data:
       limits:
         cpu: 512m
-        memory: 1024Mi
+        memory: 1Gi
       requests:
         cpu: 512m
-        memory: 1024Mi
+        memory: 1Gi
     metrics:
       limits:
         cpu: 100m
-        memory: 128Mi
+        memory: 100Mi
       requests:
         cpu: 100m
-        memory: 128Mi
+        memory: 100Mi
