@@ -1,0 +1,18 @@
+apiVersion: sql.tanzu.vmware.com/v1
+kind: Postgres
+metadata:
+  name: blog-db
+  namespace: blog
+spec:
+  postgresVersion:
+    name: postgres-17.5
+  storageSize: 1Gi
+  highAvailability:
+    readReplicas: 2
+    enabled: true
+  resources:
+    data:
+      limits:
+        memory: 1024Mi
+      requests:
+        memory: 1024Mi
