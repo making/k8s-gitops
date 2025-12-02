@@ -13,6 +13,8 @@ spec:
   resources:
     data:
       limits:
+        cpu: 512m
         memory: 1024Mi
       requests:
+        cpu: 512m
         memory: 1024Mi
