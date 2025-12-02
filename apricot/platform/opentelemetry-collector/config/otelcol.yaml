@@ -164,6 +164,8 @@ spec:
         endpoint: #@ data.values.lognroll.endpoint
         headers:
           authorization: #@ "Bearer " + data.values.lognroll.token
+        tls:
+          insecure: true
         compression: gzip
       prometheusremotewrite:
         endpoint: #@ data.values.prometheus.endpoint
