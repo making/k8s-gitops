@@ -2,6 +2,7 @@ installCRDs: true
 metrics:
   enabled: false
 global:
-  imageRegistry: public.ecr.aws
+  imagePullSecrets:
+  - regsecret
   security:
     allowInsecureImages: true
