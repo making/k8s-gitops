@@ -16,7 +16,7 @@ spec:
       name: postgres-operator
       version: v4.3.1
       repository:
-        url: oci://registry.maki.lol/bitnamicharts
+        url: oci://registry.maki.lol/tanzu-sql-postgres
         secretRef:
           name: regsecret
   - git:
