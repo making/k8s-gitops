@@ -1,7 +1,7 @@
 apiVersion: kappctrl.k14s.io/v1alpha1
 kind: App
 metadata:
-  name: blog-db
+  name: entry-db
   namespace: app-install
   annotations:
     kapp.k14s.io/change-group: "{name}"
@@ -13,7 +13,7 @@ spec:
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
-      subPath: apricot/app/blog-db
+      subPath: apricot/app/entry-db
   syncPeriod: 600h
   template:
   - sops:
