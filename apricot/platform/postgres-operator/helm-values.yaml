@@ -1,0 +1,2 @@
+operatorImage: registry.maki.lol/tanzu-sql-postgres/postgres-operator:v4.3.1
+instanceRegistryRepo: registry.maki.lol/tanzu-sql-postgres/postgres-instance
