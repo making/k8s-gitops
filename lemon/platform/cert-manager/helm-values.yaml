@@ -1,15 +1,8 @@
 installCRDs: true
 metrics:
   enabled: false
-controller:
-  image:
-    repository: bitnamilegacy/cert-manager
-  acmesolver:
-    image:
-      repository: bitnamilegacy/acmesolver
-webhook:
-  image:
-    repository: bitnamilegacy/cert-manager-webhook
-cainjector:
-  image:
-    repository: bitnamilegacy/cainjector
+global:
+  imagePullSecrets:
+  - regsecret
+  security:
+    allowInsecureImages: true
