@@ -16,7 +16,7 @@ spec:
       name: contour
       version: 22.2.1
       repository:
-        url: oci://registry.synology.ik.am/bitnamicharts
+        url: oci://registry.maki.lol/bitnamicharts
         secretRef:
           name: regsecret
   - git:
