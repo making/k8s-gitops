@@ -92,6 +92,8 @@ spec:
               fieldPath: status.hostIP
         - name: spring.threads.virtual.enabled
           value: "false"
+        - name: rate-limit.max-requests
+          value: "50"
         image: #@ data.values.image
         imagePullPolicy: IfNotPresent
         livenessProbe:
