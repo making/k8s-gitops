@@ -5,11 +5,13 @@ deployment:
 web:
   proxyProtocol:
     trustedIPs:
-    - 10.0.10.0/24
+    - 10.0.0.0/16
+    - 10.96.0.0/16
 websecure:
   proxyProtocol:
     trustedIPs:
-    - 10.0.10.0/24
+    - 10.0.0.0/16
+    - 10.96.0.0/16
 logs:
   general:
     format: json
