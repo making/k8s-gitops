@@ -184,4 +184,13 @@ ingress:
   - hosts:
     - entry-api.ik.am
     secretName: default-tls-ik-am
+certificate:
+  enabled: true
+  commonName: entry-api.ik.am
+  dnsNames:
+  - entry-api.ik.am
+  secretName: entry-api-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-ik-am
 ---
