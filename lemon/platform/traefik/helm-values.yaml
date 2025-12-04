@@ -1,0 +1,71 @@
+service:
+  type: ClusterIP
+deployment:
+  replicas: 2
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 1
+  minAvailable: 1
+logs:
+  general:
+    format: json
+  access:
+    enabled: true
+    format: json
+    otlp:
+      enabled: true
+      http:
+        enabled: true
+        endpoint: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+        tls:
+          insecureSkipVerify: true
+tracing:
+  otlp:
+    enabled: true
+    http:
+      enabled: true
+      endpoint: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+      tls:
+        insecureSkipVerify: true
+experimental:
+  plugins:
+    example:
+      moduleName: github.com/traefik/plugindemo
+      version: v0.2.2
+  otlpLogs: true
+ingressRoute:
+  dashboard:
+    enabled: true
+    matchRule: Host(`dashboard.traefik.ik.am`)
+    entryPoints:
+    - websecure
+    middlewares:
+    - name: dashboard-auth
+extraObjects:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: dashboard-auth-secret
+    namespace: traefik
+  type: kubernetes.io/basic-auth
+  stringData:
+    username: admin
+    password: changeme
+- apiVersion: traefik.io/v1alpha1
+  kind: Middleware
+  metadata:
+    name: dashboard-auth
+    namespace: traefik
+  spec:
+    basicAuth:
+      secret: dashboard-auth-secret
+- apiVersion: traefik.io/v1alpha1
+  kind: Middleware
+  metadata:
+    name: headers-middleware
+    namespace: traefik
+  spec:
+    plugin:
+      example:
+        headers:
+          X-Foo: Bar
