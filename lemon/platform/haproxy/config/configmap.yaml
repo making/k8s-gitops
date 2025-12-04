@@ -77,23 +77,47 @@ data:
       mode tcp
       server otelcol_vault_audit otel-collector.opentelemetry.svc.cluster.local:9090 check
 
-    # HTTP routing (80)
+    # HTTP routing (80) with host-based routing
     frontend http_frontend
       bind *:8080
-      mode tcp
-      option tcplog
+      mode http
+      option httplog
+    
+      # Traefik routing for specific hosts
+      acl is_traefik_host hdr(host) -i httpbin.ik.am
+      acl is_traefik_host hdr(host) -i phpldapadmin.ik.am
+    
+      use_backend traefik_http_backend if is_traefik_host
       default_backend http_backend
     
+    backend traefik_http_backend
+      mode http
+      server traefik traefik.traefik.svc.cluster.local:80 check
+    
     backend http_backend
-      mode tcp
+      mode http
       server contour contour-envoy.projectcontour.svc.cluster.local:80 check send-proxy-v2
 
-    # HTTPS routing (443)
+    # HTTPS routing (443) with SNI-based routing
     frontend https_frontend
       bind *:8443
       mode tcp
       option tcplog
+    
+      # Extract SNI for routing decisions
+      tcp-request inspect-delay 5s
+      tcp-request content accept if { req_ssl_hello_type 1 }
+    
+      # Traefik routing for specific hosts
+      acl is_traefik_host req_ssl_sni -i httpbin.ik.am
+      acl is_traefik_host req_ssl_sni -i phpldapadmin.ik.am
+    
+      use_backend traefik_https_backend if is_traefik_host
       default_backend https_backend
+    
+    backend traefik_https_backend
+      mode tcp
+      server traefik traefik.traefik.svc.cluster.local:443 check
     
     backend https_backend
       mode tcp
