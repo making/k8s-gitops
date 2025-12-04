@@ -1,7 +1,10 @@
+global:
+  imagePullSecrets:
+  - regsecret
 grafana:
   enabled: false
-  image:
-    repository: bitnamilegacy/grafana
-operator:
-  image:
-    repository: bitnamilegacy/grafana-operator
+  #! image:
+  #!   repository: bitnamilegacy/grafana
+#! operator:
+#!   image:
+#!     repository: bitnamilegacy/grafana-operator
