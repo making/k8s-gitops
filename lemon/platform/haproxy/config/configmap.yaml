@@ -92,7 +92,7 @@ data:
     
     backend traefik_http_backend
       mode http
-      server traefik traefik.traefik.svc.cluster.local:80 check
+      server traefik traefik.traefik.svc.cluster.local:80 check send-proxy-v2
     
     backend http_backend
       mode http
@@ -117,7 +117,7 @@ data:
     
     backend traefik_https_backend
       mode tcp
-      server traefik traefik.traefik.svc.cluster.local:443 check
+      server traefik traefik.traefik.svc.cluster.local:443 check send-proxy-v2
     
     backend https_backend
       mode tcp
