@@ -12,9 +12,11 @@ spec:
   fetch:
   - helmChart:
       name: grafana-operator
-      version: 4.9.37
+      version: 4.10.9
       repository:
-        url: oci://registry-1.docker.io/bitnamicharts
+        url: oci://registry.maki.lol/bitnamicharts
+        secretRef:
+          name: regsecret
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
