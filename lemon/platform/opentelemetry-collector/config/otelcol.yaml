@@ -178,7 +178,11 @@ spec:
         attributes:
         - key: k8s.cluster.name
           value: #@ data.values.cluster
-          action: upsert
+          action: insert
+        - pattern: process\..+
+          action: delete
+        - pattern: os\..+
+          action: delete
       resource/vault_audit:
         attributes:
         - key: service.name
@@ -188,7 +192,7 @@ spec:
         actions:
         - key: cluster
           value: #@ data.values.cluster
-          action: upsert
+          action: insert
       filter:
         #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/filterprocessor
         error_mode: ignore
