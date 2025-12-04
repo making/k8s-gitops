@@ -172,9 +172,9 @@ deployment:
         weight: 1
 ingress:
   enabled: true
-  ingressClassName: contour
+  ingressClassName: traefik
   annotations:
-    projectcontour.io/tls-cert-namespace: projectcontour
+    cert-manager.io/cluster-issuer: letsencrypt-ik-am
   hosts:
   - host: entry-api.ik.am
     paths:
@@ -183,5 +183,5 @@ ingress:
   tls:
   - hosts:
     - entry-api.ik.am
-    secretName: default-tls-ik-am
+    secretName: entry-api-tls
 ---
