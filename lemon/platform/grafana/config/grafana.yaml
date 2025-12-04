@@ -25,6 +25,8 @@ spec:
           labels:
             app.kubernetes.io/part-of: grafana
         spec:
+          imagePullSecrets:
+          - name: regsecret
           affinity:
             podAntiAffinity:
               preferredDuringSchedulingIgnoredDuringExecution:
@@ -49,7 +51,7 @@ spec:
               secretName: ldap-config
           containers:
           - name: grafana
-            image: docker.io/bitnamilegacy/grafana:12.1.1-debian-12-r1
+            image: registry.maki.lol/bitnamicharts/photon-5/grafana:12.3.0-photon-5-r0
             imagePullPolicy: IfNotPresent
             #! env:
             #! - name: GF_INSTALL_PLUGINS
