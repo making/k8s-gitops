@@ -2,16 +2,17 @@ service:
   type: ClusterIP
 deployment:
   replicas: 2
-web:
-  proxyProtocol:
-    trustedIPs:
-    - 10.0.0.0/16
-    - 10.96.0.0/16
-websecure:
-  proxyProtocol:
-    trustedIPs:
-    - 10.0.0.0/16
-    - 10.96.0.0/16
+ports:
+  web:
+    proxyProtocol:
+      trustedIPs:
+      - 10.0.0.0/16
+      - 10.96.0.0/16
+  websecure:
+    proxyProtocol:
+      trustedIPs:
+      - 10.0.0.0/16
+      - 10.96.0.0/16
 logs:
   general:
     format: json
