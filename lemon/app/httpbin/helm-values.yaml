@@ -22,9 +22,10 @@ service:
   ports: [ { "name": "http","port": 80,"protocol": "TCP","targetPort": 80 } ]
 ingress:
   enabled: true
-  ingressClassName: contour
+  ingressClassName: traefik
   annotations:
-    projectcontour.io/tls-cert-namespace: projectcontour
+    cert-manager.io/cluster-issuer: letsencrypt-ik-am
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-headers-middleware@kubernetescrd
   hosts:
   - host: httpbin.ik.am
     paths:
@@ -33,4 +34,4 @@ ingress:
   tls:
   - hosts:
     - httpbin.ik.am
-    secretName: default-tls-ik-am
+    secretName: httpbin-tls
