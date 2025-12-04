@@ -6,6 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/part-of: grafana
 spec:
+  version: "12.3.0"
   client:
     timeout: 5
   service:
