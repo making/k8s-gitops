@@ -33,11 +33,11 @@ phpldapadmin:
   ingress:
     enabled: true
     annotations:
-      projectcontour.io/tls-cert-namespace: projectcontour
+      cert-manager.io/cluster-issuer: letsencrypt-ik-am
     hosts:
     - phpldapadmin.ik.am
     tls:
-    - secretName: default-tls-ik-am
+    - secretName: phpldapadmin-tls
       hosts:
       - phpldapadmin.ik.am
   env:
