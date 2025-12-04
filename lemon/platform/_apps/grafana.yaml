@@ -11,6 +11,8 @@ metadata:
     kapp.k14s.io/change-rule.delete-order.2: "delete before deleting openldap"
     kapp.k14s.io/change-rule.create-order.3: "upsert after upserting grafana-operator"
     kapp.k14s.io/change-rule.delete-order.3: "delete before deleting grafana-operator"
+    kapp.k14s.io/change-rule.create-order.4: "upsert after upserting regsecret"
+    kapp.k14s.io/change-rule.delete-order.4: "delete before deleting regsecret"
 spec:
   serviceAccountName: kapp
   fetch:
