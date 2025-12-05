@@ -114,14 +114,15 @@ deployment:
               app.kubernetes.io/part-of: blog-frontend
           topologyKey: kubernetes.io/hostname
         weight: 1
+service:
+  annotations:
+    traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+    traefik.ingress.kubernetes.io/service.sticky.cookie.name: X-Traefik-Session-Affinity
 ingress:
   enabled: true
   ingressClassName: traefik
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-ik-am
-    traefik.ingress.kubernetes.io/affinity: "true"
-    traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
-    traefik.ingress.kubernetes.io/service.sticky.cookie.name: Traefik-Affinity
   hosts:
   - host: ik.am
     paths:
