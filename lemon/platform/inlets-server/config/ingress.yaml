@@ -1,0 +1,25 @@
+#@ for name in ['synology', 'inlets.gw', 'openai.synology', 's3.synology', 'otlp-sink.synology', 'lognroll.synology', 'registry.synology', 'registry-ui.synology']:
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: #@ name.replace('.', '-')
+  namespace: inlets
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: #@ "{}.ik.am".format(name)
+    http:
+      paths:
+      - backend:
+          service:
+            name: inlets-exit
+            port:
+              name: "6868"
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - #@ "{}.ik.am".format(name)
+    secretName: #@ "{}-tls".format(name.replace('.', '-'))
+#@ end
