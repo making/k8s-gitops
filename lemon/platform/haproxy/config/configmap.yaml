@@ -118,6 +118,7 @@ data:
       acl is_traefik_host req_ssl_sni -i grafana.ik.am
       acl is_traefik_host req_ssl_sni -i keycloak.ik.am
       acl is_traefik_host req_ssl_sni -i jwt-reissuer.ik.am
+      acl is_traefik_host req_ssl_sni -i spring-batch-dashboard.ik.am
       acl is_traefik_host req_ssl_sni -i httpbin.ik.am
       acl is_traefik_host req_ssl_sni -i phpldapadmin.ik.am
       acl is_traefik_host req_ssl_sni -i dashboard.traefik.ik.am
