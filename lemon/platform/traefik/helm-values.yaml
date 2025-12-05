@@ -80,6 +80,7 @@ extraObjects:
   kind: Middleware
   metadata:
     name: websocket-header
+    namespace: traefik
   spec:
     headers:
       customRequestHeaders:
