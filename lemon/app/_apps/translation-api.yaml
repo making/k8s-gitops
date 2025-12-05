@@ -39,7 +39,6 @@ spec:
       - 1/config
       valuesFrom:
       - path: 1/credentials.yaml
-      - path: 1/values.yaml
       - path: 2/native_aarch64.yaml
   - kbld:
       paths:
