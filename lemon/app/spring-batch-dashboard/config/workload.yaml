@@ -6,13 +6,15 @@ metadata:
   namespace: spring-batch
   annotations:
     kapp.k14s.io/change-group: workload
+    traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+    traefik.ingress.kubernetes.io/service.sticky.cookie.name: X-Traefik-Session-Affinity
   labels:
     app: spring-batch-dashboard
     app.kubernetes.io/part-of: spring-batch-dashboard
 spec:
   ports:
   - name: http
-    port: 80
+    port: 8080
     protocol: TCP
     targetPort: 8080
   selector:

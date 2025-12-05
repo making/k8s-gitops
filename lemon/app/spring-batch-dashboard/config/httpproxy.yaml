@@ -11,6 +11,6 @@ spec:
   routes:
   - services:
     - name: spring-batch-dashboard
-      port: 80
+      port: 8080
     loadBalancerPolicy:
       strategy: Cookie

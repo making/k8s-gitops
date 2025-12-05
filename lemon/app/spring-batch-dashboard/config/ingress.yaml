@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-ik-am
+  name: spring-batch-dashboard
+  namespace: spring-batch
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: spring-batch-dashboard.ik.am
+    http:
+      paths:
+      - backend:
+          service:
+            name: spring-batch-dashboard
+            port:
+              name: http
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - spring-batch-dashboard.ik.am
+    secretName: spring-batch-dashboard-tls
