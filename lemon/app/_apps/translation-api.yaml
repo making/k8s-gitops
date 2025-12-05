@@ -36,6 +36,7 @@ spec:
       - path: 1/helm-values.yaml
   - ytt:
       paths:
+      - "-"
       - 1/config
       valuesFrom:
       - path: 1/credentials.yaml
