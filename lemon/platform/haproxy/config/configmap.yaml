@@ -122,7 +122,7 @@ data:
       acl is_traefik_host req_ssl_sni -i httpbin.ik.am
       acl is_traefik_host req_ssl_sni -i phpldapadmin.ik.am
       acl is_traefik_host req_ssl_sni -i dashboard.traefik.ik.am
-      acl is_traefik_host req_ssl_sni -i registry-ui.synology.ik.am
+      acl is_traefik_host req_ssl_sni -m end synology.ik.am
     
       use_backend traefik_https_backend if is_traefik_host
       default_backend https_backend
