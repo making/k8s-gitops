@@ -237,6 +237,7 @@ spec:
         logs:
           log_record:
           - IsMatch(attributes["RequestPath"], "/actuator.*")
+          - IsMatch(attributes["RequestAddr"], "otlp.*")
           - IsMatch(resource.attributes["k8s.container.name"], ".*-minecraft") and (severity_text == "DEBUG" or severity_text == "TRACE")
       filter/vault_audit:
         error_mode: ignore
