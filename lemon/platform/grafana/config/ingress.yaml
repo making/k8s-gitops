@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-ik-am
+  name: grafana
+  namespace: grafana
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: grafana.ik.am
+    http:
+      paths:
+      - backend:
+          service:
+            name: grafana-service
+            port:
+              name: grafana
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - grafana.ik.am
+    secretName: grafana-tls
