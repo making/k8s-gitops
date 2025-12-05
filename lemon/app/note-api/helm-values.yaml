@@ -1,13 +1,174 @@
-global:
-  storageClass: nfs
-  postgresql:
-    auth:
-      username: note
-      database: note
-      existingSecret: note-db
-      secretKeys:
-        adminPasswordKey: password
-        userPasswordKey: password
-primary:
-  persistence:
-    size: 8Gi
+---
+applicationName: note-api
+deployment:
+  replicas: 1
+  image:
+    repository: ghcr.io/categolj/note-api
+    tag: jvm
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: note-api
+  additionalPodAnnotations:
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
+    instrumentation.opentelemetry.io/inject-java: opentelemetry/only-logs
+  env:
+    JAVA_TOOL_OPTIONS:
+      value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=32M -XX:MaxMetaspaceSize=128M -Xss512k -Dfile.encoding=UTF-8 -Duser.country=JP -Duser.language=ja -Duser.timezone=Asia/Tokyo
+    BPL_JVM_THREAD_COUNT:
+      value: "28"
+    BPL_SPRING_CLOUD_BINDINGS_DISABLED:
+      value: "true"
+    entry.api-url:
+      valueFrom:
+        secretKeyRef:
+          name: note-config
+          key: entry-api-url
+    entry.client-id:
+      valueFrom:
+        secretKeyRef:
+          name: note-config
+          key: entry-api-client-id
+    entry.client-secret:
+      valueFrom:
+        secretKeyRef:
+          name: note-config
+          key: entry-api-client-secret
+    rsa.private-key:
+      value: file:/note-config/rsa-private-key.pem
+    rsa.public-key:
+      value: file:/note-config/rsa-public-key.pem
+    spring.datasource.url:
+      valueFrom:
+        secretKeyRef:
+          name: note-db
+          key: jdbc-url
+    spring.datasource.username:
+      valueFrom:
+        secretKeyRef:
+          name: note-db
+          key: username
+    spring.datasource.password:
+      valueFrom:
+        secretKeyRef:
+          name: note-db
+          key: password
+    spring.sendgrid.api-key:
+      valueFrom:
+        secretKeyRef:
+          name: note-config
+          key: sendgrid-api-key
+    management.tracing.export.zipkin.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+    management.opentelemetry.resource-attributes.k8s.pod.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    management.opentelemetry.resource-attributes.k8s.namespace.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    management.opentelemetry.resource-attributes.k8s.node.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    management.opentelemetry.resource-attributes.host.ip:
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+    spring.datasource.hikari.maximum-pool-size:
+      value: "3"
+    spring.datasource.hikari.minimum-idle:
+      value: "1"
+    spring.datasource.hikari.login-timeout:
+      value: "2"
+    spring.datasource.hikari.connection-timeout:
+      value: "2000"
+    spring.datasource.hikari.data-source-properties.cancelSignalTimeout:
+      value: "2"
+    spring.datasource.hikari.data-source-properties.connectTimeout:
+      value: "2"
+    spring.datasource.hikari.data-source-properties.loginTimeout:
+      value: "2"
+    spring.datasource.hikari.data-source-properties.socketTimeout:
+      value: "10"
+    spring.datasource.hikari.max-lifetime:
+      value: "300000"
+    spring.datasource.hikari.idle-timeout:
+      value: "240000"
+    spring.datasource.hikari.keepalive-time:
+      value: "240000"
+    spring.datasource.hikari.validation-timeout:
+      value: "2000"
+    info.env.hostname:
+      value: ${HOSTNAME:}
+  volumeMounts:
+    note-config:
+      mountPath: /bindings/note-config
+  volumes:
+    note-config:
+      secret:
+        secretName: note-config
+  resources:
+    limits:
+      cpu:
+      memory: 512Mi
+    requests:
+      cpu:
+      memory: 512Mi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+      scheme: HTTP
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+      scheme: HTTP
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: note-api
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-ik-am
+  hosts:
+  - host: note-api-note.apps.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  - host: note-api.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - note-api-note.apps.ik.am
+    - note-api.ik.am
+    secretName: note-api-tls
+---
