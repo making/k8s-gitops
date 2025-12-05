@@ -109,6 +109,8 @@ data:
       tcp-request content accept if { req_ssl_hello_type 1 }
     
       # Traefik routing for specific hosts
+      acl is_traefik_host req_ssl_sni -i ik.am
+      acl is_traefik_host req_ssl_sni -i blog.ik.am
       acl is_traefik_host req_ssl_sni -i entry-api.ik.am
       acl is_traefik_host req_ssl_sni -i note-api.ik.am
       acl is_traefik_host req_ssl_sni -i note-api-note.apps.ik.am
