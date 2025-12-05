@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jwt-reissuer
+  namespace: kube-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-ik-am
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: jwt-reissuer.ik.am
+    http:
+      paths:
+      - backend:
+          service:
+            name: jwt-reissuer
+            port:
+              name: http
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - jwt-reissuer.ik.am
+    secretName: jwt-reissuer-tls
