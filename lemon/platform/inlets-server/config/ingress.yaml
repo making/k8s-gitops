@@ -5,6 +5,8 @@ kind: Ingress
 metadata:
   name: #@ name.replace('.', '-')
   namespace: inlets
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-ik-am
 spec:
   ingressClassName: traefik
   rules:
