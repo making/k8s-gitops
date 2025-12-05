@@ -1,0 +1,137 @@
+---
+applicationName: blog-frontend
+deployment:
+  replicas: 2
+  image:
+    repository: ghcr.io/categolj/blog-frontend
+    tag: native
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: blog-frontend
+  additionalPodAnnotations:
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
+  env:
+    JAVA_TOOL_OPTIONS:
+      value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=32M -Xss512k -Dfile.encoding="UTF-8" -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.endpoint.health.show-details="always" -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include="*" -Dmanagement.health.probes.enabled="true" -Dmanagement.server.port="8081" -Dserver.port="8080" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
+    BPL_JVM_THREAD_COUNT:
+      value: "28"
+    spring.security.oauth2.client.registration.google.client-id:
+      valueFrom:
+        secretKeyRef:
+          name: frontend-config
+          key: oauth2-google-client-id
+    spring.security.oauth2.client.registration.google.client-secret:
+      valueFrom:
+        secretKeyRef:
+          name: frontend-config
+          key: oauth2-google-client-secret
+    logging.structured.format.console:
+      value: ecs
+    info.env.hostname:
+      value: ${HOSTNAME:}
+    blog-api.url:
+      value: http://entry-api.blog.svc.cluster.local:8080
+    comment-api.url:
+      value: http://comment-api.blog.svc.cluster.local
+    translation-api.url:
+      value: http://translation-api.blog.svc.cluster.local:8080
+    note-api.url:
+      value: http://note-api.note.svc.cluster.local:8080
+    counter-api.url:
+      value: http://counter-api.blog.svc.cluster.local/counter
+    counter-api.ip-black-list:
+      valueFrom:
+        secretKeyRef:
+          name: frontend-config
+          key: ip-blacklist
+    management.opentelemetry.logging.export.otlp.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+    management.opentelemetry.logging.export.otlp.compression:
+      value: gzip
+    management.opentelemetry.tracing.export.otlp.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+    management.opentelemetry.tracing.export.otlp.compression:
+      value: gzip
+    management.opentelemetry.resource-attributes.k8s.pod.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    management.opentelemetry.resource-attributes.k8s.namespace.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    management.opentelemetry.resource-attributes.k8s.node.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    management.opentelemetry.resource-attributes.host.ip:
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+    spring.threads.virtual.enabled:
+      value: "false"
+  resources:
+    limits:
+      cpu:
+      memory: 1024Mi
+    requests:
+      cpu:
+      memory: 512Mi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+      scheme: HTTP
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+      scheme: HTTP
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: blog-frontend
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-ik-am
+    traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+  hosts:
+  - host: ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  - host: blog.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - ik.am
+    - blog.ik.am
+    secretName: blog-frontend-tls
+---
