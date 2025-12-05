@@ -11,6 +11,6 @@ spec:
   routes:
   - services:
     - name: blog-frontend
-      port: 80
+      port: 8080
     loadBalancerPolicy:
       strategy: Cookie
