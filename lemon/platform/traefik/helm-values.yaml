@@ -76,3 +76,11 @@ extraObjects:
       example:
         headers:
           X-Foo: Bar
+- apiVersion: traefik.io/v1alpha1
+  kind: Middleware
+  metadata:
+    name: websocket-header
+  spec:
+    headers:
+      customRequestHeaders:
+        X-Bar: foo
