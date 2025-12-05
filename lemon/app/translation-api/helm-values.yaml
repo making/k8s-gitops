@@ -21,6 +21,8 @@ deployment:
       value: -XX:ActiveProcessorCount=2 -Dfile.encoding="UTF-8" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
     BPL_JVM_THREAD_COUNT:
       value: "28"
+    server.port:
+      value: "8080"
     entry.api-url:
       value: http://entry-api.blog.svc.cluster.local:8080
     spring.ai.openai.api-key:
