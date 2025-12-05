@@ -83,20 +83,11 @@ data:
       mode http
       option httplog
     
-      # Traefik routing for specific hosts
-      acl is_traefik_host hdr(host) -i httpbin.ik.am
-      acl is_traefik_host hdr(host) -i phpldapadmin.ik.am
-    
-      use_backend traefik_http_backend if is_traefik_host
-      default_backend http_backend
+      default_backend traefik_http_backend
     
     backend traefik_http_backend
       mode http
       server traefik traefik.traefik.svc.cluster.local:80 check send-proxy-v2
-    
-    backend http_backend
-      mode http
-      server contour contour-envoy.projectcontour.svc.cluster.local:80 check send-proxy-v2
 
     # HTTPS routing (443) with SNI-based routing
     frontend https_frontend
@@ -107,33 +98,11 @@ data:
       # Extract SNI for routing decisions
       tcp-request inspect-delay 5s
       tcp-request content accept if { req_ssl_hello_type 1 }
-    
-      # Traefik routing for specific hosts
-      acl is_traefik_host req_ssl_sni -i ik.am
-      acl is_traefik_host req_ssl_sni -i blog.ik.am
-      acl is_traefik_host req_ssl_sni -i entry-api.ik.am
-      acl is_traefik_host req_ssl_sni -i note-api.ik.am
-      acl is_traefik_host req_ssl_sni -i note-api-note.apps.ik.am
-      acl is_traefik_host req_ssl_sni -i translation-api.ik.am
-      acl is_traefik_host req_ssl_sni -i grafana.ik.am
-      acl is_traefik_host req_ssl_sni -i keycloak.ik.am
-      acl is_traefik_host req_ssl_sni -i jwt-reissuer.ik.am
-      acl is_traefik_host req_ssl_sni -i spring-batch-dashboard.ik.am
-      acl is_traefik_host req_ssl_sni -i httpbin.ik.am
-      acl is_traefik_host req_ssl_sni -i phpldapadmin.ik.am
-      acl is_traefik_host req_ssl_sni -i dashboard.traefik.ik.am
-      acl is_traefik_host req_ssl_sni -i inlets.gw.ik.am
-      acl is_traefik_host req_ssl_sni -m end synology.ik.am
-    
-      use_backend traefik_https_backend if is_traefik_host
-      default_backend https_backend
+
+      default_backend traefik_https_backend
     
     backend traefik_https_backend
       mode tcp
       server traefik traefik.traefik.svc.cluster.local:443 check send-proxy-v2
-    
-    backend https_backend
-      mode tcp
-      server contour contour-envoy.projectcontour.svc.cluster.local:443 check send-proxy-v2
 
 ---
