@@ -8,6 +8,9 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-ik-am
     traefik.ingress.kubernetes.io/router.observability.tracing: "false"
+    #@ if name == 'otlp-sink.synology' or name ==: 'registry-ui.synology' or name == 'lognroll.synology':
+    traefik.ingress.kubernetes.io/router.observability.accesslogs: "false"
+    #@ end
 spec:
   ingressClassName: traefik
   rules:
