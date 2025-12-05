@@ -109,7 +109,7 @@ deployment:
       value: ${HOSTNAME:}
   volumeMounts:
     note-config:
-      mountPath: /bindings/note-config
+      mountPath: /note-config
   volumes:
     note-config:
       secret:
