@@ -207,6 +207,8 @@ spec:
           - IsMatch(attributes["envoy_cluster_name"], "projectcontour_.*")
         traces:
           span:
+          - IsMatch(attributes["url.full"], "/actuator.*")
+          - IsMatch(attributes["url.path"], "/actuator.*")
           - IsMatch(attributes["upstream_cluster"], "grafana/.*")
           - IsMatch(attributes["upstream_cluster"], "tap-gui/.*")
           - IsMatch(attributes["upstream_cluster"], "raspberrypi/.*")
@@ -223,7 +225,6 @@ spec:
           - IsMatch(attributes["uri"], ".*/readyz")
           - attributes["http.route"] == "/livez"
           - attributes["http.route"] == "/readyz"
-          - IsMatch(attributes["url.path"], "/actuator.*")
           - attributes["url.path"] == "/livez"
           - attributes["url.path"] == "/readyz"
           - attributes["user_agent.original"] == "kube-probe//"
@@ -235,6 +236,7 @@ spec:
           - IsMatch(name, "fs .*")
         logs:
           log_record:
+          - IsMatch(attributes["RequestPath"], "/actuator.*")
           - IsMatch(resource.attributes["k8s.container.name"], ".*-minecraft") and (severity_text == "DEBUG" or severity_text == "TRACE")
       filter/vault_audit:
         error_mode: ignore
