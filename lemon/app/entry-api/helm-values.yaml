@@ -135,7 +135,7 @@ deployment:
   resources:
     limits:
       cpu:
-      memory: 512Mi
+      memory: 1024Mi
     requests:
       cpu:
       memory: 512Mi
