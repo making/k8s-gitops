@@ -1,0 +1,148 @@
+---
+applicationName: translation-api
+deployment:
+  replicas: 1
+  image:
+    repository: ghcr.io/categolj/translation-api
+    tag: native
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: translation-api
+  additionalPodAnnotations:
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
+  env:
+    JAVA_TOOL_OPTIONS:
+      value: -XX:ActiveProcessorCount=2 -Dfile.encoding="UTF-8" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
+    BPL_JVM_THREAD_COUNT:
+      value: "28"
+    entry.api-url:
+      value: http://entry-api.blog.svc.cluster.local:8080
+    spring.ai.openai.api-key:
+      valueFrom:
+        secretKeyRef:
+          key: openai-api-key
+          name: translation-config
+    spring.ai.openai.base-url:
+      valueFrom:
+        secretKeyRef:
+          key: openai-base-url
+          name: translation-config
+    spring.ai.openai.chat.completions-path:
+      valueFrom:
+        secretKeyRef:
+          key: openai-chat-completions-path
+          name: translation-config
+    spring.ai.openai.chat.options.model:
+      valueFrom:
+        secretKeyRef:
+          key: openai-chat-options-model
+          name: translation-config
+    github.access-token:
+      valueFrom:
+        secretKeyRef:
+          key: github-access-token
+          name: translation-config
+    github.webhook-secret:
+      valueFrom:
+        secretKeyRef:
+          key: github-webhook-secret
+          name: translation-config
+    management.otlp.logging.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+    management.otlp.logging.compression:
+      value: gzip
+    management.otlp.tracing.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+    management.otlp.tracing.compression:
+      value: gzip
+    management.otlp.metrics.export.url:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/metrics
+    management.otlp.metrics.export.base-time-unit:
+      value: seconds
+    spring.http.client.factory:
+      value: jdk
+    spring.http.client.read-timeout:
+      value: 5m
+    spring.threads.virtual.enabled:
+      value: "true"
+    management.opentelemetry.resource-attributes.k8s.pod.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    management.opentelemetry.resource-attributes.k8s.namespace.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    management.opentelemetry.resource-attributes.k8s.node.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    management.opentelemetry.resource-attributes.host.ip:
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+    logging.structured.format.console:
+      value: ecs
+    logging.level.net.ttddyy.dsproxy.listener.logging.SLF4JQueryLoggingListener:
+      value: info
+    info.env.hostname:
+      value: ${HOSTNAME:}
+  resources:
+    limits:
+      cpu:
+      memory: 250Mi
+    requests:
+      cpu:
+      memory: 250Mi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+      scheme: HTTP
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+      scheme: HTTP
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: translation-api
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-ik-am
+  hosts:
+  - host: translation-api.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - translation-api.ik.am
+    secretName: translation-api-tls
+---

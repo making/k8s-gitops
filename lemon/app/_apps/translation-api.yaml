@@ -10,6 +10,11 @@ metadata:
 spec:
   serviceAccountName: kapp
   fetch:
+  - helmChart:
+      name: application
+      version: "6.14.0"
+      repository:
+        url: https://stakater.github.io/stakater-charts
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
@@ -23,13 +28,22 @@ spec:
       age:
         privateKeysSecretRef:
           name: age-key
+  - helmTemplate:
+      name: translation-api
+      namespace: blog
+      path: "0"
+      valuesFrom:
+      - path: 1/helm-values.yaml
   - ytt:
       paths:
-      - 0/config
+      - 1/config
       valuesFrom:
-      - path: 0/credentials.yaml
-      - path: 0/values.yaml
-      - path: 1/native_aarch64.yaml
+      - path: 1/credentials.yaml
+      - path: 1/values.yaml
+      - path: 2/native_aarch64.yaml
+  - kbld:
+      paths:
+      - '-'
   deploy:
   - kapp:
       rawOptions:
