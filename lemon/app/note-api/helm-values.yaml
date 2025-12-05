@@ -24,6 +24,8 @@ deployment:
       value: "28"
     BPL_SPRING_CLOUD_BINDINGS_DISABLED:
       value: "true"
+    server.port:
+      value: "8080"
     entry.api-url:
       valueFrom:
         secretKeyRef:
