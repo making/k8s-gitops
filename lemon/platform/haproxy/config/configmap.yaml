@@ -110,6 +110,8 @@ data:
     
       # Traefik routing for specific hosts
       acl is_traefik_host req_ssl_sni -i entry-api.ik.am
+      acl is_traefik_host req_ssl_sni -i note-api.ik.am
+      acl is_traefik_host req_ssl_sni -i note-api-note.apps.ik.am
       acl is_traefik_host req_ssl_sni -i translation-api.ik.am
       acl is_traefik_host req_ssl_sni -i keycloak.ik.am
       acl is_traefik_host req_ssl_sni -i jwt-reissuer.ik.am
