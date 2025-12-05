@@ -11,8 +11,6 @@ metadata:
     kapp.k14s.io/change-rule.delete-order.2: "delete before deleting servicebinding-runtime"
     kapp.k14s.io/change-rule.create-order.3: "upsert after upserting opentelemetry-collector"
     kapp.k14s.io/change-rule.delete-order.3: "delete before deleting opentelemetry-collector"
-    kapp.k14s.io/change-rule.create-order.4: "upsert after upserting contour"
-    kapp.k14s.io/change-rule.delete-order.4: "delete before deleting contour"
 spec:
   serviceAccountName: kapp
   fetch:
