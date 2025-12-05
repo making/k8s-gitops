@@ -11,7 +11,7 @@ metadata:
   namespace: inlets
 spec:
   ports:
-  - name: "6868"
+  - name: inlets-exit
     port: 6868
   selector:
     app: inlets-server

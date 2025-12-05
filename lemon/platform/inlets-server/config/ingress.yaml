@@ -15,7 +15,7 @@ spec:
           service:
             name: inlets-exit
             port:
-              name: "6868"
+              name: inlets-exit
         path: /
         pathType: Prefix
   tls:
