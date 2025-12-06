@@ -64,7 +64,21 @@ ingressRoute:
     - websecure
     middlewares:
     - name: dashboard-auth
+    tls:
+      secretName: dashboard-tls
 extraObjects:
+- apiVersion: cert-manager.io/v1
+  kind: Certificate
+  metadata:
+    name: dashboard-tls
+    namespace: traefik
+  spec:
+    secretName: dashboard-tls
+    issuerRef:
+      name: letsencrypt
+      kind: ClusterIssuer
+    dnsNames:
+    - dashboard.traefik.ik.am
 - apiVersion: v1
   kind: Secret
   metadata:
