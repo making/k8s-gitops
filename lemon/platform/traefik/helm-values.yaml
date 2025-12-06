@@ -100,6 +100,7 @@ extraObjects:
     plugin:
       geoblock:
         enabled: "true"
+        databaseFilePath: /plugins-local/src/github.com/nscuro/traefik-plugin-geoblock/IP2LOCATION-LITE-DB1.IPV6.BIN
         blockedCountries: [ "RU" ]
         blockedIPBlocks:
         - 133.159.153.116/32
