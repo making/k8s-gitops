@@ -150,6 +150,5 @@ extraObjects:
         - SecRuleEngine On
         - SecDebugLog /dev/stdout
         - SecDebugLogLevel 9
-        - SecRule REQUEST_URI "@streq /wp-admin" "id:101,phase:1,log,deny,status:403"
         - Include @crs-setup.conf.example
         - Include @owasp_crs/*.conf
