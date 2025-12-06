@@ -23,8 +23,8 @@ ports:
         readTimeout: 600s
         writeTimeout: 600s
         idleTimeout: 600s
-    #! middlewares:
-    #! - traefik-headers-middleware@kubernetescrd
+    middlewares:
+    - traefik-denyip@kubernetescrd
 logs:
   general:
     format: json
@@ -91,7 +91,17 @@ extraObjects:
     plugin:
       denyip:
         ipDenyList:
-        - 133.159.153.116
+        - 185.242.177.0/24
+        - 91.239.216.99
+        - 193.142.147.209
+        - 157.143.30.12
+        - 205.169.39.0/24
+        - 172.192.18.188
+        - 104.197.69.115
+        - 34.123.170.104
+        - 192.159.99.95
+        - 37.46.196.22
+        - 159.89.194.131
 - apiVersion: traefik.io/v1alpha1
   kind: Middleware
   metadata:
