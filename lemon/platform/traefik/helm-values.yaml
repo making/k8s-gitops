@@ -8,6 +8,8 @@ ports:
       trustedIPs:
       - 10.0.0.0/16
       - 10.96.0.0/16
+    forwardedHeaders:
+      insecure: true
     transport:
       respondingTimeouts:
         readTimeout: 600s
@@ -18,6 +20,8 @@ ports:
       trustedIPs:
       - 10.0.0.0/16
       - 10.96.0.0/16
+    forwardedHeaders:
+      insecure: true
     transport:
       respondingTimeouts:
         readTimeout: 600s
