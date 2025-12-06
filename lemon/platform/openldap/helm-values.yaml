@@ -33,7 +33,7 @@ phpldapadmin:
   ingress:
     enabled: true
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-ik-am
+      cert-manager.io/cluster-issuer: letsencrypt
     hosts:
     - phpldapadmin.ik.am
     tls:
