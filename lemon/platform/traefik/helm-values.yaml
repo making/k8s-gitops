@@ -102,6 +102,9 @@ extraObjects:
         - 192.159.99.95
         - 37.46.196.22
         - 159.89.194.131
+        - 147.185.132.76
+        - 185.242.177.50
+        - 192.159.99.95
 - apiVersion: traefik.io/v1alpha1
   kind: Middleware
   metadata:
