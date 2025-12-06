@@ -12,6 +12,10 @@ metadata:
 spec:
   serviceAccountName: kapp
   fetch:
+  - sops:
+      age:
+        privateKeysSecretRef:
+          name: age-key
   - helmChart:
       name: traefik
       version: 37.4.0
@@ -33,6 +37,11 @@ spec:
       paths:
       - "-"
       - 1/config
+      valuesFrom:
+      - path: 1/credentials.yaml
+  - kbld:
+      paths:
+      - '-'
   deploy:
   - kapp:
       rawOptions:

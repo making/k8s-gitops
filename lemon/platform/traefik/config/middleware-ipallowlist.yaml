@@ -1,0 +1,10 @@
+#@ load("@ytt:data", "data")
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: allow-home
+  namespace: traefik
+spec:
+  ipAllowList:
+    sourceRange:
+    - #@ data.values.home_global_ip
