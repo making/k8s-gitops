@@ -49,8 +49,8 @@ tracing:
 experimental:
   plugins:
     blockip:
-      moduleName: github.com/intaacopilot/traefik-plugin-blockip
-      version: "2.0.7"
+      moduleName: "github.com/kvncrw/denyip"
+      version: "v2.0.0"
   otlpLogs: true
 ingressRoute:
   dashboard:
@@ -86,5 +86,5 @@ extraObjects:
   spec:
     plugin:
       blockip:
-        blockedIPs:
+        ipDenyList:
         - 133.159.153.116
