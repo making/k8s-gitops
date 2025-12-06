@@ -13,6 +13,9 @@ metadata:
     #@ if name == 'otlp-sink.synology' or name == 'registry-ui.synology' or name == 'lognroll.synology':
     traefik.ingress.kubernetes.io/router.observability.accesslogs: "false"
     #@ end
+    #@ if name == 'inlets.gw' or name == 'registry-ui.synology':
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-allow-home@kubernetescrd
+    #@ end
 spec:
   ingressClassName: traefik
   rules:
