@@ -28,7 +28,7 @@ ports:
 logs:
   general:
     format: json
-    level: WARN
+    #! level: WARN
   access:
     enabled: true
     format: json
