@@ -6,7 +6,7 @@ metadata:
   name: #@ name.replace('.', '-')
   namespace: inlets
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-ik-am
+    cert-manager.io/cluster-issuer: letsencrypt
     #@ if name != 'synology':
     traefik.ingress.kubernetes.io/router.observability.tracing: "false"
     #@ end

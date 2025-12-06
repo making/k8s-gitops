@@ -4,7 +4,7 @@ metadata:
   name: jwt-reissuer
   namespace: kube-system
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-ik-am
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
   ingressClassName: traefik
   rules:
