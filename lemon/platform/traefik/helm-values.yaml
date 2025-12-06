@@ -23,8 +23,8 @@ ports:
         readTimeout: 600s
         writeTimeout: 600s
         idleTimeout: 600s
-    middlewares:
-    - traefik-headers-middleware@kubernetescrd
+    #! middlewares:
+    #! - traefik-headers-middleware@kubernetescrd
 logs:
   general:
     format: json
