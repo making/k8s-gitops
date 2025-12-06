@@ -7,6 +7,7 @@ metadata:
 spec:
   plugin:
     oidc-auth:
+      LogLevel: DEBUG
       Secret: #@ data.values.secret
       forceHTTPS: "true"
       Provider:
