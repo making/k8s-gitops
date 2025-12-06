@@ -174,7 +174,7 @@ ingress:
   enabled: true
   ingressClassName: traefik
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-ik-am
+    cert-manager.io/cluster-issuer: letsencrypt
   hosts:
   - host: entry-api.ik.am
     paths:

@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-ik-am
+    cert-manager.io/cluster-issuer: letsencrypt
   name: spring-batch-dashboard
   namespace: spring-batch
 spec:
