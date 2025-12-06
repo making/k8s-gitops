@@ -52,8 +52,8 @@ experimental:
       moduleName: github.com/traefik/plugindemo
       version: v0.2.2
     denyip:
-      moduleName: github.com/ttys3/traefik-plugin-denyip
-      version: v2.0.9
+      moduleName: github.com/kvncrw/denyip
+      version: v2.0.0
   otlpLogs: true
 ingressRoute:
   dashboard:
@@ -99,7 +99,5 @@ extraObjects:
   spec:
     plugin:
       denyip:
-        builtinLists:
-        - blocklist_net_ua.ipset
         ipDenyList:
-        - 133.159.153.116/32
+        - 133.159.153.116
