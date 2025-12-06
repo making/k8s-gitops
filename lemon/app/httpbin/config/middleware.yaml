@@ -17,3 +17,20 @@ spec:
       - openid
       - phone
       - email
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oidc-cognito
+  namespace: default
+spec:
+  plugin:
+    oidc:
+      providerURL: #@ data.values.oidc_provider_url
+      clientID: #@ data.values.oidc_client_id
+      clientSecret: #@ data.values.oidc_client_secret
+      sessionEncryptionKey: #@ data.values.secret
+      callbackURL: /oidc/callback
+      logoutURL: /oidc/logout
+      scopes:
+      - aws.cognito.signin.user.admin
