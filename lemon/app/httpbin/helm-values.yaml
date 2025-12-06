@@ -25,7 +25,7 @@ ingress:
   ingressClassName: traefik
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    #! traefik.ingress.kubernetes.io/router.middlewares: traefik-headers-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-headers-middleware@kubernetescrd,traefik-geoblock@kubernetescrd
   hosts:
   - host: httpbin.ik.am
     paths:

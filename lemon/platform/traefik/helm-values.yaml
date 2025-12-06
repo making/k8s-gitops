@@ -51,6 +51,9 @@ experimental:
     example:
       moduleName: github.com/traefik/plugindemo
       version: v0.2.2
+    geoblock:
+      moduleName: github.com/nscuro/traefik-plugin-geoblock
+      version: v0.14.0
   otlpLogs: true
 ingressRoute:
   dashboard:
@@ -88,3 +91,15 @@ extraObjects:
       example:
         headers:
           X-Foo: Bar
+- apiVersion: traefik.io/v1alpha1
+  kind: Middleware
+  metadata:
+    name: geoblock
+    namespace: traefik
+  spec:
+    plugin:
+      geoblock:
+        enabled: "true"
+        blockedCountries: [ "RU" ]
+        blockedIPBlocks:
+        - 133.159.153.116/32
