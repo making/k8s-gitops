@@ -51,9 +51,9 @@ experimental:
     example:
       moduleName: github.com/traefik/plugindemo
       version: v0.2.2
-    denyip:
-      moduleName: github.com/kvncrw/denyip
-      version: v2.0.0
+    blockip:
+      moduleName: github.com/intaacopilot/traefik-plugin-blockip
+      version: v2.0.5
   otlpLogs: true
 ingressRoute:
   dashboard:
@@ -94,10 +94,10 @@ extraObjects:
 - apiVersion: traefik.io/v1alpha1
   kind: Middleware
   metadata:
-    name: denyip
+    name: blockip
     namespace: traefik
   spec:
     plugin:
-      denyip:
-        ipDenyList:
+      blockip:
+        blockedIPs:
         - 133.159.153.116
