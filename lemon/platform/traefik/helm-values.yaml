@@ -51,9 +51,9 @@ experimental:
     example:
       moduleName: github.com/traefik/plugindemo
       version: v0.2.2
-    geoblock:
-      moduleName: github.com/nscuro/traefik-plugin-geoblock
-      version: v0.14.0
+    denyip:
+      moduleName: github.com/ttys3/traefik-plugin-denyip
+      version: v2.0.9
   otlpLogs: true
 ingressRoute:
   dashboard:
@@ -94,13 +94,12 @@ extraObjects:
 - apiVersion: traefik.io/v1alpha1
   kind: Middleware
   metadata:
-    name: geoblock
+    name: denyip
     namespace: traefik
   spec:
     plugin:
-      geoblock:
-        enabled: "true"
-        databaseFilePath: /plugins-local/src/github.com/nscuro/traefik-plugin-geoblock/IP2LOCATION-LITE-DB1.IPV6.BIN
-        blockedCountries: [ "RU" ]
-        blockedIPBlocks:
+      denyip:
+        builtinLists:
+        - blocklist_net_ua.ipset
+        ipDenyList:
         - 133.159.153.116/32
