@@ -7,6 +7,7 @@ metadata:
 spec:
   plugin:
     oidc-auth:
+      Secret: #@ data.values.secret
       Provider:
         ClientId: #@ data.values.oidc_client_id
         ClientSecret: #@ data.values.oidc_client_secret
