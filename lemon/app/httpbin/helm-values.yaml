@@ -25,7 +25,7 @@ ingress:
   ingressClassName: traefik
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    traefik.ingress.kubernetes.io/router.middlewares: traefik-coraza-http-wasm-traefik@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: coraza@kubernetescrd
   hosts:
   - host: httpbin.ik.am
     paths:
