@@ -48,9 +48,6 @@ tracing:
         insecureSkipVerify: true
 experimental:
   plugins:
-    example:
-      moduleName: github.com/traefik/plugindemo
-      version: v0.2.2
     blockip:
       moduleName: github.com/intaacopilot/traefik-plugin-blockip
       version: v2.0.5
@@ -81,16 +78,6 @@ extraObjects:
   spec:
     basicAuth:
       secret: dashboard-auth-secret
-- apiVersion: traefik.io/v1alpha1
-  kind: Middleware
-  metadata:
-    name: headers-middleware
-    namespace: traefik
-  spec:
-    plugin:
-      example:
-        headers:
-          X-Foo: Bar
 - apiVersion: traefik.io/v1alpha1
   kind: Middleware
   metadata:
