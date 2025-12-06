@@ -11,6 +11,7 @@ spec:
         ClientId: #@ data.values.oidc_client_id
         ClientSecret: #@ data.values.oidc_client_secret
         Url: #@ data.values.oidc_provider_url
+        UseClaimsFromUserInfo: "true"
       Scopes:
       - openid
       - phone
