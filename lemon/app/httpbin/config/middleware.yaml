@@ -8,6 +8,7 @@ spec:
   plugin:
     oidc-auth:
       Secret: #@ data.values.secret
+      forceHTTPS: "true"
       Provider:
         ClientId: #@ data.values.cognito.client_id
         ClientSecret: #@ data.values.cognito.client_secret
