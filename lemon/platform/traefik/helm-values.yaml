@@ -50,8 +50,8 @@ tracing:
 experimental:
   plugins:
     blockip:
-      moduleName: "github.com/kvncrw/denyip"
-      version: "v2.0.0"
+      moduleName: "github.com/ttys3/traefik-plugin-denyip"
+      version: "v2.0.9"
   otlpLogs: true
 ingressRoute:
   dashboard:
