@@ -32,5 +32,8 @@ spec:
       sessionEncryptionKey: #@ data.values.secret
       callbackURL: /oidc/callback
       logoutURL: /oidc/logout
+      overrideScopes: true
       scopes:
-      - aws.cognito.signin.user.admin
+      - openid
+      - phone
+      - email
