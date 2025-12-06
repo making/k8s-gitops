@@ -12,10 +12,6 @@ metadata:
 spec:
   serviceAccountName: kapp
   fetch:
-  - sops:
-      age:
-        privateKeysSecretRef:
-          name: age-key
   - helmChart:
       name: traefik
       version: 37.4.0
@@ -27,6 +23,10 @@ spec:
       subPath: lemon/platform/traefik
   syncPeriod: 24h
   template:
+  - sops:
+      age:
+        privateKeysSecretRef:
+          name: age-key
   - helmTemplate:
       name: traefik
       namespace: traefik
