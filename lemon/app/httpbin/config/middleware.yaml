@@ -10,26 +10,11 @@ spec:
       Secret: #@ data.values.secret
       forceHTTPS: "true"
       Provider:
-        ClientId: #@ data.values.cognito.client_id
-        ClientSecret: #@ data.values.cognito.client_secret
-        Url: #@ data.values.cognito.provider_url
+        ClientId: #@ data.values.keycloak.client_id
+        ClientSecret: #@ data.values.keycloak.client_secret
+        Url: #@ data.values.keycloak.provider_url
         UseClaimsFromUserInfo: "true"
       Scopes:
       - openid
-      - phone
+      - profile
       - email
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: oidc-keycloak
-  namespace: default
-spec:
-  plugin:
-    oidc:
-      providerURL: #@ data.values.keycloak.provider_url
-      clientID: #@ data.values.keycloak.client_id
-      clientSecret: #@ data.values.keycloak.client_secret
-      sessionEncryptionKey: #@ data.values.secret
-      callbackURL: /oidc/callback
-      logoutURL: /oidc/logout
