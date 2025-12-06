@@ -118,3 +118,6 @@ extraObjects:
         - SecDebugLog /dev/stdout
         - SecDebugLogLevel 9
         - SecRule REQUEST_URI "@streq /admin" "id:101,phase:1,log,deny,status:403"
+        - Include @coraza.conf-recommended
+        - Include @crs-setup.conf.example
+        - Include @owasp_crs/*.conf
