@@ -25,8 +25,7 @@ ports:
         readTimeout: 600s
         writeTimeout: 600s
         idleTimeout: 600s
-    middlewares:
-    - traefik-denyip@kubernetescrd
+    middlewares: []
 logs:
   general:
     format: json
@@ -51,9 +50,6 @@ tracing:
         insecureSkipVerify: true
 experimental:
   plugins:
-    denyip:
-      moduleName: "github.com/kvncrw/denyip"
-      version: "v1.1.0"
     coraza:
       moduleName: "github.com/jcchavezs/coraza-http-wasm-traefik"
       version: "v0.3.0"
