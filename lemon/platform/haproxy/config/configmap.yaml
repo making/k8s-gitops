@@ -1,3 +1,4 @@
+#@ load("@ytt:data", "data")
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,6 +7,7 @@ metadata:
   annotations:
     kapp.k14s.io/versioned: ""
 data:
+  #@yaml/text-templated-strings
   haproxy.cfg: |
     global
       log stdout format raw local0
@@ -82,7 +84,13 @@ data:
       bind *:8080
       mode http
       option httplog
-    
+      
+      # Blocked IPs
+      (@- for i in range(len(data.values.blocked_ips)): @)
+      acl blocked src (@= data.values.blocked_ips[i] @)
+      (@- end @)
+      tcp-request connection reject if blocked
+      
       default_backend traefik_http_backend
     
     backend traefik_http_backend
@@ -94,7 +102,13 @@ data:
       bind *:8443
       mode tcp
       option tcplog
-    
+      
+      # Blocked IPs
+      (@- for i in range(len(data.values.blocked_ips)): @)
+      acl blocked src (@= data.values.blocked_ips[i] @)
+      (@- end @)
+      tcp-request connection reject if blocked
+      
       # Extract SNI for routing decisions
       tcp-request inspect-delay 5s
       tcp-request content accept if { req_ssl_hello_type 1 }

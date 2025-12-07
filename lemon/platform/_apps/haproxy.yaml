@@ -21,6 +21,8 @@ spec:
   - ytt:
       paths:
       - config
+      valuesFrom:
+      - path: values.yaml
   deploy:
   - kapp:
       rawOptions:
