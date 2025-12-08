@@ -236,6 +236,9 @@ spec:
           - IsMatch(name, "fs .*")
         logs:
           log_record:
+          #@ for host in data.values.home.filtered_host:
+          - #@ 'attributes["RequestHost"] == "{}" and attributes["ClientHost"] == "{}"'.format(host, data.values.home.ip)
+          #@ end
           - IsMatch(attributes["RequestPath"], "/actuator.*")
           - IsMatch(attributes["RequestAddr"], "otlp.*")
           - IsMatch(attributes["RequestAddr"], "keycloak.*")
