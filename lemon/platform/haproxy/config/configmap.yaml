@@ -27,7 +27,7 @@ data:
       bind *:8389
       mode tcp
       # option tcplog
-      option dontlog-normal
+      no log
       default_backend ldap_backend
 
     backend ldap_backend
@@ -39,7 +39,7 @@ data:
       bind *:8636
       mode tcp
       # option tcplog
-      option dontlog-normal
+      no log
       default_backend ldaps_backend
 
     backend ldaps_backend
@@ -51,7 +51,7 @@ data:
       bind *:25565
       mode tcp
       # option tcplog
-      option dontlog-normal
+      no log
       default_backend minecraft_backend
     
     backend minecraft_backend
@@ -63,7 +63,7 @@ data:
       bind *:35565
       mode tcp
       # option tcplog
-      option dontlog-normal
+      no log
       default_backend mc_vanilla_backend
     
     backend mc_vanilla_backend
@@ -75,7 +75,7 @@ data:
       bind *:9090
       mode tcp
       # option tcplog
-      option dontlog-normal
+      no log
       default_backend otelcol_vault_audit_backend
     
     backend otelcol_vault_audit_backend
