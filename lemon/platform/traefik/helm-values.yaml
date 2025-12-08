@@ -25,7 +25,7 @@ ports:
         readTimeout: 600s
         writeTimeout: 600s
         idleTimeout: 600s
-    middlewares: []
+    middlewares: [ ]
 logs:
   general:
     format: json
@@ -64,7 +64,7 @@ ingressRoute:
     entryPoints:
     - websecure
     middlewares:
-    - name: dashboard-auth
+    - name: oidc-auth-for-dashbord
     tls:
       secretName: dashboard-tls
 extraObjects:
@@ -80,20 +80,3 @@ extraObjects:
       kind: ClusterIssuer
     dnsNames:
     - dashboard.traefik.ik.am
-- apiVersion: v1
-  kind: Secret
-  metadata:
-    name: dashboard-auth-secret
-    namespace: traefik
-  type: kubernetes.io/basic-auth
-  stringData:
-    username: admin
-    password: changeme
-- apiVersion: traefik.io/v1alpha1
-  kind: Middleware
-  metadata:
-    name: dashboard-auth
-    namespace: traefik
-  spec:
-    basicAuth:
-      secret: dashboard-auth-secret
