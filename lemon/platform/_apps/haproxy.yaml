@@ -23,6 +23,9 @@ spec:
       - config
       valuesFrom:
       - path: values.yaml
+  - kbld:
+      paths:
+      - '-'
   deploy:
   - kapp:
       rawOptions:
