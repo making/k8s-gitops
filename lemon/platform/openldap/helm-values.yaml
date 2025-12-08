@@ -34,6 +34,7 @@ phpldapadmin:
     enabled: true
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt
+      traefik.ingress.kubernetes.io/router.middlewares: traefik-allow-home@kubernetescrd
     hosts:
     - phpldapadmin.ik.am
     tls:
