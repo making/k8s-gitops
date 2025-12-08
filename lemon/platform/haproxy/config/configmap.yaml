@@ -26,7 +26,7 @@ data:
     frontend ldap_frontend
       bind *:8389
       mode tcp
-      option tcplog
+      # option tcplog
       default_backend ldap_backend
 
     backend ldap_backend
@@ -37,7 +37,7 @@ data:
     frontend ldaps_frontend
       bind *:8636
       mode tcp
-      option tcplog
+      # option tcplog
       default_backend ldaps_backend
 
     backend ldaps_backend
@@ -48,7 +48,7 @@ data:
     frontend minecraft_frontend
       bind *:25565
       mode tcp
-      option tcplog
+      # option tcplog
       default_backend minecraft_backend
     
     backend minecraft_backend
@@ -59,7 +59,7 @@ data:
     frontend mc_vanilla_frontend
       bind *:35565
       mode tcp
-      option tcplog
+      # option tcplog
       default_backend mc_vanilla_backend
     
     backend mc_vanilla_backend
