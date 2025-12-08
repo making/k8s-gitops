@@ -27,6 +27,7 @@ data:
       bind *:8389
       mode tcp
       # option tcplog
+      options dontlog-normal
       default_backend ldap_backend
 
     backend ldap_backend
@@ -38,6 +39,7 @@ data:
       bind *:8636
       mode tcp
       # option tcplog
+      options dontlog-normal
       default_backend ldaps_backend
 
     backend ldaps_backend
@@ -49,6 +51,7 @@ data:
       bind *:25565
       mode tcp
       # option tcplog
+      options dontlog-normal
       default_backend minecraft_backend
     
     backend minecraft_backend
@@ -60,17 +63,19 @@ data:
       bind *:35565
       mode tcp
       # option tcplog
+      options dontlog-normal
       default_backend mc_vanilla_backend
     
     backend mc_vanilla_backend
       mode tcp
       server cloudflared cloudflared.cloudflared.svc.cluster.local:35565 check
 
-    # Minecraft otelcol/vault_audit routing (9090)
+    # otelcol/vault_audit routing (9090)
     frontend otelcol_vault_audit_frontend
       bind *:9090
       mode tcp
-      option tcplog
+      # option tcplog
+      options dontlog-normal
       default_backend otelcol_vault_audit_backend
     
     backend otelcol_vault_audit_backend
