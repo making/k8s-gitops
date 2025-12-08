@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: haproxy
-        image: haproxy:3.1
+        image: haproxy:3.2
         ports:
         - containerPort: 25565
           name: minecraft
