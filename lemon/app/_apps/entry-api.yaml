@@ -36,13 +36,13 @@ spec:
       path: "0"
       valuesFrom:
       - path: 1/helm-values.yaml
+      - path: 2/jvm_aarch64.yaml
   - ytt:
       paths:
       - "-"
       - 1/config
       valuesFrom:
       - path: 1/credentials.yaml
-      - path: 2/jvm_aarch64.yaml
   - kbld:
       paths:
       - '-'
