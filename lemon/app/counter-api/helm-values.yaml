@@ -1,0 +1,116 @@
+---
+applicationName: counter-api
+deployment:
+  replicas: 1
+  image:
+    repository: ghcr.io/categolj/counter-api
+    tag: native
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: counter-api
+  additionalPodAnnotations:
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
+  env:
+    JAVA_TOOL_OPTIONS:
+      value: -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
+    BPL_JVM_THREAD_COUNT:
+      value: "28"
+    server.port:
+      value: "8080"
+    info.env.hostname:
+      value: ${HOSTNAME:}
+    spring.sql.init.mode:
+      value: never
+    spring.datasource.url:
+      valueFrom:
+        secretKeyRef:
+          key: jdbc-url
+          name: counter-config
+    spring.datasource.username:
+      valueFrom:
+        secretKeyRef:
+          key: jdbc-username
+          name: counter-config
+    spring.datasource.password:
+      valueFrom:
+        secretKeyRef:
+          key: jdbc-password
+          name: counter-config
+    logging.structured.format.console:
+      value: ecs
+    management.opentelemetry.logging.export.otlp.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+    management.opentelemetry.logging.export.otlp.compression:
+      value: gzip
+    management.opentelemetry.tracing.export.otlp.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+    management.opentelemetry.tracing.export.otlp.compression:
+      value: gzip
+    management.otlp.metrics.export.url:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/metrics
+    management.otlp.metrics.export.base-time-unit:
+      value: seconds
+    management.opentelemetry.resource-attributes.k8s.pod.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    management.opentelemetry.resource-attributes.k8s.namespace.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    management.opentelemetry.resource-attributes.k8s.node.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    management.opentelemetry.resource-attributes.host.ip:
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+    spring.threads.virtual.enabled:
+      value: "false"
+  resources:
+    limits:
+      cpu: 125m
+      memory: 250M
+    requests:
+      cpu: 125m
+      memory: 250M
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+      scheme: HTTP
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+      scheme: HTTP
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: counter-api
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+ingress:
+  enabled: false

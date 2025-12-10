@@ -44,7 +44,7 @@ deployment:
     note-api.url:
       value: http://note-api.note.svc.cluster.local:8080
     counter-api.url:
-      value: http://counter-api.blog.svc.cluster.local/counter
+      value: http://counter-api.blog.svc.cluster.local:8080/counter
     counter-api.ip-black-list:
       valueFrom:
         secretKeyRef:
