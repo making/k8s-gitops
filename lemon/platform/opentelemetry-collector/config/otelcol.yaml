@@ -282,6 +282,7 @@ spec:
           - set(time, Time(attributes["syslog.timestamp"], "%Y-%m-%dT%H:%M:%S.%s%z")) where IsMatch(attributes["syslog.timestamp"], "^\\d+\\-.+\\d$")
           - set(time, Time(attributes["syslog.timestamp"], "%b %d %H:%M:%S")) where IsMatch(attributes["syslog.timestamp"], "^[a-zA-Z]+ .+\\d$")
           - set(body, attributes["syslog.message"])
+          - set(resource.attributes["service.name"], resource.attributes["syslog.program"]) where IsString(resource.attributes["syslog.program"])
           - set(resource.attributes["container.image.name"], resource.attributes["container_image"]) where IsString(resource.attributes["container_image"])
           - set(resource.attributes["service.name"], resource.attributes["app_name"]) where IsString(resource.attributes["app_name"])
           - set(resource.attributes["service.name"], resource.attributes["app"]) where IsString(resource.attributes["app"])
