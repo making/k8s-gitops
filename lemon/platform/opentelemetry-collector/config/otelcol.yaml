@@ -256,9 +256,13 @@ spec:
         - context: log
           statements:
           - merge_maps(attributes, ExtractGrokPatterns(body, "(?:%{INT:syslog6587.msglen} )?<%{POSINT:syslog.pri}>(%{SPACE})?(?:%{NONNEGINT:syslog5424.ver} )?(?:%{SYSLOGTIMESTAMP:syslog.timestamp}|%{TIMESTAMP_ISO8601:syslog.timestamp}) %{DATA:syslog.hostname} %{DATA:syslog.program}(?:\\[%{POSINT:syslog.pid}\\])?(:)? %{GREEDYDATA:syslog.message}", true), "upsert") where IsString(body)
-          - 'merge_maps(attributes, ExtractGrokPatterns(attributes["syslog.message"], "(?:%{DATA:syslog.procid}|\\-) (?:%{DATA:syslog.msgid}|\\-)(?: %{SYSLOG5424SD:syslog.sd}| \\-)? %{GREEDYDATA:syslog.message}", true), "upsert") where attributes["syslog5424.ver"] == "1"'
-          - 'merge_maps(attributes, ExtractGrokPatterns(attributes["syslog.sd"], "\\[%{DATA:syslog.sd_id} (?<syslog_sd_params_raw>[^\\]]+)\\]", true), "upsert") where IsString(attributes["syslog.sd"])'
-          - merge_maps(resource.attributes, ParseKeyValue(attributes["syslog_sd_params_raw"]), "upsert") where IsString(attributes["syslog_sd_params_raw"])
+          - 'merge_maps(attributes, ExtractGrokPatterns(attributes["syslog.message"], "(?:%{DATA:syslog.procid}|\\-) (?:%{DATA:syslog.msgid}|\\-)? %{GREEDYDATA:syslog.message}", true), "upsert") where attributes["syslog5424.ver"] == "1"'
+          - merge_maps(attributes, ExtractGrokPatterns(attributes["syslog.message"], "(?P<syslog_sd>\\[[^\\]\\\\]*@[^\\]\\\\]*(?:\\\\.[^\\]\\\\]*)*\\])(?P<syslog_meta>\\[meta[^\\]]*\\])?\\s+%{GREEDYDATA:syslog.message}"), "upsert")
+          - 'merge_maps(attributes, ExtractGrokPatterns(attributes["syslog_sd"], "\\[%{DATA:syslog.sd_id} (?<syslog_sd_params_raw>([^\\]\\\\]|\\\\.)+)\\]", true), "upsert") where IsString(attributes["syslog_sd"])'
+          - merge_maps(attributes, ParseKeyValue(attributes["syslog_sd_params_raw"]), "upsert") where IsString(attributes["syslog_sd_params_raw"])
+          - 'merge_maps(attributes, ExtractGrokPatterns(attributes["syslog_meta"], "\\[%{DATA:syslog.meta_id} (?<syslog_meta_params_raw>([^\\]\\\\]|\\\\.)+)\\]", true), "upsert") where IsString(attributes["syslog_meta"])'
+          - merge_maps(attributes, ParseKeyValue(attributes["syslog_meta_params_raw"]), "upsert") where IsString(attributes["syslog_meta_params_raw"])
+          - set(attributes["syslog.message"], Trim(attributes["syslog.message"], "﻿"))
           - set(attributes["syslog.facility"], Int(attributes["syslog.pri"]) / 8) where IsString(attributes["syslog.pri"])
           - set(attributes["syslog.severity"], Int(attributes["syslog.pri"]) - (attributes["syslog.facility"] * 8)) where IsString(attributes["syslog.pri"])
           - set(severity_text, "FATAL") where attributes["syslog.severity"] == 0
@@ -282,23 +286,26 @@ spec:
           - set(time, Time(attributes["syslog.timestamp"], "%Y-%m-%dT%H:%M:%S.%s%z")) where IsMatch(attributes["syslog.timestamp"], "^\\d+\\-.+\\d$")
           - set(time, Time(attributes["syslog.timestamp"], "%b %d %H:%M:%S")) where IsMatch(attributes["syslog.timestamp"], "^[a-zA-Z]+ .+\\d$")
           - set(body, attributes["syslog.message"])
-          - set(resource.attributes["service.name"], resource.attributes["syslog.program"]) where IsString(resource.attributes["syslog.program"])
-          - set(resource.attributes["container.image.name"], resource.attributes["container_image"]) where IsString(resource.attributes["container_image"])
-          - set(resource.attributes["service.name"], resource.attributes["app_name"]) where IsString(resource.attributes["app_name"])
-          - set(resource.attributes["service.name"], resource.attributes["app"]) where IsString(resource.attributes["app"])
-          - set(resource.attributes["k8s.node.name"], resource.attributes["node"]) where IsString(resource.attributes["node"])
+          - set(resource.attributes["container.image.name"], attributes["container_image"]) where IsString(attributes["container_image"])
+          - set(resource.attributes["service.name"], attributes["app_name"]) where IsString(attributes["app_name"])
+          - set(resource.attributes["service.name"], attributes["app"]) where IsString(attributes["app"])
+          - set(resource.attributes["k8s.node.name"], attributes["node"]) where IsString(attributes["node"])
+          - set(resource.attributes["service.name"], attributes["syslog.program"]) where IsString(attributes["syslog.program"])
           - delete_key(attributes, "syslog.message")
-          - delete_key(attributes, "syslog.sd")
+          - delete_key(attributes, "syslog_sd")
           - delete_key(attributes, "syslog_sd_params_raw")
+          - delete_key(attributes, "syslog_meta")
+          - delete_key(attributes, "syslog_meta_params_raw")
+          - delete_key(attributes, "syslog.meta_id")
           - delete_key(attributes, "syslog.pri")
           - delete_key(attributes, "syslog.severity")
           - delete_key(attributes, "syslog.timestamp")
           - delete_key(attributes, "syslog.procid") where attributes["syslog.procid"] == "-"
           - delete_key(attributes, "syslog.msgid") where attributes["syslog.msgid"] == "-"
-          - delete_key(resource.attributes, "container_image")
-          - delete_key(resource.attributes, "app_name")
-          - delete_key(resource.attributes, "app")
-          - delete_key(resource.attributes, "node")
+          - delete_key(attributes, "container_image")
+          - delete_key(attributes, "app_name")
+          - delete_key(attributes, "app")
+          - delete_key(attributes, "node")
       filter/syslog:
         error_mode: ignore
         logs:
