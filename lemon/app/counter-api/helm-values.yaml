@@ -72,6 +72,10 @@ deployment:
       valueFrom:
         fieldRef:
           fieldPath: status.podIP
+    management.metrics.tags.app:
+      value: counter-api
+    management.metrics.tags.instance:
+      value: ${HOSTNAME:}
     spring.threads.virtual.enabled:
       value: "false"
   resources:
