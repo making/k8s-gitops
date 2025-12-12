@@ -108,15 +108,15 @@ data:
       bind *:8443
       mode tcp
       option tcplog
-      # Track connection rate per client IP (1 second window, 100k entries, 30s expiry)
-      stick-table type ip size 100k expire 30s store conn_rate(1s)
+      # Track connection rate per client IP (60 seconds window, 100k entries, 60s expiry)
+      stick-table type ip size 100k expire 60s store conn_rate(60s)
       # Blocked IPs
       acl blocked src -f /usr/local/etc/haproxy/blocked-ips.txt
       tcp-request connection reject if blocked
       # Record client IP at connection level
       tcp-request connection track-sc0 src
-      # Reject connection if rate exceeds 10 conn/sec
-      tcp-request connection reject if { sc_conn_rate(0) gt 10 }
+      # Reject connection if rate exceeds 50 conn/sec
+      tcp-request connection reject if { sc_conn_rate(0) gt 50 }
       # Extract SNI for routing decisions
       tcp-request inspect-delay 5s
       tcp-request content accept if { req_ssl_hello_type 1 }
