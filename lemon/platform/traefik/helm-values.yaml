@@ -1,5 +1,5 @@
 image:
-  tag: v3.6.4
+  tag: v3.6.5
 service:
   type: ClusterIP
 deployment:
