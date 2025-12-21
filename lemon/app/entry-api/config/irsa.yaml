@@ -9,7 +9,7 @@ spec:
       volumes:
       - name: shared-token
         emptyDir: { }
-      initContainers:
+      containers:
       #@overlay/match by="name"
       - name: entry-api
         env:
@@ -32,6 +32,7 @@ spec:
         volumeMounts:
         - name: shared-token
           mountPath: /var/irsa
+      initContainers:
       #@overlay/match by="name"
       - name: token-refresher
         image: curlimages/curl:latest
