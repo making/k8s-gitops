@@ -9,7 +9,7 @@ spec:
       volumes:
       - name: shared-token
         emptyDir: { }
-      containers:
+      initContainers:
       #@overlay/match by="name"
       - name: entry-api
         env:
@@ -36,6 +36,7 @@ spec:
       - name: token-refresher
         image: curlimages/curl:latest
         command: [ "/bin/sh" ]
+        restartPolicy: Always
         args:
         - -c
         - |
