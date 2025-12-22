@@ -30,7 +30,7 @@ spec:
           name: age-key
   - helmTemplate:
       name: ldap-ssp
-      namespace: blog
+      namespace: ldap-ssp
       path: "0"
       valuesFrom:
       - path: 1/helm-values.yaml
