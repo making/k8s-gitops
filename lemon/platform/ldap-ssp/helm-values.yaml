@@ -1,0 +1,150 @@
+---
+applicationName: ldap-ssp
+deployment:
+  replicas: 1
+  image:
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: ldap-ssp
+  env:
+    info.env.hostname:
+      value: ${HOSTNAME:}
+    spring.ldap.urls:
+      valueFrom:
+        secretKeyRef:
+          key: ldap_url
+          name: ldap-ssp-config
+    spring.ldap.username:
+      valueFrom:
+        secretKeyRef:
+          key: ldap_username
+          name: ldap-ssp-config
+    spring.ldap.password:
+      valueFrom:
+        secretKeyRef:
+          key: ldap_password
+          name: ldap-ssp-config
+    spring.ldap.base:
+      valueFrom:
+        secretKeyRef:
+          key: ldap_base
+          name: ldap-ssp-config
+    ldap.id-attribute:
+      value: cn
+    ldap.user-search-base:
+      value: ou=people
+    ldap.user-search-filter:
+      value: (cn={0})
+    ldap.email-pattern:
+      value: "*%s"
+    sendgrid.url:
+      value: https://api.sendgrid.com
+    sendgrid.from:
+      value: noreply@ik.am
+    sendgrid.api-key:
+      valueFrom:
+        secretKeyRef:
+          key: sendgrid_api_key
+          name: ldap-ssp-config
+    ssp.external-url:
+      valueFrom:
+        secretKeyRef:
+          key: ssp_external_url
+          name: ldap-ssp-config
+    management.otlp.logging.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+    management.otlp.logging.compression:
+      value: gzip
+    management.otlp.tracing.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+    management.otlp.tracing.compression:
+      value: gzip
+    management.otlp.metrics.export.url:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/metrics
+    management.otlp.metrics.export.base-time-unit:
+      value: seconds
+    management.metrics.tags.app:
+      value: ldap-ssp
+    management.metrics.tags.instance:
+      value: ${HOSTNAME:}
+    JAVA_TOOL_OPTIONS:
+      value: -XX:ActiveProcessorCount=2 -Dfile.encoding="UTF-8" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
+    server.port:
+      value: "8080"
+    spring.threads.virtual.enabled:
+      value: "true"
+    management.opentelemetry.resource-attributes.k8s.pod.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    management.opentelemetry.resource-attributes.k8s.namespace.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    management.opentelemetry.resource-attributes.k8s.node.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    management.opentelemetry.resource-attributes.host.ip:
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+    logging.structured.format.console:
+      value: ecs
+  resources:
+    limits:
+      cpu: 125m
+      memory: 250M
+    requests:
+      cpu: 125m
+      memory: 250M
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+      scheme: HTTP
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+      scheme: HTTP
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: ldap-ssp
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+  hosts:
+  - host: ldap-ssp.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - ldap-ssp.ik.am
+    secretName: ldap-ssp-tls
+---
