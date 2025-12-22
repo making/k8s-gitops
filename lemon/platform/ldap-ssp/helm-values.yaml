@@ -51,10 +51,7 @@ deployment:
           key: sendgrid_api_key
           name: ldap-ssp-config
     ssp.external-url:
-      valueFrom:
-        secretKeyRef:
-          key: ssp_external_url
-          name: ldap-ssp-config
+      value: https://ldap-ssp.ik.am
     management.otlp.logging.endpoint:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
     management.otlp.logging.compression:
