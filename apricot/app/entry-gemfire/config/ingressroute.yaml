@@ -1,0 +1,40 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: entry-gemfire-locator
+  namespace: blog
+spec:
+  entryPoints:
+  - websecure
+  routes:
+  - kind: Rule
+    match: Host(`entry-gemfire-locator.lan.ik.am`)
+    services:
+    - name: entry-gemfire-locator
+      port: 7070
+      scheme: https
+      serversTransport: entry-gemfire-locator-transport
+  tls:
+    secretName: entry-gemfire-locator-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: entry-gemfire-locator-tls
+  namespace: blog
+spec:
+  dnsNames:
+  - entry-gemfire-locator.lan.ik.am
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: entry-gemfire-locator-tls
+---
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: entry-gemfire-locator-transport
+  namespace: blog
+spec:
+  insecureSkipVerify: true
