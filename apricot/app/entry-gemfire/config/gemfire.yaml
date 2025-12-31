@@ -1,0 +1,29 @@
+apiVersion: gemfire.vmware.com/v1
+kind: GemFireCluster
+metadata:
+  name: entry-gemfire
+  namespace: blog
+spec:
+  image: registry.maki.lol/pivotal-gemfire/vmware-gemfire:10.1.5
+  imagePullSecrets:
+  - name: regsecret
+  clusterConfiguration:
+    cacheXMLConfigMap:
+      name: entry-cache-xml
+  antiAffinityPolicy: Cluster
+  persistentVolumeClaim:
+    deleteOnShutdown: true
+  locators:
+    replicas: 2
+    resources:
+      requests:
+        memory: 1Gi
+      limits:
+        memory: 1Gi
+  servers:
+    replicas: 2
+    resources:
+      requests:
+        memory: 1Gi
+      limits:
+        memory: 1Gi
