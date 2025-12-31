@@ -25,9 +25,6 @@ spec:
   - ytt:
       paths:
       - config
-  - kbld:
-      paths:
-      - '-'
   deploy:
   - kapp:
       rawOptions:
