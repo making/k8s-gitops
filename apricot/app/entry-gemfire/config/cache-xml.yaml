@@ -16,8 +16,8 @@ data:
             </disk-dirs>
         </disk-store>
         <pdx disk-store-name="pdxmetadata" persistent="true" read-serialized="true"/>
-        <region name="Entry">
-            <region-attributes refid="PARTITION_PERSISTENT"/>
+        <region name="Entry" refid="REPLICATE_PERSISTENT">
+            <region-attributes data-policy="persistent-replicate" scope="distributed-ack"/>
             <index name="idx_tenant_updated_at"
                    expression="tenantId, updatedAt"
                    from-clause="/Entry"/>
