@@ -10,7 +10,7 @@ spec:
   routes:
   - kind: Rule
     match: Host(`entry-gemfire-locator.lan.ik.am`)
-    middleware:
+    middlewares:
     - name: entry-gemfire-locator-auth
     services:
     - name: entry-gemfire-locator
