@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: entry-cache-xml
+  namespace: blog
+data:
+  cache.xml: |
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <cache version="1.0"
+           xsi:schemaLocation="http://geode.apache.org/schema/jdbc http://geode.apache.org/schema/jdbc/jdbc-1.0.xsd http://geode.apache.org/schema/query-config-service http://geode.apache.org/schema/query-config-service/query-config-service-1.0.xsd http://geode.apache.org/schema/cache http://geode.apache.org/schema/cache/cache-1.0.xsd"
+           xmlns="http://geode.apache.org/schema/cache"
+           xmlns:jdbc="http://geode.apache.org/schema/jdbc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <disk-store name="pdxmetadata">
+            <disk-dirs>
+                <disk-dir>/data/pdxmetadata</disk-dir>
+            </disk-dirs>
+        </disk-store>
+        <pdx read-serialized="true" persistent="true" disk-store-name="pdxmetadata"/>
+        <region name="Entry" refid="PARTITION_REDUNDANT_PERSISTENT">
+            <region-attributes data-policy="persistent-partition">
+                <partition-attributes redundant-copies="1"/>
+            </region-attributes>
+            <index name="idx_tenant_updated_at" expression="tenantId, updatedAt" from-clause="/Entry" key-index="false"
+                   type="range"/>
+        </region>
+    </cache>
