@@ -3,7 +3,7 @@ applicationName: entry-api
 deployment:
   replicas: 2
   image:
-    repository: ghcr.io/categolj/entry-api
+    repository: ghcr.io/categolj/entry-api-gemfire
     tag: jvm
     pullPolicy: Always
   ports:
@@ -21,12 +21,26 @@ deployment:
       value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=28M -XX:MaxMetaspaceSize=128M -Xss512k -Dfile.encoding=UTF-8 -Duser.country=JP -Duser.language=ja -Duser.timezone=Asia/Tokyo
     BPL_JVM_THREAD_COUNT:
       value: "28"
-    spring.config.import:
-      value: configtree:/workspace/config/,optional:classpath:git.properties,optional:classpath:META-INF/build-info.properties
-    spring.datasource.url:
-      value: jdbc:postgresql://${spring.datasource.instancename}.${spring.datasource.namespace}.svc.cluster.local:5432/${spring.datasource.dbname}
-    spring.datasource.hikari.data-source-properties.sslmode:
-      value: require
+    gemfire.locators:
+      value: entry-gemfire-locator-0.entry-gemfire-locator.blog.svc.cluster.local:10334,entry-gemfire-locator-1.entry-gemfire-locator.blog.svc.cluster.local:10334
+    gemfire.properties.ssl-enabled-components:
+      value: all
+    gemfire.properties.ssl-endpoint-identification-enabled:
+      value: "true"
+    gemfire.properties.ssl-keystore:
+      value: /certs/truststore.p12
+    gemfire.properties.ssl-keystore-password:
+      valueFrom:
+        secretKeyRef:
+          name: entry-gemfire-cert
+          key: password
+    gemfire.properties.ssl-truststore:
+      value: /certs/keystore.p12
+    gemfire.properties.ssl-truststore-password:
+      valueFrom:
+        secretKeyRef:
+          name: entry-gemfire-cert
+          key: password
     spring.security.user.password:
       valueFrom:
         secretKeyRef:
@@ -95,6 +109,8 @@ deployment:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
     management.opentelemetry.tracing.export.otlp.compression:
       value: gzip
+    management.logging.export.otlp.enabled:
+      value: "true"
     management.opentelemetry.logging.export.otlp.endpoint:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
     management.opentelemetry.logging.export.otlp.compression:
@@ -117,18 +133,15 @@ deployment:
           fieldPath: status.podIP
     logging.structured.format.console:
       value: ecs
-    logging.level.net.ttddyy.dsproxy.listener.logging.SLF4JQueryLoggingListener:
-      value: info
     info.env.hostname:
       value: ${HOSTNAME:}
   volumeMounts:
-    entry-db:
-      mountPath: /workspace/config/spring/datasource
-      readOnly: true
+    cert-volume:
+      mountPath: /certs
   volumes:
-    entry-db:
+    cert-volume:
       secret:
-        secretName: entry-db-db-secret
+        secretName: entry-gemfire-cert
   resources:
     limits:
       cpu:
