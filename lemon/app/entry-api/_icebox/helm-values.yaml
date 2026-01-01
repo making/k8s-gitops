@@ -3,7 +3,7 @@ applicationName: entry-api
 deployment:
   replicas: 2
   image:
-    repository: ghcr.io/categolj/entry-api-gemfire
+    repository: ghcr.io/categolj/entry-api
     tag: jvm
     pullPolicy: Always
   ports:
@@ -21,26 +21,23 @@ deployment:
       value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=28M -XX:MaxMetaspaceSize=128M -Xss512k -Dfile.encoding=UTF-8 -Duser.country=JP -Duser.language=ja -Duser.timezone=Asia/Tokyo
     BPL_JVM_THREAD_COUNT:
       value: "28"
-    gemfire.locators:
-      value: entry-gemfire-locator-0.entry-gemfire-locator.blog.svc.cluster.local:10334
-    gemfire.properties.ssl-enabled-components:
-      value: all
-    gemfire.properties.ssl-endpoint-identification-enabled:
-      value: "true"
-    gemfire.properties.ssl-keystore:
-      value: /certs/truststore.p12
-    gemfire.properties.ssl-keystore-password:
+    spring.profiles.active:
+      value: "dsql,redis"
+    spring.datasource.url:
       valueFrom:
         secretKeyRef:
-          name: entry-gemfire-cert
-          key: password
-    gemfire.properties.ssl-truststore:
-      value: /certs/keystore.p12
-    gemfire.properties.ssl-truststore-password:
+          key: spring-datasource-url
+          name: entry-api-config
+    spring.datasource.username:
       valueFrom:
         secretKeyRef:
-          name: entry-gemfire-cert
-          key: password
+          key: spring-datasource-username
+          name: entry-api-config
+    spring.data.redis.url:
+      valueFrom:
+        secretKeyRef:
+          key: spring-data-redis-url
+          name: entry-api-config
     spring.security.user.password:
       valueFrom:
         secretKeyRef:
@@ -109,8 +106,6 @@ deployment:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
     management.opentelemetry.tracing.export.otlp.compression:
       value: gzip
-    management.logging.export.otlp.enabled:
-      value: "true"
     management.opentelemetry.logging.export.otlp.endpoint:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
     management.opentelemetry.logging.export.otlp.compression:
@@ -133,15 +128,10 @@ deployment:
           fieldPath: status.podIP
     logging.structured.format.console:
       value: ecs
+    logging.level.net.ttddyy.dsproxy.listener.logging.SLF4JQueryLoggingListener:
+      value: info
     info.env.hostname:
       value: ${HOSTNAME:}
-  volumeMounts:
-    cert-volume:
-      mountPath: /certs
-  volumes:
-    cert-volume:
-      secret:
-        secretName: entry-gemfire-cert
   resources:
     limits:
       cpu:
@@ -185,6 +175,7 @@ ingress:
   ingressClassName: traefik
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-coraza@kubernetescrd
   hosts:
   - host: entry-api.ik.am
     paths:
