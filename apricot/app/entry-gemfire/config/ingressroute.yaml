@@ -9,6 +9,8 @@ spec:
   routes:
   - kind: Rule
     match: Host(`entry-gemfire-locator.lan.ik.am`)
+    middleware:
+    - name: entry-gemfire-locator-auth
     services:
     - name: entry-gemfire-locator
       port: 7070
@@ -38,3 +40,22 @@ metadata:
   namespace: blog
 spec:
   insecureSkipVerify: true
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: entry-gemfire-locator-auth
+  namespace: blog
+spec:
+  basicAuth:
+    secret: entry-gemfire-locator-auth
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: entry-gemfire-locator-auth
+  namespace: blog
+type: kubernetes.io/basic-auth
+stringData:
+  username: #@ data.values.locator.username
+  password: #@ data.values.locator.password
