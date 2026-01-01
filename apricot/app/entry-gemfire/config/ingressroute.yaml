@@ -1,3 +1,4 @@
+#@ load("@ytt:data", "data")
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
