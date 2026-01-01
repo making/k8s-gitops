@@ -48,14 +48,5 @@ metadata:
   name: entry-gemfire-locator-auth
   namespace: blog
 spec:
-  basicAuth:
-    secret: entry-gemfire-locator-auth
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: entry-gemfire-locator-auth
-  namespace: blog
-spec:
   ipWhiteList:
     sourceRange: #@ data.values.locator.ip_white_list
