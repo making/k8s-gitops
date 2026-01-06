@@ -255,65 +255,65 @@ spec:
         #! https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/transformprocessor#basic-config
         - context: log
           statements:
-          - merge_maps(attributes, ExtractGrokPatterns(body, "(?:%{INT:syslog6587.msglen} )?<%{POSINT:syslog.pri}>(%{SPACE})?(?:%{NONNEGINT:syslog5424.ver} )?(?:%{SYSLOGTIMESTAMP:syslog.timestamp}|%{TIMESTAMP_ISO8601:syslog.timestamp}) %{DATA:syslog.hostname} %{DATA:syslog.program}(?:\\[%{POSINT:syslog.pid}\\])?(:)? %{GREEDYDATA:syslog.message}", true), "upsert") where IsString(body)
-          - 'merge_maps(attributes, ExtractGrokPatterns(attributes["syslog.message"], "(?:%{DATA:syslog.procid}|\\-) (?:%{DATA:syslog.msgid}|\\-)? %{GREEDYDATA:syslog.message}", true), "upsert") where attributes["syslog5424.ver"] == "1"'
-          - merge_maps(attributes, ExtractGrokPatterns(attributes["syslog.message"], "(?P<syslog_sd>\\[[^\\]\\\\]*@[^\\]\\\\]*(?:\\\\.[^\\]\\\\]*)*\\])(?P<syslog_meta>\\[meta[^\\]]*\\])?\\s+%{GREEDYDATA:syslog.message}"), "upsert")
-          - 'merge_maps(attributes, ExtractGrokPatterns(attributes["syslog_sd"], "\\[%{DATA:syslog.sd_id} (?<syslog_sd_params_raw>([^\\]\\\\]|\\\\.)+)\\]", true), "upsert") where IsString(attributes["syslog_sd"])'
-          - merge_maps(attributes, ParseKeyValue(attributes["syslog_sd_params_raw"]), "upsert") where IsString(attributes["syslog_sd_params_raw"])
-          - 'merge_maps(attributes, ExtractGrokPatterns(attributes["syslog_meta"], "\\[%{DATA:syslog.meta_id} (?<syslog_meta_params_raw>([^\\]\\\\]|\\\\.)+)\\]", true), "upsert") where IsString(attributes["syslog_meta"])'
-          - merge_maps(attributes, ParseKeyValue(attributes["syslog_meta_params_raw"]), "upsert") where IsString(attributes["syslog_meta_params_raw"])
-          - set(attributes["syslog.message"], Trim(attributes["syslog.message"], "﻿"))
-          - set(attributes["syslog.facility"], Int(attributes["syslog.pri"]) / 8) where IsString(attributes["syslog.pri"])
-          - set(attributes["syslog.severity"], Int(attributes["syslog.pri"]) - (attributes["syslog.facility"] * 8)) where IsString(attributes["syslog.pri"])
-          - set(severity_text, "FATAL") where attributes["syslog.severity"] == 0
-          - set(severity_number, 21) where attributes["syslog.severity"] == 0
-          - set(severity_text, "FATAL") where attributes["syslog.severity"] == 1
-          - set(severity_number, 21) where attributes["syslog.severity"] == 1
-          - set(severity_text, "FATAL") where attributes["syslog.severity"] == 2
-          - set(severity_number, 21) where attributes["syslog.severity"] == 2
-          - set(severity_text, "ERROR") where attributes["syslog.severity"] == 3
-          - set(severity_number, 17) where attributes["syslog.severity"] == 3
-          - set(severity_text, "WARN") where attributes["syslog.severity"] == 4
-          - set(severity_number, 13) where attributes["syslog.severity"] == 4
-          - set(severity_text, "INFO") where attributes["syslog.severity"] == 5
-          - set(severity_number, 9) where attributes["syslog.severity"] == 5
-          - set(severity_text, "INFO") where attributes["syslog.severity"] == 6
-          - set(severity_number, 9) where attributes["syslog.severity"] == 6
-          - set(severity_text, "DEBUG") where attributes["syslog.severity"] == 7
-          - set(severity_number, 5) where attributes["syslog.severity"] == 7
-          - replace_pattern(attributes["syslog.timestamp"], "(.+)([\\+\\-])(\\d+):(\\d+)$", "$$1$$2$$3$$4")
-          - set(time, Time(attributes["syslog.timestamp"], "%Y-%m-%dT%H:%M:%S.%sZ")) where IsMatch(attributes["syslog.timestamp"], "^\\d+\\-.+Z$")
-          - set(time, Time(attributes["syslog.timestamp"], "%Y-%m-%dT%H:%M:%S.%s%z")) where IsMatch(attributes["syslog.timestamp"], "^\\d+\\-.+\\d$")
-          - set(time, Time(attributes["syslog.timestamp"], "%b %d %H:%M:%S")) where IsMatch(attributes["syslog.timestamp"], "^[a-zA-Z]+ .+\\d$")
-          - set(body, attributes["syslog.message"])
-          - set(resource.attributes["container.image.name"], attributes["container_image"]) where IsString(attributes["container_image"])
-          - set(resource.attributes["service.name"], attributes["app_name"]) where IsString(attributes["app_name"])
-          - set(resource.attributes["service.name"], attributes["app"]) where IsString(attributes["app"])
-          - set(resource.attributes["k8s.node.name"], attributes["node"]) where IsString(attributes["node"])
-          - set(resource.attributes["service.name"], attributes["syslog.program"]) where IsString(attributes["syslog.program"])
-          - delete_key(attributes, "syslog.message")
-          - delete_key(attributes, "syslog_sd")
-          - delete_key(attributes, "syslog_sd_params_raw")
-          - delete_key(attributes, "syslog_meta")
-          - delete_key(attributes, "syslog_meta_params_raw")
-          - delete_key(attributes, "syslog.meta_id")
-          - delete_key(attributes, "syslog.pri")
-          - delete_key(attributes, "syslog.severity")
-          - delete_key(attributes, "syslog.timestamp")
-          - delete_key(attributes, "syslog.procid") where attributes["syslog.procid"] == "-"
-          - delete_key(attributes, "syslog.msgid") where attributes["syslog.msgid"] == "-"
-          - delete_key(attributes, "container_image")
-          - delete_key(attributes, "app_name")
-          - delete_key(attributes, "app")
-          - delete_key(attributes, "node")
+          - merge_maps(log.attributes, ExtractGrokPatterns(log.body, "(?:%{INT:syslog6587.msglen} )?<%{POSINT:syslog.pri}>(%{SPACE})?(?:%{NONNEGINT:syslog5424.ver} )?(?:%{SYSLOGTIMESTAMP:syslog.timestamp}|%{TIMESTAMP_ISO8601:syslog.timestamp}) %{DATA:syslog.hostname} %{DATA:syslog.program}(?:\\[%{POSINT:syslog.pid}\\])?(:)? %{GREEDYDATA:syslog.message}", true), "upsert") where IsString(log.body)
+          - 'merge_maps(log.attributes, ExtractGrokPatterns(log.attributes["syslog.message"], "(?:%{DATA:syslog.procid}|\\-) (?:%{DATA:syslog.msgid}|\\-)? %{GREEDYDATA:syslog.message}", true), "upsert") where log.attributes["syslog5424.ver"] == "1"'
+          - merge_maps(log.attributes, ExtractGrokPatterns(log.attributes["syslog.message"], "(?P<syslog_sd>\\[[^\\]\\\\]*@[^\\]\\\\]*(?:\\\\.[^\\]\\\\]*)*\\])(?P<syslog_meta>\\[meta[^\\]]*\\])?\\s+%{GREEDYDATA:syslog.message}"), "upsert")
+          - 'merge_maps(log.attributes, ExtractGrokPatterns(log.attributes["syslog_sd"], "\\[%{DATA:syslog.sd_id} (?<syslog_sd_params_raw>([^\\]\\\\]|\\\\.)+)\\]", true), "upsert") where IsString(log.attributes["syslog_sd"])'
+          - merge_maps(log.attributes, ParseKeyValue(log.attributes["syslog_sd_params_raw"]), "upsert") where IsString(log.attributes["syslog_sd_params_raw"])
+          - 'merge_maps(log.attributes, ExtractGrokPatterns(log.attributes["syslog_meta"], "\\[%{DATA:syslog.meta_id} (?<syslog_meta_params_raw>([^\\]\\\\]|\\\\.)+)\\]", true), "upsert") where IsString(log.attributes["syslog_meta"])'
+          - merge_maps(log.attributes, ParseKeyValue(log.attributes["syslog_meta_params_raw"]), "upsert") where IsString(log.attributes["syslog_meta_params_raw"])
+          - set(log.attributes["syslog.message"], Trim(log.attributes["syslog.message"], "﻿"))
+          - set(log.attributes["syslog.facility"], Int(log.attributes["syslog.pri"]) / 8) where IsString(log.attributes["syslog.pri"])
+          - set(log.attributes["syslog.severity"], Int(log.attributes["syslog.pri"]) - (log.attributes["syslog.facility"] * 8)) where IsString(log.attributes["syslog.pri"])
+          - set(log.severity_text, "FATAL") where log.attributes["syslog.severity"] == 0
+          - set(log.severity_number, 21) where log.attributes["syslog.severity"] == 0
+          - set(log.severity_text, "FATAL") where log.attributes["syslog.severity"] == 1
+          - set(log.severity_number, 21) where log.attributes["syslog.severity"] == 1
+          - set(log.severity_text, "FATAL") where log.attributes["syslog.severity"] == 2
+          - set(log.severity_number, 21) where log.attributes["syslog.severity"] == 2
+          - set(log.severity_text, "ERROR") where log.attributes["syslog.severity"] == 3
+          - set(log.severity_number, 17) where log.attributes["syslog.severity"] == 3
+          - set(log.severity_text, "WARN") where log.attributes["syslog.severity"] == 4
+          - set(log.severity_number, 13) where log.attributes["syslog.severity"] == 4
+          - set(log.severity_text, "INFO") where log.attributes["syslog.severity"] == 5
+          - set(log.severity_number, 9) where log.attributes["syslog.severity"] == 5
+          - set(log.severity_text, "INFO") where log.attributes["syslog.severity"] == 6
+          - set(log.severity_number, 9) where log.attributes["syslog.severity"] == 6
+          - set(log.severity_text, "DEBUG") where log.attributes["syslog.severity"] == 7
+          - set(log.severity_number, 5) where log.attributes["syslog.severity"] == 7
+          - replace_pattern(log.attributes["syslog.timestamp"], "(.+)([\\+\\-])(\\d+):(\\d+)$", "$$1$$2$$3$$4")
+          - set(log.time, Time(log.attributes["syslog.timestamp"], "%Y-%m-%dT%H:%M:%S.%sZ")) where IsMatch(log.attributes["syslog.timestamp"], "^\\d+\\-.+Z$")
+          - set(log.time, Time(log.attributes["syslog.timestamp"], "%Y-%m-%dT%H:%M:%S.%s%z")) where IsMatch(log.attributes["syslog.timestamp"], "^\\d+\\-.+\\d$")
+          - set(log.time, Time(log.attributes["syslog.timestamp"], "%b %e %H:%M:%S")) where IsMatch(log.attributes["syslog.timestamp"], "^[a-zA-Z]+ .+\\d$")
+          - set(log.body, log.attributes["syslog.message"])
+          - set(resource.attributes["container.image.name"], log.attributes["container_image"]) where IsString(log.attributes["container_image"])
+          - set(resource.attributes["service.name"], log.attributes["app_name"]) where IsString(log.attributes["app_name"])
+          - set(resource.attributes["service.name"], log.attributes["app"]) where IsString(log.attributes["app"])
+          - set(resource.attributes["k8s.node.name"], log.attributes["node"]) where IsString(log.attributes["node"])
+          - set(resource.attributes["service.name"], log.attributes["syslog.program"]) where IsString(log.attributes["syslog.program"])
+          - delete_key(log.attributes, "syslog.message")
+          - delete_key(log.attributes, "syslog_sd")
+          - delete_key(log.attributes, "syslog_sd_params_raw")
+          - delete_key(log.attributes, "syslog_meta")
+          - delete_key(log.attributes, "syslog_meta_params_raw")
+          - delete_key(log.attributes, "syslog.meta_id")
+          - delete_key(log.attributes, "syslog.pri")
+          - delete_key(log.attributes, "syslog.severity")
+          - delete_key(log.attributes, "syslog.timestamp")
+          - delete_key(log.attributes, "syslog.procid") where log.attributes["syslog.procid"] == "-"
+          - delete_key(log.attributes, "syslog.msgid") where log.attributes["syslog.msgid"] == "-"
+          - delete_key(log.attributes, "container_image")
+          - delete_key(log.attributes, "app_name")
+          - delete_key(log.attributes, "app")
+          - delete_key(log.attributes, "node")
       filter/syslog:
         error_mode: ignore
         logs:
           log_record:
-          - attributes["syslog.program"] == "otelcol-contrib"
-          - attributes["syslog.program"] == "audisp-syslog"
-          - attributes["syslog.program"] == "CRON"
-          - attributes["syslog.program"] == "systemd"
+          - log.attributes["syslog.program"] == "otelcol-contrib"
+          - log.attributes["syslog.program"] == "audisp-syslog"
+          - log.attributes["syslog.program"] == "CRON"
+          - log.attributes["syslog.program"] == "systemd"
     exporters:
       otlphttp/grafana_cloud:
         endpoint: https://otlp-gateway-prod-us-central-0.grafana.net/otlp
