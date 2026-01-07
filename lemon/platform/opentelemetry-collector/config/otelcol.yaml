@@ -286,11 +286,6 @@ spec:
           - set(log.time, Time(log.attributes["syslog.timestamp"], "%Y-%m-%dT%H:%M:%S.%s%z")) where IsMatch(log.attributes["syslog.timestamp"], "^\\d+\\-.+\\d$")
           - set(log.time, Time(log.attributes["syslog.timestamp"], "%b %e %H:%M:%S")) where IsMatch(log.attributes["syslog.timestamp"], "^[a-zA-Z]+ .+\\d$")
           - set(log.body, log.attributes["syslog.message"])
-          - set(resource.attributes["container.image.name"], log.attributes["container_image"]) where IsString(log.attributes["container_image"])
-          - set(resource.attributes["service.name"], log.attributes["app_name"]) where IsString(log.attributes["app_name"])
-          - set(resource.attributes["service.name"], log.attributes["app"]) where IsString(log.attributes["app"])
-          - set(resource.attributes["k8s.node.name"], log.attributes["node"]) where IsString(log.attributes["node"])
-          - set(resource.attributes["service.name"], log.attributes["syslog.program"]) where IsString(log.attributes["syslog.program"])
           - delete_key(log.attributes, "syslog.message")
           - delete_key(log.attributes, "syslog_sd")
           - delete_key(log.attributes, "syslog_sd_params_raw")
@@ -302,10 +297,7 @@ spec:
           - delete_key(log.attributes, "syslog.timestamp")
           - delete_key(log.attributes, "syslog.procid") where log.attributes["syslog.procid"] == "-"
           - delete_key(log.attributes, "syslog.msgid") where log.attributes["syslog.msgid"] == "-"
-          - delete_key(log.attributes, "container_image")
-          - delete_key(log.attributes, "app_name")
-          - delete_key(log.attributes, "app")
-          - delete_key(log.attributes, "node")
+          - delete_key(log.attributes, "syslog6587.msglen")
       filter/syslog:
         error_mode: ignore
         logs:
@@ -314,6 +306,31 @@ spec:
           - log.attributes["syslog.program"] == "audisp-syslog"
           - log.attributes["syslog.program"] == "CRON"
           - log.attributes["syslog.program"] == "systemd"
+      groupbyattrs/syslog:
+        keys:
+        - syslog.program
+        - syslog.hostname
+        - container_image
+        - app_name
+        - app
+        - node
+      transform/syslog-resource:
+        error_mode: ignore
+        log_statements:
+        - context: log
+          statements:
+          - set(resource.attributes["service.name"], resource.attributes["syslog.program"]) where IsString(resource.attributes["syslog.program"])
+          - set(resource.attributes["client.address"], resource.attributes["syslog.hostname"]) where IsString(resource.attributes["syslog.hostname"])
+          - set(resource.attributes["container.image.name"], resource.attributes["container_image"]) where IsString(resource.attributes["container_image"])
+          - set(resource.attributes["service.name"], resource.attributes["app_name"]) where IsString(resource.attributes["app_name"])
+          - set(resource.attributes["service.name"], resource.attributes["app"]) where IsString(resource.attributes["app"])
+          - set(resource.attributes["k8s.node.name"], resource.attributes["node"]) where IsString(resource.attributes["node"])
+          - delete_key(resource.attributes, "syslog.program")
+          - delete_key(resource.attributes, "syslog.hostname")
+          - delete_key(resource.attributes, "container_image")
+          - delete_key(resource.attributes, "app_name")
+          - delete_key(resource.attributes, "app")
+          - delete_key(resource.attributes, "node")
     exporters:
       otlphttp/grafana_cloud:
         endpoint: https://otlp-gateway-prod-us-central-0.grafana.net/otlp
@@ -415,6 +432,8 @@ spec:
           - resource
           - transform/syslog
           - filter/syslog
+          - groupbyattrs/syslog
+          - transform/syslog-resource
           exporters:
           - otlphttp/grafana_cloud
           - otlphttp/otlp_sink
