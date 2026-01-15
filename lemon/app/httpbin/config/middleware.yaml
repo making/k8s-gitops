@@ -1,27 +1,13 @@
 #@ load("@ytt:data", "data")
-apiVersion: traefik.io/v1alpha1
+apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: oidc-auth
-  namespace: default
+  name: api-token
 spec:
   plugin:
-    oidc-auth:
-      LogLevel: WARN
-      Secret: #@ data.values.secret
-      forceHTTPS: "true"
-      Provider:
-        ClientId: #@ data.values.keycloak.client_id
-        ClientSecret: #@ data.values.keycloak.client_secret
-        Url: #@ data.values.keycloak.provider_url
-      Headers:
-      - Name: "Authorization"
-        Value: "Bearer {{ .idToken }}"
-      - Name: "X-Oidc-Username"
-        Value: "{{ .claims.preferred_username }}"
-      - Name: "X-Oidc-Email"
-        Value: "{{ .claims.email }}"
-      Scopes:
-      - openid
-      - profile
-      - email
+    api-token:
+      bearerHeader: true
+      bearerHeaderName: Authorization
+      tokens:
+      - foo
+      - bar
