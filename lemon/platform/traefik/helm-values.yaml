@@ -56,6 +56,9 @@ experimental:
     oidc-auth:
       moduleName: "github.com/sevensolutions/traefik-oidc-auth"
       version: "v0.17.0"
+    api-token:
+      moduleName: "github.com/Aetherinox/traefik-api-token-middleware"
+      version: "v0.1.4"
   otlpLogs: true
 ingressRoute:
   dashboard:
