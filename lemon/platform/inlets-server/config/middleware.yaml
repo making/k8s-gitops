@@ -1,0 +1,13 @@
+#@ load("@ytt:data", "data")
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: api-token
+  namespace: inlets
+spec:
+  plugin:
+    api-token:
+      bearerHeader: true
+      bearerHeaderName: Authorization
+      removeHeadersOnSuccess: false
+      tokens: #@ data.values.api_tokens
