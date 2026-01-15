@@ -1,4 +1,4 @@
-#@ for name in ['synology', 'inlets.gw', 'openai.synology', 'anthropic.synology', 's3.synology', 'otlp-sink.synology', 'lognroll.synology', 'registry.synology', 'registry-ui.synology']:
+#@ for name in ['synology', 'inlets.gw', 'llama-server.synology', 's3.synology', 'otlp-sink.synology', 'lognroll.synology', 'registry.synology', 'registry-ui.synology']:
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -16,7 +16,7 @@ metadata:
     #@ if name == 'inlets.gw' or name == 'registry-ui.synology':
     traefik.ingress.kubernetes.io/router.middlewares: traefik-allow-home@kubernetescrd
     #@ end
-    #@ if name == 'openai.synology' or name == 'anthropic.synology':
+    #@ if name == 'llama-server.synology':
     traefik.ingress.kubernetes.io/router.middlewares: inlets-api-token@kubernetescrd
     #@ end
 spec:
