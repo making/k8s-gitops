@@ -9,6 +9,7 @@ spec:
     api-token:
       bearerHeader: true
       bearerHeaderName: Authorization
+      removeHeadersOnSuccess: false
       tokens:
       - foo
       - bar
