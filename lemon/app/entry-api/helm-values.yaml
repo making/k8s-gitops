@@ -61,6 +61,8 @@ deployment:
         secretKeyRef:
           key: users-2
           name: entry-api-config
+    blog.github.direct-update:
+      value: "true"
     blog.github.content-owner:
       value: making
     blog.github.content-repo:
