@@ -105,6 +105,21 @@ deployment:
         secretKeyRef:
           key: github-webhook-secret-note
           name: entry-api-config
+    spring.ai.openai.base-url:
+      valueFrom:
+        secretKeyRef:
+          key: openai-url
+          name: entry-api-config
+    spring.ai.openai.chat.options.model:
+      valueFrom:
+        secretKeyRef:
+          key: openai-chat-model
+          name: entry-api-config
+    spring.ai.openai.api-key:
+      valueFrom:
+        secretKeyRef:
+          key: openai-apikey
+          name: entry-api-config
     management.observations.enable.spring.security:
       value: "false"
     management.tracing.export.otlp.enabled:
