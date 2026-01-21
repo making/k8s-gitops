@@ -120,6 +120,8 @@ deployment:
         secretKeyRef:
           key: openai-apikey
           name: entry-api-config
+    spring.cloud.aws.region.static:
+      value: us-east-1
     management.observations.enable.spring.security:
       value: "false"
     management.tracing.export.otlp.enabled:
