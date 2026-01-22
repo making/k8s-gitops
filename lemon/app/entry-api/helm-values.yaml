@@ -120,8 +120,32 @@ deployment:
         secretKeyRef:
           key: openai-apikey
           name: entry-api-config
-    spring.cloud.aws.region.static:
+    spring.cloud.aws.credentials.access-key:
+      valueFrom:
+        secretKeyRef:
+          key: s3-access-key
+          name: entry-api-config
+    spring.cloud.aws.credentials.secret-key:
+      valueFrom:
+        secretKeyRef:
+          key: s3-secret-key
+          name: entry-api-config
+    spring.cloud.aws.s3.endpoint:
+      valueFrom:
+        secretKeyRef:
+          key: s3-url
+          name: entry-api-config
+    spring.cloud.aws.s3.path-style-access-enabled:
+      value: "true"
+    spring.cloud.aws.s3.region:
       value: us-east-1
+    blog.s3.create-bucket:
+      value: "true"
+    blog.s3.backet-name:
+      valueFrom:
+        secretKeyRef:
+          key: s3-bucket-name
+          name: entry-api-config
     management.observations.enable.spring.security:
       value: "false"
     management.tracing.export.otlp.enabled:
