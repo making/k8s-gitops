@@ -19,8 +19,8 @@ data:
       mode    tcp
       option  dontlognull
       timeout connect 5s
-      timeout client  50s
-      timeout server  50s
+      timeout client  600s
+      timeout server  600s
 
     # LDAP routing (389)
     frontend ldap_frontend
