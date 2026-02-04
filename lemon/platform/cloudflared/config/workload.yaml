@@ -41,7 +41,7 @@ spec:
         - #@ data.values.public_hosts.mc_vanilla
         - --url
         - 0.0.0.0:35565
-        image: cloudflare/cloudflared:latest
+        image: docker.io/cloudflare/cloudflared:latest
         name: cloudflared-mc-vanilla
         ports:
         - name: mc-vanilla
