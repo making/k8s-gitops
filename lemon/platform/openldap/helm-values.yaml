@@ -31,7 +31,7 @@ customLdifFiles:
     ou: groups
 phpldapadmin:
   image:
-    repository: docker.io/library/osixia/phpldapadmin
+    repository: docker.io/osixia/phpldapadmin
   ingress:
     enabled: true
     annotations:

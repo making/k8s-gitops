@@ -20,7 +20,7 @@ spec:
       initContainers:
       #@overlay/match by="name"
       - name: init-chmod-secret
-        image: docker.io/library/nicolaka/netshoot:v0.15
+        image: docker.io/nicolaka/netshoot:v0.15
         command:
         #@overlay/match by=overlay.index(2)
         #@overlay/replace
