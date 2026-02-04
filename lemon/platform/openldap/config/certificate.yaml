@@ -17,13 +17,13 @@ spec:
 spec:
   template:
     spec:
-      containers:
-      #@overlay/match by="name"
-      - name: openldap-stack-ha
-        args:
-        #@overlay/match by=overlay.index(1)
-        #@overlay/replace
-        - debug
+      #! containers:
+      #! #@overlay/match by="name"
+      #! - name: openldap-stack-ha
+      #!   args:
+      #!   #@overlay/match by=overlay.index(1)
+      #!   #@overlay/replace
+      #!   - debug
       initContainers:
       #@overlay/match by="name"
       - name: init-chmod-secret
