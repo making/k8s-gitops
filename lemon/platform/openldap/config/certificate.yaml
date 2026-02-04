@@ -27,4 +27,4 @@ spec:
         - |
           set -ex
           cp -Lr /tmp-certs/* /certs
-          curl -svk https://letsencrypt.org/certs/lets-encrypt-r3.pem > /certs/ca.crt
+          curl -svk https://letsencrypt.org/certs/lets-encrypt-r4.pem > /certs/ca.crt
