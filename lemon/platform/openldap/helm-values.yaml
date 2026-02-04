@@ -20,8 +20,6 @@ env:
   LDAP_DOMAIN: ik.am
   LDAP_ORGANISATION: IK.AM
   LDAP_READONLY_USER: "true"
-  CONTAINER_LOG_LEVEL: "1"
-  LDAP_LOG_LEVEL: "256"
 ltb-passwd:
   enabled: false
 customLdifFiles:
