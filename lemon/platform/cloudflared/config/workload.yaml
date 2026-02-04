@@ -29,7 +29,7 @@ spec:
         - #@ data.values.public_hosts.minecraft
         - --url
         - 0.0.0.0:25565
-        image: cloudflare/cloudflared:latest
+        image: docker.io/cloudflare/cloudflared:latest
         name: cloudflared-minecraft
         ports:
         - name: minecraft
