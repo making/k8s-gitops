@@ -367,6 +367,7 @@ spec:
         endpoint: #@ data.values.access_monitor.endpoint
         headers:
           authorization: #@ "Basic " + base64.encode(data.values.access_monitor.username + ":" + data.values.access_monitor.password)
+        compression: none
       otlphttp/otlp_sink:
         endpoint: #@ data.values.otlp_sink.endpoint
         headers:
