@@ -1,4 +1,4 @@
-#@ for name in ['synology', 'inlets.gw', 'llama-server.synology', 's3.synology', 'otlp-sink.synology', 'lognroll.synology', 'registry.synology', 'registry-ui.synology']:
+#@ for name in ['synology', 'inlets.gw', 'llama-server.synology', 's3.synology', 'otlp-sink.synology', 'lognroll.synology', 'registry.synology', 'registry-ui.synology', 'access-monitor.synology']:
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -10,7 +10,7 @@ metadata:
     #@ if name != 'synology':
     traefik.ingress.kubernetes.io/router.observability.tracing: "false"
     #@ end
-    #@ if name == 'otlp-sink.synology' or name == 'registry-ui.synology' or name == 'lognroll.synology':
+    #@ if name == 'otlp-sink.synology' or name == 'registry-ui.synology' or name == 'lognroll.synology' or name == 'access-monitor.synology':
     traefik.ingress.kubernetes.io/router.observability.accesslogs: "false"
     #@ end
     #@ if name == 'inlets.gw' or name == 'registry-ui.synology':
