@@ -249,6 +249,27 @@ spec:
         logs:
           log_record:
           - not (IsMatch(attributes["request"]["path"], "auth/.*") or IsMatch(attributes["request"]["path"], "sys/auth"))
+      filter/access_monitor:
+        error_mode: ignore
+        logs:
+          log_record:
+          - resource.attributes["service.name"] != "traefik"
+      transform/access_monitor:
+        log_statements:
+        - context: log
+          statements:
+          - set(body, "")
+          - keep_keys(attributes, [
+            "RequestHost", "RequestPath", "RequestMethod",
+            "DownstreamStatus", "Duration", "StartUTC",
+            "ClientHost", "RequestScheme", "RequestProtocol",
+            "ServiceName", "RouterName", "OriginStatus",
+            "OriginDuration", "Overhead", "TraceId", "SpanId",
+            "RetryAttempts"
+            ])
+        - context: resource
+          statements:
+          - keep_keys(attributes, [])
       transform/syslog:
         error_mode: ignore
         log_statements:
@@ -342,6 +363,10 @@ spec:
         headers:
           authorization: #@ "Bearer " + data.values.lognroll.token
         compression: gzip
+      otlphttp/access_monitor:
+        endpoint: #@ data.values.access_monitor.endpoint
+        headers:
+          authorization: #@ "Basic " + base64.encode(data.values.access_monitor.username + ":" + data.values.access_monitor.password)
       otlphttp/otlp_sink:
         endpoint: #@ data.values.otlp_sink.endpoint
         headers:
@@ -423,6 +448,15 @@ spec:
           - otlphttp/grafana_cloud
           - otlphttp/otlp_sink
           - otlphttp/betterstack
+        logs/access_monitor:
+          receivers:
+          - otlp
+          processors:
+          - batch
+          - filter/access_monitor
+          - transform/access_monitor
+          exporters:
+          - otlphttp/access_monitor
         logs/syslog:
           receivers:
           - tcplog/syslog
