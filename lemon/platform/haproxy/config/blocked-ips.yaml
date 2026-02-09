@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: haproxy-blocked-ips
-  namespace: haproxy
+  name: blocked-ips
   annotations:
     kapp.k14s.io/versioned: ""
 data:
@@ -921,6 +920,7 @@ data:
     2.59.152.0/24
     20.14.73.0/24
     20.168.113.0/24
+    20.188.57.25/32
     20.189.70.0/24
     20.214.0.0/16
     20.239.59.0/24
