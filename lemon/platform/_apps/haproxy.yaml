@@ -12,7 +12,7 @@ spec:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
       subPath: lemon/platform/haproxy
-  syncPeriod: 10m
+  syncPeriod: 120m
   template:
   - sops:
       age:
