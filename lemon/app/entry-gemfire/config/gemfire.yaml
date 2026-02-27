@@ -22,7 +22,7 @@ spec:
       limits:
         memory: 1Gi
   servers:
-    replicas: 2
+    replicas: 1
     resources:
       requests:
         memory: 1Gi
