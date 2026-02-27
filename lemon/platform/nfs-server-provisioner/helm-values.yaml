@@ -2,3 +2,8 @@ persistence:
   enabled: true
   size: 50Gi
   storageClass: oci-bv
+storageClass:
+  mountOptions:
+  - vers=4
+  - retrans=2
+  - timeo=30
