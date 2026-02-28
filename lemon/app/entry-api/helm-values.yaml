@@ -22,7 +22,7 @@ deployment:
     BPL_JVM_THREAD_COUNT:
       value: "28"
     gemfire.locators:
-      value: entry-gemfire-locator-0.entry-gemfire-locator.blog.svc.cluster.local:10334
+      value: entry-gemfire-locator-0.entry-gemfire-locator.blog.svc.cluster.local:10334,entry-gemfire-locator-1.entry-gemfire-locator.blog.svc.cluster.local:10334
     gemfire.properties.ssl-enabled-components:
       value: all
     gemfire.properties.ssl-endpoint-identification-enabled:
