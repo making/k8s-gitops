@@ -15,7 +15,7 @@ spec:
     storageClassName: nfs
     deleteOnShutdown: true
   locators:
-    replicas: 1
+    replicas: 2
     resources:
       requests:
         memory: 1Gi
