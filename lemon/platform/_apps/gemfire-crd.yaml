@@ -14,7 +14,7 @@ spec:
   fetch:
   - helmChart:
       name: gemfire-crd
-      version: 2.5.0
+      version: 2.6.1
       repository:
         url: oci://registry.maki.lol/tanzu-gemfire-for-kubernetes
         secretRef:
