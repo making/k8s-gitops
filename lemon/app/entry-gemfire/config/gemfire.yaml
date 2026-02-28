@@ -4,7 +4,7 @@ metadata:
   name: entry-gemfire
   namespace: blog
 spec:
-  image: registry.maki.lol/pivotal-gemfire/vmware-gemfire:10.1.5
+  image: registry.maki.lol/pivotal-gemfire/vmware-gemfire:10.2.1
   imagePullSecrets:
   - name: regsecret
   clusterConfiguration:
