@@ -30,5 +30,5 @@ ingress:
       pathType: Prefix
   tls:
   - hosts:
-    - httpbin.lan.ik.am
+    - httpbin.raspberry.ik.am
     secretName: httpbin-tls
