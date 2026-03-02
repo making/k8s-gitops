@@ -1,0 +1,151 @@
+---
+applicationName: access-monitor
+deployment:
+  replicas: 1
+  image:
+    repository: ghcr.io/categolj/access-monitor
+    tag: jvm
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: access-monitor
+  additionalPodAnnotations:
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
+  env:
+    JAVA_TOOL_OPTIONS:
+      value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=32M -XX:MaxMetaspaceSize=128M -Xss512k -Dfile.encoding=UTF-8 -Duser.country=JP -Duser.language=ja -Duser.timezone=Asia/Tokyo
+    BPL_JVM_THREAD_COUNT:
+      value: "28"
+    BPL_SPRING_CLOUD_BINDINGS_DISABLED:
+      value: "true"
+    server.port:
+      value: "8080"
+    access-monitor.blacklist.github.enabled:
+      value: "true"
+    access-monitor.blacklist.github.access-token:
+      valueFrom:
+        secretKeyRef:
+          name: access-monitor-config
+          key: github-access-token
+    access-monitor.blacklist.threshold:
+      value: "4"
+    access-monitor.blacklist.allowed-ips:
+      valueFrom:
+        secretKeyRef:
+          name: access-monitor-config
+          key: allowed-ips
+    spring.rabbitmq.addresses:
+      value: amqp://access-monitor-rabbitmq.access-monitor.svc:5672
+    spring.rabbitmq.username:
+      valueFrom:
+        secretKeyRef:
+          name: access-monitor-rabbitmq-default-user
+          key: username
+    spring.rabbitmq.password:
+      valueFrom:
+        secretKeyRef:
+          name: access-monitor-rabbitmq-default-user
+          key: password
+    spring.data.redis.host:
+      value: access-monitor-valkey-headless.access-monitor.svc
+    spring.data.redis.port:
+      value: "6379"
+    spring.data.redis.password:
+      valueFrom:
+        secretKeyRef:
+          name: valkey-secret
+          key: valkey-password
+    spring.security.user.name:
+      valueFrom:
+        secretKeyRef:
+          name: access-monitor-admin-user
+          key: username
+    spring.security.user.password:
+      valueFrom:
+        secretKeyRef:
+          name: access-monitor-admin-user
+          key: password
+    management.otlp.logging.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
+    management.otlp.tracing.endpoint:
+      value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+    management.otlp.tracing.export.enabled:
+      value: "true"
+    management.opentelemetry.resource-attributes.k8s.pod.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    management.opentelemetry.resource-attributes.k8s.namespace.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    management.opentelemetry.resource-attributes.k8s.node.name:
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    management.opentelemetry.resource-attributes.host.ip:
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+    logging.structured.format.console:
+      value: ecs
+    info.env.hostname:
+      value: ${HOSTNAME:}
+  resources:
+    limits:
+      cpu:
+      memory: 512Mi
+    requests:
+      cpu:
+      memory: 512Mi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+      scheme: HTTP
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+      scheme: HTTP
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: access-monitor
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+  hosts:
+  - host: access-monitor.lan.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - access-monitor.lan.ik.am
+    secretName: access-monitor-tls
+---
