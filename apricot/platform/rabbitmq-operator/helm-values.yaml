@@ -1,0 +1,18 @@
+rabbitmqImage:
+  pullSecrets:
+  - name: regsecret
+credentialUpdaterImage:
+  pullSecrets:
+  - name: regsecret
+clusterOperator:
+  image:
+    pullSecrets:
+    - name: regsecret
+msgTopologyOperator:
+  image:
+    pullSecrets:
+    - name: regsecret
+auditLogger:
+  image:
+    pullSecrets:
+    - name: regsecret
