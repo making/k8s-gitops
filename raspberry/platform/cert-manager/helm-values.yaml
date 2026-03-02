@@ -1,0 +1,8 @@
+installCRDs: true
+metrics:
+  enabled: false
+global:
+  imagePullSecrets:
+  - regsecret
+  security:
+    allowInsecureImages: true
