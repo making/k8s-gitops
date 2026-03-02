@@ -10,6 +10,7 @@ spec:
     aof:
       fsyncPolicy: "everysec"
     keepAfterDelete: true
+    storageSize: "30Gi"
   kubernetesConfig:
     imagePullSecrets:
     - name: regsecret
