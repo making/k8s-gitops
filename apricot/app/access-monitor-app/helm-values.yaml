@@ -11,7 +11,7 @@ deployment:
     containerPort: 8080
     protocol: TCP
   podLabels:
-    app: access-monitor
+    app: access-monitor-app
   additionalPodAnnotations:
     prometheus.io/path: /actuator/prometheus
     prometheus.io/port: "8080"
@@ -128,7 +128,7 @@ deployment:
       - podAffinityTerm:
           labelSelector:
             matchLabels:
-              app.kubernetes.io/part-of: access-monitor
+              app.kubernetes.io/part-of: access-monitor-app
           topologyKey: kubernetes.io/hostname
         weight: 1
 service:
