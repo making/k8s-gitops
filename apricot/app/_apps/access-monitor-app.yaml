@@ -31,7 +31,7 @@ spec:
         privateKeysSecretRef:
           name: age-key
   - helmTemplate:
-      name: access-monitor
+      name: access-monitor-app
       namespace: access-monitor
       path: "0"
       valuesFrom:

@@ -1,5 +1,5 @@
 ---
-applicationName: access-monitor
+applicationName: access-monitor-app
 deployment:
   replicas: 1
   image:
