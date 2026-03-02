@@ -1,6 +1,0 @@
-installCRDs: true
-controller:
-  extraArgs:
-  - --enable-gateway-api
-metrics:
-  enabled: false
