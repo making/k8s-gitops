@@ -6,6 +6,10 @@ metadata:
 spec:
   valkeyVersion:
     name: valkey-7.2.11
+  persistence:
+    aof:
+      fsyncPolicy: "everysec"
+    keepAfterDelete: true
   kubernetesConfig:
     imagePullSecrets:
     - name: regsecret
