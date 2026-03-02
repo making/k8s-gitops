@@ -131,6 +131,8 @@ deployment:
               app.kubernetes.io/part-of: access-monitor
           topologyKey: kubernetes.io/hostname
         weight: 1
+service:
+  type: LoadBalancer
 ingress:
   enabled: true
   ingressClassName: traefik
