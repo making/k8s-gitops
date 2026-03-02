@@ -1,25 +1,23 @@
 applicationName: httpbin
 deployment:
   image:
-    repository: kennethreitz/httpbin
+    repository: ghcr.io/mccutchen/go-httpbin
     tag: latest
     pullPolicy: Always
   ports:
   - name: http
-    containerPort: 80
+    containerPort: 8080
     protocol: TCP
   resources:
     limits:
       cpu:
-      memory: 128Mi
+      memory: 32Mi
     requests:
       cpu:
-      memory: 128Mi
+      memory: 32Mi
   containerSecurityContext:
     runAsNonRoot: false
     readOnlyRootFilesystem: false
-service:
-  ports: [ { "name": "http","port": 80,"protocol": "TCP","targetPort": 80 } ]
 ingress:
   enabled: true
   annotations:
