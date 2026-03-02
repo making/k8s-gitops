@@ -1,0 +1,14 @@
+apiVersion: data.tanzu.vmware.com/v1
+kind: Valkey
+metadata:
+  name: access-monitor-valkey
+  namespace: access-monitor
+spec:
+  valkeyVersion:
+    name: valkey-7.2.11
+  kubernetesConfig:
+    imagePullSecrets:
+    - name: regsecret
+    valkeySecret:
+      name: valkey-secret
+      key: valkey-password
