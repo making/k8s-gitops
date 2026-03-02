@@ -1,0 +1,21 @@
+imagePullSecretName: regsecret
+operator:
+  image:
+    repository: registry.maki.lol/tanzu-valkey/tanzu-valkey-container/tanzu-valkey-operator
+    tag: 3.3.0
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 0.1
+      memory: 128Mi
+
+instanceRepo: registry.maki.lol/tanzu-valkey/tanzu-valkey-container/tanzu-valkey-instances
+authRepo: registry.maki.lol/tanzu-valkey/tanzu-valkey-container/tanzu-valkey-auth
+persistenceRepo: registry.maki.lol/tanzu-valkey/tanzu-valkey-container/tanzu-valkey-persistence
+commanderRepo: registry.maki.lol/tanzu-valkey/tanzu-valkey-container/tanzu-valkey-commander
+modulesRepo: registry.maki.lol/tanzu-valkey/tanzu-valkey-container/tanzu-valkey-modules
+exporterRepo: registry.maki.lol/tanzu-valkey/tanzu-valkey-container/tanzu-valkey-exporter
+
+enableSecurityContext: true
