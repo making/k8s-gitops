@@ -9,7 +9,7 @@ spec:
   persistence:
     aof:
       fsyncPolicy: "everysec"
-    keepAfterDelete: true
+    keepAfterDelete: false
     storageSize: "30Gi"
   kubernetesConfig:
     imagePullSecrets:
