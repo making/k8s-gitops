@@ -1,5 +1,5 @@
 ```
-kubectl apply -f https://github.com/carvel-dev/kapp-controller/releases/download/v0.59.0/release.yml
+kubectl apply -f https://github.com/carvel-dev/kapp-controller/releases/download/v0.59.2/release.yml
 ```
 
 ```
