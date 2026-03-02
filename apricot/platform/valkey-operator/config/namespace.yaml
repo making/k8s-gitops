@@ -3,10 +3,10 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: valkey
+  name: valkey-system
 
 #@overlay/match by=overlay.all, expects="1+"
 ---
 metadata:
   #@overlay/match missing_ok=True
-  namespace: valkey
+  namespace: valkey-system
