@@ -9,4 +9,4 @@ spec:
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
-  secretName: apricot-ik-am
+  secretName: raspberry-ik-am
