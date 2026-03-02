@@ -61,15 +61,12 @@ deployment:
           name: valkey-secret
           key: valkey-password
     spring.security.user.name:
-      valueFrom:
-        secretKeyRef:
-          name: access-monitor-admin-user
-          key: username
+      value: admin
     spring.security.user.password:
       valueFrom:
         secretKeyRef:
-          name: access-monitor-admin-user
-          key: password
+          name: access-monitor-config
+          key: admin-password
     management.otlp.logging.endpoint:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
     management.otlp.tracing.endpoint:
