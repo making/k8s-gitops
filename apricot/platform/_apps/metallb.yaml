@@ -9,7 +9,7 @@ spec:
   serviceAccountName: kapp
   fetch:
   - http:
-      url: https://raw.githubusercontent.com/metallb/metallb/v0.15.2/config/manifests/metallb-native.yaml
+      url: https://raw.githubusercontent.com/metallb/metallb/v0.15.3/config/manifests/metallb-native.yaml
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
