@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/part-of: grafana
 spec:
-  version: "12.3.1"
+  version: "12.4.0"
   client:
     timeout: 5
   service:
@@ -52,7 +52,7 @@ spec:
               secretName: ldap-config
           containers:
           - name: grafana
-            image: registry.maki.lol/bitnamicharts/photon-5/grafana:12.3.1-photon-5-r0
+            image: registry.maki.lol/bitnamicharts/photon-5/grafana:12.4.0-photon-5-r1
             imagePullPolicy: IfNotPresent
             #! env:
             #! - name: GF_INSTALL_PLUGINS
