@@ -1,0 +1,26 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: access-monitor-rabbitmq
+  namespace: access-monitor
+spec:
+  imagePullSecrets:
+  - name: regsecret
+  service:
+    type: LoadBalancer
+    annotations:
+      traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+      traefik.ingress.kubernetes.io/service.sticky.cookie.name: X-Traefik-Session-Affinity
+  replicas: 3
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - access-monitor-rabbitmq
+          topologyKey: kubernetes.io/hostname
