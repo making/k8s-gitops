@@ -12,3 +12,7 @@ kind: L2Advertisement
 metadata:
   name: empty
   namespace: metallb-system
+spec:
+  interfaces:
+  - wlan0    # 192.168.11.16 (Raspberry Pi)
+  - enP7s7   # 192.168.11.20 (Nvidia)
