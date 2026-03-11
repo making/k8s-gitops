@@ -29,7 +29,7 @@ spec:
           name: age-key
   - helmTemplate:
       name: authorization-server
-      namespace: default
+      namespace: demo
       path: "0"
       valuesFrom:
       - path: 1/helm-values.yaml
