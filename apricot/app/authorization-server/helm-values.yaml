@@ -58,10 +58,6 @@ deployment:
     requests:
       cpu:
       memory: 512Mi
-  persistence:
-    enabled: true
-    mountPVC: true
-    mountPath: /data
   livenessProbe:
     enabled: true
     httpGet:
@@ -93,6 +89,10 @@ deployment:
               app.kubernetes.io/part-of: authorization-server
           topologyKey: kubernetes.io/hostname
         weight: 1
+persistence:
+  enabled: true
+  mountPVC: true
+  mountPath: /data
 ingress:
   enabled: true
   annotations:
