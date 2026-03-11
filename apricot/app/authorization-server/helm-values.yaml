@@ -23,6 +23,28 @@ deployment:
       value: "28"
     server.port:
       value: "8080"
+    spring.security.oauth2.authorizationserver.client.todo-frontend.registration.authorization-grant-types:
+      value: authorization_code,refresh_token
+    spring.security.oauth2.authorizationserver.client.todo-frontend.registration.client-authentication-methods:
+      value: client_secret_basic
+    spring.security.oauth2.authorizationserver.client.todo-frontend.registration.client-id:
+      value: todo-frontend
+    spring.security.oauth2.authorizationserver.client.todo-frontend.registration.client-name:
+      value: Todo List
+    spring.security.oauth2.authorizationserver.client.todo-frontend.registration.client-secret:
+      value: "{noop}secret"
+    spring.security.oauth2.authorizationserver.client.todo-frontend.registration.post-logout-redirect-uris:
+      value: https://todo.lan.ik.am
+    spring.security.oauth2.authorizationserver.client.todo-frontend.registration.redirect-uris:
+      value: https://todo.lan.ik.am/login/oauth2/code/todo-frontend
+    spring.security.oauth2.authorizationserver.client.todo-frontend.registration.scopes:
+      value: openid,todo:read,todo:write
+    spring.security.oauth2.authorizationserver.client.todo-frontend.require-authorization-consent:
+      value: "false"
+    webauthn.rp-id:
+      value: authorization-server.lan.ik.am
+    webauthn.allowed-origins:
+      value: https://authorization-server.lan.ik.am
     logging.structured.format.console:
       value: ecs
     info.env.hostname:
