@@ -72,6 +72,8 @@ deployment:
       path: /actuator/health/readiness
       port: 8080
       scheme: HTTP
+  securityContext:
+    fsGroup: 1002
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
