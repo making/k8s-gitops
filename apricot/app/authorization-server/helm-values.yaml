@@ -1,0 +1,81 @@
+---
+applicationName: authorization-server
+deployment:
+  replicas: 1
+  image:
+    repository: ghcr.io/making/oauth2-sso-demo/authorization
+    tag: jvm
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: authorization-server
+  additionalPodAnnotations:
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
+  env:
+    JAVA_TOOL_OPTIONS:
+      value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=28M -XX:MaxMetaspaceSize=128M -Xss512k -Dfile.encoding=UTF-8 -Duser.country=JP -Duser.language=ja -Duser.timezone=Asia/Tokyo
+    BPL_JVM_THREAD_COUNT:
+      value: "28"
+    server.port:
+      value: "8080"
+    logging.structured.format.console:
+      value: ecs
+    info.env.hostname:
+      value: ${HOSTNAME:}
+  resources:
+    limits:
+      cpu:
+      memory: 512Mi
+    requests:
+      cpu:
+      memory: 512Mi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+      scheme: HTTP
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+      scheme: HTTP
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: authorization-server
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+  hosts:
+  - host: authorization-server.lan.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - authorization-server.lan.ik.am
+    secretName: authorization-server-tls
+---
