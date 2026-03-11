@@ -1,0 +1,93 @@
+---
+applicationName: todo-api
+deployment:
+  replicas: 1
+  strategy:
+    type: Recreate
+  image:
+    repository: ghcr.io/making/oauth2-sso-demo/todo-api
+    tag: jvm
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: todo-api
+  additionalPodAnnotations:
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
+  env:
+    JAVA_TOOL_OPTIONS:
+      value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=28M -XX:MaxMetaspaceSize=128M -Xss512k -Dfile.encoding=UTF-8 -Duser.country=JP -Duser.language=ja -Duser.timezone=Asia/Tokyo
+    BPL_JVM_THREAD_COUNT:
+      value: "28"
+    server.port:
+      value: "8080"
+    spring.datasource.url:
+      value: jdbc:sqlite:/data/authorization.db
+    spring.security.oauth2.resourceserver.jwt.issuer-uri:
+      value: https://authorization-server.lan.ik.am
+    logging.structured.format.console:
+      value: ecs
+    info.env.hostname:
+      value: ${HOSTNAME:}
+  resources:
+    limits:
+      cpu:
+      memory: 512Mi
+    requests:
+      cpu:
+      memory: 512Mi
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+      scheme: HTTP
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+      scheme: HTTP
+  securityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: todo-api
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+persistence:
+  enabled: true
+  mountPVC: true
+  mountPath: /data
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+  hosts:
+  - host: todo-api.lan.ik.am
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - todo-api.lan.ik.am
+    secretName: todo-api-tls
+---
