@@ -2,6 +2,8 @@
 applicationName: authorization-server
 deployment:
   replicas: 1
+  strategy:
+    type: Recreate
   image:
     repository: ghcr.io/making/oauth2-sso-demo/authorization
     tag: jvm
