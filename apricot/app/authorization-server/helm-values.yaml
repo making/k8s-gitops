@@ -23,6 +23,8 @@ deployment:
       value: "28"
     server.port:
       value: "8080"
+    spring.datasource.url:
+      value: jdbc:sqlite:/data/authorization.db
     spring.security.oauth2.authorizationserver.client.todo-frontend.registration.authorization-grant-types:
       value: authorization_code,refresh_token
     spring.security.oauth2.authorizationserver.client.todo-frontend.registration.client-authentication-methods:
@@ -56,6 +58,10 @@ deployment:
     requests:
       cpu:
       memory: 512Mi
+  persistence:
+    enabled: true
+    mountPVC: true
+    mountPath: /data
   livenessProbe:
     enabled: true
     httpGet:
