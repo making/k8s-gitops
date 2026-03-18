@@ -23,6 +23,8 @@ deployment:
       value: "28"
     server.port:
       value: "8080"
+    jdbc.datasource-proxy.type:
+      value: PROXY
     info.env.hostname:
       value: ${HOSTNAME:}
     spring.sql.init.mode:
