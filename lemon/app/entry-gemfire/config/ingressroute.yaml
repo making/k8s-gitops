@@ -49,5 +49,4 @@ metadata:
   namespace: blog
 spec:
   ipAllowList:
-    sourceRange:
-    - #@ data.values.locator.ip_white_list
+    sourceRange: #@ data.values.locator.ip_white_list
