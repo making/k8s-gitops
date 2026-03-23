@@ -2,14 +2,24 @@
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: api-token
+  name: oidc-auth
   namespace: default
 spec:
   plugin:
-    api-token:
-      bearerHeader: true
-      bearerHeaderName: Authorization
-      removeHeadersOnSuccess: false
-      tokens:
-      - foo
-      - bar
+    oidc-auth:
+      LogLevel: WARN
+      Secret: #@ data.values.secret
+      forceHTTPS: "true"
+      Provider:
+        ClientId: #@ data.values.oidc.client_id
+        ClientSecret: #@ data.values.oidc.client_secret
+        Url: #@ data.values.oidc.provider_url
+      Headers:
+      - Name: "Authorization"
+        Value: "Bearer {{ .idToken }}"
+      - Name: "X-Oidc-Username"
+        Value: "{{ .claims.sub }}"
+      Scopes:
+      - openid
+      - profile
+      - email
