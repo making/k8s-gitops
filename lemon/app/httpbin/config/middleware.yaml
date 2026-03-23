@@ -8,7 +8,7 @@ spec:
   plugin:
     oidc-auth:
       LogLevel: WARN
-      Secret: #@ data.values.secret
+      #! Secret: #@ data.values.secret
       forceHTTPS: "true"
       Provider:
         ClientId: #@ data.values.oidc.client_id
