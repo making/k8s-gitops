@@ -48,5 +48,6 @@ metadata:
   name: entry-gemfire-locator-auth
   namespace: blog
 spec:
-  ipWhiteList:
-    sourceRange: #@ data.values.locator.ip_white_list
+  ipAllowList:
+    sourceRange:
+    - #@ data.values.locator.ip_white_list
