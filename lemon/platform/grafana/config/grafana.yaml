@@ -1,3 +1,4 @@
+#@ load("@ytt:data", "data")
 apiVersion: grafana.integreatly.org/v1beta1
 kind: Grafana
 metadata:
@@ -54,7 +55,17 @@ spec:
           - name: grafana
             image: registry.maki.lol/bitnamicharts/photon-5/grafana:12.4.0-photon-5-r1
             imagePullPolicy: IfNotPresent
-            #! env:
+            env:
+            - name: AUTH_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-oauth
+                  key: client-id
+            - name: AUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-oauth
+                  key: client-secret
             #! - name: GF_INSTALL_PLUGINS
             #!   value: https://github.com/motherduckdb/grafana-duckdb-datasource/releases/download/0.1.0/motherduck-duckdb-datasource-0.1.0.zip;motherduck-duckdb-datasource
             securityContext:
@@ -122,6 +133,21 @@ spec:
     server:
       root_url: |-
         http://localhost:3000
+    auth.generic_oauth:
+      enabled: "true"
+      name: "Maki ID"
+      allow_sign_up: "false"
+      client_id: ${AUTH_CLIENT_ID}
+      client_secret: ${AUTH_CLIENT_SECRET}
+      scopes: "openid email profile groups"
+      email_attribute_path: email
+      login_attribute_path: preferred_username
+      name_attribute_path: preferred_username
+      groups_attribute_path: groups
+      auth_url: #@ data.values.oidc.auth_url
+      token_url: #@ data.values.oidc.token_url
+      api_url: #@ data.values.oidc.api_url
+      role_attribute_path: "contains(groups[*], 'administrators') && 'Admin' || contains(groups[*], 'grafana-editor') && 'Editor' || 'Viewer'"
   jsonnet:
     libraryLabelSelector:
       matchLabels:

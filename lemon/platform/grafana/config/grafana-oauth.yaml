@@ -1,0 +1,9 @@
+#@ load("@ytt:data", "data")
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-oauth
+  namespace: grafana
+stringData:
+  client-id: #@ data.values.oidc.client_id
+  client-secret: #@ data.values.oidc.client_secret
