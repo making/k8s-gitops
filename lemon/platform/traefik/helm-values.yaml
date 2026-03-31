@@ -25,7 +25,6 @@ ports:
         readTimeout: 600s
         writeTimeout: 600s
         idleTimeout: 600s
-    middlewares: [ ]
 logs:
   general:
     format: json
