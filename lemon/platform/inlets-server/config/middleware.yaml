@@ -11,3 +11,27 @@ spec:
       bearerHeaderName: Authorization
       removeHeadersOnSuccess: false
       tokens: #@ data.values.api_tokens
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oidc-auth
+  namespace: inlets
+spec:
+  plugin:
+    oidc-auth:
+      LogLevel: WARN
+      forceHTTPS: "true"
+      Provider:
+        ClientId: #@ data.values.oidc.client_id
+        ClientSecret: #@ data.values.oidc.client_secret
+        Url: #@ data.values.oidc.provider_url
+        UsePkce: true
+      Headers:
+      - Name: "Authorization"
+        Value: "Bearer {{ .idToken }}"
+      Scopes:
+      - openid
+      - profile
+      - groups
+      - email
