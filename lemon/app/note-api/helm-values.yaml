@@ -112,6 +112,8 @@ deployment:
       value: "240000"
     spring.datasource.hikari.validation-timeout:
       value: "2000"
+    spring.lifecycle.timeout-per-shutdown-phase:
+      value: "30"
     info.env.hostname:
       value: ${HOSTNAME:}
   volumeMounts:
