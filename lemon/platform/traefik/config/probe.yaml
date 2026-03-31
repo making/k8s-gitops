@@ -1,0 +1,34 @@
+#@ load("@ytt:overlay", "overlay")
+#@overlay/match by=overlay.subset({"kind": "Deployment", "metadata": {"name": "traefik"}})
+---
+spec:
+  template:
+    spec:
+      containers:
+      #@overlay/match by=overlay.subset({"name": "traefik"})
+      - livenessProbe:
+          #@overlay/remove
+          httpGet:
+          exec:
+            command:
+            - sh
+            - -c
+            - "wget -q -O /tmp/routers http://localhost:8080/api/http/routers && grep -q '\"status\":\"enabled\"' /tmp/routers"
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          failureThreshold: 3
+          timeoutSeconds: 5
+        #@overlay/match missing_ok=True
+        startupProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "wget -q -O /tmp/routers http://localhost:8080/api/http/routers && grep -q '\"status\":\"enabled\"' /tmp/routers"
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          #@overlay/match missing_ok=True
+          failureThreshold: 3
