@@ -7,3 +7,12 @@ spec:
   retry:
     attempts: 3
     initialInterval: 100ms
+---
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: with-retry-timeout
+  namespace: traefik
+spec:
+  forwardingTimeouts:
+    responseHeaderTimeout: 10s
