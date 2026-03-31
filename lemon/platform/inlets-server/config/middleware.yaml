@@ -35,6 +35,12 @@ spec:
       - profile
       - groups
       - email
+      Authorization:
+        AssertClaims:
+        - Name: groups
+          AnyOf:
+          - administrators
+          - guardian
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -59,3 +65,9 @@ spec:
       - profile
       - groups
       - email
+      Authorization:
+        AssertClaims:
+        - Name: groups
+          AnyOf:
+          - administrators
+          - guardian
