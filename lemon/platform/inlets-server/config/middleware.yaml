@@ -15,7 +15,7 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: oidc-auth
+  name: oidc-auth-forge
   namespace: inlets
 spec:
   plugin:
@@ -23,8 +23,32 @@ spec:
       LogLevel: WARN
       forceHTTPS: "true"
       Provider:
-        ClientId: #@ data.values.oidc.client_id
-        ClientSecret: #@ data.values.oidc.client_secret
+        ClientId: #@ data.values.oidc.forge.client_id
+        ClientSecret: #@ data.values.oidc.forge.client_secret
+        Url: #@ data.values.oidc.provider_url
+        UsePkce: true
+      Headers:
+      - Name: "Authorization"
+        Value: "Bearer {{ .idToken }}"
+      Scopes:
+      - openid
+      - profile
+      - groups
+      - email
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oidc-auth-vanilla
+  namespace: inlets
+spec:
+  plugin:
+    oidc-auth:
+      LogLevel: WARN
+      forceHTTPS: "true"
+      Provider:
+        ClientId: #@ data.values.oidc.vanilla.client_id
+        ClientSecret: #@ data.values.oidc.vanilla.client_secret
         Url: #@ data.values.oidc.provider_url
         UsePkce: true
       Headers:

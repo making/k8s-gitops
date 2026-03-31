@@ -19,8 +19,11 @@ metadata:
     #@ if name == 'llama-server.synology':
     traefik.ingress.kubernetes.io/router.middlewares: inlets-api-token@kubernetescrd
     #@ end
-    #@ if name == 'forge.minecraft-status.synology' or name == 'vanilla.minecraft-status.synology':
-    traefik.ingress.kubernetes.io/router.middlewares: inlets-oidc-auth@kubernetescrd
+    #@ if name == 'forge.minecraft-status.synology':
+    traefik.ingress.kubernetes.io/router.middlewares: inlets-oidc-auth-forge@kubernetescrd
+    #@ end
+    #@ if name == 'vanilla.minecraft-status.synology':
+    traefik.ingress.kubernetes.io/router.middlewares: inlets-oidc-auth-vanilla@kubernetescrd
     #@ end
 spec:
   ingressClassName: traefik
