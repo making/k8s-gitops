@@ -9,14 +9,18 @@ spec:
       - livenessProbe:
           #@overlay/remove
           httpGet:
+          #@overlay/match missing_ok=True
           exec:
             command:
             - sh
             - -c
             - "wget -q -O /tmp/routers http://localhost:8080/api/http/routers && grep -q '\"status\":\"enabled\"' /tmp/routers"
+          #@overlay/match missing_ok=True
           initialDelaySeconds: 30
+          #@overlay/match missing_ok=True
           periodSeconds: 15
           failureThreshold: 3
+          #@overlay/match missing_ok=True
           timeoutSeconds: 5
         #@overlay/match missing_ok=True
         startupProbe:
@@ -30,5 +34,4 @@ spec:
           failureThreshold: 30
           timeoutSeconds: 5
         readinessProbe:
-          #@overlay/match missing_ok=True
           failureThreshold: 3
