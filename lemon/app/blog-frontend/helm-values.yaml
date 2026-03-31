@@ -125,6 +125,7 @@ service:
   annotations:
     traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
     traefik.ingress.kubernetes.io/service.sticky.cookie.name: X-Traefik-Session-Affinity
+    traefik.ingress.kubernetes.io/service.serverstransport: traefik-with-retry-timeout@kubernetescrd
 ingress:
   enabled: true
   ingressClassName: traefik
