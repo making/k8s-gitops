@@ -2,6 +2,11 @@
 applicationName: note-api
 deployment:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   image:
     repository: ghcr.io/categolj/note-api
     tag: jvm
@@ -159,7 +164,7 @@ ingress:
   ingressClassName: traefik
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    traefik.ingress.kubernetes.io/router.middlewares: traefik-coraza@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-retry@kubernetescrd,traefik-coraza@kubernetescrd
   hosts:
   - host: note-api-note.apps.ik.am
     paths:
