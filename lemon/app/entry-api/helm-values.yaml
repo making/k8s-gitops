@@ -185,6 +185,8 @@ deployment:
       value: ecs
     info.env.hostname:
       value: ${HOSTNAME:}
+    spring.lifecycle.timeout-per-shutdown-phase:
+      value: "30"
   volumeMounts:
     cert-volume:
       mountPath: /certs

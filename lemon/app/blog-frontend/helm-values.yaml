@@ -81,6 +81,8 @@ deployment:
           fieldPath: status.podIP
     spring.threads.virtual.enabled:
       value: "false"
+    spring.lifecycle.timeout-per-shutdown-phase:
+      value: "30"
   resources:
     limits:
       cpu:
