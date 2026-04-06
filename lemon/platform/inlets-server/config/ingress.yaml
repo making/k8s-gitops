@@ -1,4 +1,4 @@
-#@ for name in ['synology', 'inlets.gw', 'llama-server.synology', 's3.synology', 'otlp-sink.synology', 'lognroll.synology', 'registry.synology', 'registry-ui.synology', 'access-monitor.synology', 'forge.minecraft-status.synology', 'vanilla.minecraft-status.synology']:
+#@ for name in ['synology', 'inlets.gw', 'llama-server.synology', 's3.synology', 'otlp-sink.synology', 'lognroll.synology', 'registry.synology', 'registry-ui.synology', 'access-monitor.synology', 'outline.synology', 'forge.minecraft-status.synology', 'vanilla.minecraft-status.synology']:
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
