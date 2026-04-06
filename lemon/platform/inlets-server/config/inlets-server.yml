@@ -42,6 +42,7 @@ spec:
         - server
         - --port=6868
         - --token-from=/var/inlets/token
+        - --disable-transport-wrapping
         volumeMounts:
         - name: inlets-token-volume
           mountPath: /var/inlets/
