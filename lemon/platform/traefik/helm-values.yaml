@@ -37,16 +37,16 @@ logs:
       http:
         enabled: true
         endpoint: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
-        tls:
-          insecureSkipVerify: true
+        #! tls:
+        #!   insecureSkipVerify: true
 tracing:
   otlp:
     enabled: true
     http:
       enabled: true
       endpoint: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
-      tls:
-        insecureSkipVerify: true
+      #! tls:
+      #!   insecureSkipVerify: true
 experimental:
   plugins:
     coraza:
