@@ -126,7 +126,7 @@ spec:
     auth:
       disable_login_form: "false"
     auth.ldap:
-      enabled: "true"
+      enabled: "false"
       config_file: /etc/grafana-configmaps/ldap.toml
     security:
       disable_gravatar: "false"
