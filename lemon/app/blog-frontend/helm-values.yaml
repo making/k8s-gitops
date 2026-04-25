@@ -8,7 +8,7 @@ deployment:
       maxSurge: 1
       maxUnavailable: 0
   image:
-    repository: ghcr.io/categolj/blog-frontend
+    repository: ghcr.io/categolj/blog-frontend-htmx
     tag: native
     pullPolicy: Always
   ports:
