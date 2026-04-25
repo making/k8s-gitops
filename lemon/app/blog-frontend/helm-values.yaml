@@ -26,39 +26,44 @@ deployment:
       value: -XX:ActiveProcessorCount=2 -XX:ReservedCodeCacheSize=32M -Xss512k -Dfile.encoding="UTF-8" -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.endpoint.health.show-details="always" -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include="*" -Dmanagement.health.probes.enabled="true" -Dmanagement.server.port="8081" -Dserver.port="8080" -Duser.country="JP" -Duser.language="ja" -Duser.timezone="Asia/Tokyo"
     BPL_JVM_THREAD_COUNT:
       value: "28"
-    spring.security.oauth2.client.registration.google.client-id:
-      valueFrom:
-        secretKeyRef:
-          name: frontend-config
-          key: oauth2-google-client-id
-    spring.security.oauth2.client.registration.google.client-secret:
-      valueFrom:
-        secretKeyRef:
-          name: frontend-config
-          key: oauth2-google-client-secret
+    server.port:
+      value: "8080"
     logging.structured.format.console:
       value: ecs
     info.env.hostname:
       value: ${HOSTNAME:}
     blog-api.url:
       value: http://entry-api.blog.svc.cluster.local:8080
-    comment-api.url:
-      value: http://comment-api.blog.svc.cluster.local
+    blog.api.base-url:
+      value: http://entry-api.blog.svc.cluster.local:8080
     translation-api.url:
       value: http://translation-api.blog.svc.cluster.local:8080
     note-api.url:
       value: http://note-api.note.svc.cluster.local:8080
+    note.api.base-url:
+      value: http://note-api.note.svc.cluster.local:8080
     counter-api.url:
       value: http://counter-api.blog.svc.cluster.local:8080/counter
+    counter.api.base-url:
+      value: http://counter-api.blog.svc.cluster.local:8080
     counter-api.ip-black-list:
       valueFrom:
         secretKeyRef:
           name: frontend-config
           key: ip-blacklist
+    counter.api.ip-black-list:
+      valueFrom:
+        secretKeyRef:
+          name: frontend-config
+          key: ip-blacklist
+    management.logging.export.otlp.enabled:
+      value: "true"
     management.opentelemetry.logging.export.otlp.endpoint:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/logs
     management.opentelemetry.logging.export.otlp.compression:
       value: gzip
+    management.tracing.export.otlp.enabled:
+      value: "true"
     management.opentelemetry.tracing.export.otlp.endpoint:
       value: http://otel-collector.opentelemetry.svc.cluster.local:4318/v1/traces
     management.opentelemetry.tracing.export.otlp.compression:
@@ -79,8 +84,6 @@ deployment:
       valueFrom:
         fieldRef:
           fieldPath: status.podIP
-    spring.threads.virtual.enabled:
-      value: "false"
     spring.lifecycle.timeout-per-shutdown-phase:
       value: "30"
   resources:
