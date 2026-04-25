@@ -20,7 +20,7 @@ spec:
       ref: origin/main
       subPath: lemon/app/blog-frontend
   - git:
-      url: https://github.com/categolj/blog-frontend.git
+      url: https://github.com/categolj/blog-frontend-htmx.git
       ref: origin/images
   syncPeriod: 10m
   template:
