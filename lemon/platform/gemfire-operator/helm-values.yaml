@@ -1,2 +1,2 @@
-controllerImage: registry.maki.lol/tanzu-gemfire-for-kubernetes/gemfire-controller:2.6.3
+controllerImage: registry.maki.lol/tanzu-gemfire-for-kubernetes/gemfire-controller:2.6.2
 imagePullSecretName: regsecret
