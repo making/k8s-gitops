@@ -18,13 +18,13 @@ spec:
     replicas: 2
     resources:
       requests:
-        memory: 2Gi
-      limits:
         memory: 1Gi
+      limits:
+        memory: 2Gi
   servers:
     replicas: 2
     resources:
       requests:
-        memory: 2Gi
-      limits:
         memory: 1Gi
+      limits:
+        memory: 2Gi
