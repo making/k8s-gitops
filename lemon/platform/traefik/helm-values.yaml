@@ -12,7 +12,7 @@ ports:
       - 10.96.0.0/16
     transport:
       respondingTimeouts:
-        readTimeout: 600s
+        readTimeout: 601s
         writeTimeout: 600s
         idleTimeout: 600s
   websecure:
