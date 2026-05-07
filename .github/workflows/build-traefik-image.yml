@@ -1,0 +1,52 @@
+name: build-traefik-image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - lemon/platform/traefik/build-image.sh
+      - lemon/platform/traefik/helm-values.yaml
+      - lemon/platform/_apps/traefik.yaml
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-qemu-action@v3
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build multi-arch image, push to ghcr.io, regenerate overlay
+        working-directory: lemon/platform/traefik
+        run: ./build-image.sh --multi-arch --push
+
+      - name: Commit and push regenerated overlay
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -e
+          OVERLAY=lemon/platform/traefik/config/local-plugins-overlay.yaml
+          if git diff --quiet -- "$OVERLAY"; then
+            echo "No overlay changes — nothing to commit."
+            exit 0
+          fi
+          IMAGE_REF=$(grep -m1 -oE 'ghcr\.io/[^ ]+' "$OVERLAY")
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$OVERLAY"
+          git commit -m "Update traefik image to ${IMAGE_REF}"
+          git push origin "HEAD:${BRANCH}"

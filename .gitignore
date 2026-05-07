@@ -5,3 +5,4 @@ key.txt
 auth
 .htpasswd
 *.mdb
+lemon/platform/traefik/Dockerfile.generated
