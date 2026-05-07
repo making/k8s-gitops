@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
       #@overlay/match by=overlay.subset({"name": "traefik"})
-      - image: ghcr.io/making/traefik:v3.6.15-34baaae
+      - image: ghcr.io/making/traefik:v3.6.15-6fcb651
         args:
         #@overlay/match by=lambda i,l,r: l.startswith("--experimental.plugins."), expects="0+"
         #@overlay/remove
