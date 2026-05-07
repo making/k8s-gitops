@@ -1,0 +1,11 @@
+kind: ClusterRoleBinding
+metadata:
+  name: cluster-admin-platform-engineer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: oidc:platform-engineer
