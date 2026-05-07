@@ -136,7 +136,7 @@ spec:
         #! OIDC provider settings
         - --oidc-issuer-url=https://id.ik.am
         - --oidc-client-id=kubernetes
-        - --oidc-username-claim=preferred_username
+        - --oidc-username-claim=sub
         - --oidc-groups-claim=groups
         #! Required even when the IdP uses a publicly-trusted CA: the
         #! TremoloSecurity fork unconditionally parses --oidc-ca-file and
