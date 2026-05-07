@@ -31,7 +31,10 @@ rules:
   - "userextras/scopes"
   - "userextras/remote-client-ip"
   - "tokenreviews"
-  - "userextras/*"
+  - "userextras/originaluser.jetstack.io-user"
+  - "userextras/originaluser.jetstack.io-groups"
+  - "userextras/originaluser.jetstack.io-extra"
+  - "userextras/authentication.kubernetes.io/credential-id"
   verbs: [ "create", "impersonate" ]
 - apiGroups: [ "authorization.k8s.io" ]
   resources: [ "subjectaccessreviews" ]
