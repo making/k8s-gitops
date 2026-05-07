@@ -138,6 +138,8 @@ spec:
         - --oidc-client-id=kubernetes
         - --oidc-username-claim=sub
         - --oidc-groups-claim=groups
+        - "--oidc-username-prefix=oidc:"
+        - "--oidc-groups-prefix=oidc:"
         #! Required even when the IdP uses a publicly-trusted CA: the
         #! TremoloSecurity fork unconditionally parses --oidc-ca-file and
         #! fails to start when the value is empty. Point it at the image's
