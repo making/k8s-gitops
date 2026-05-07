@@ -27,6 +27,15 @@ data:
       timeout client  600s
       timeout server  600s
 
+    # Health endpoint for kubelet probes (port 8444). Separate from the
+    # production listeners so probes never get caught by SNI inspection,
+    # rate limiting, or graceful-shutdown timing.
+    frontend health_frontend
+      bind *:8444
+      mode http
+      no log
+      monitor-uri /healthz
+
     # LDAP routing (389)
     frontend ldap_frontend
       bind *:8389

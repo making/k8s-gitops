@@ -43,6 +43,8 @@ spec:
           name: http
         - containerPort: 8443
           name: https
+        - containerPort: 8444
+          name: health
         - containerPort: 8389
           name: ldap
         - containerPort: 8636
@@ -73,13 +75,15 @@ spec:
           seccompProfile:
             type: RuntimeDefault
         livenessProbe:
-          tcpSocket:
-            port: 8443
+          httpGet:
+            path: /healthz
+            port: 8444
           initialDelaySeconds: 5
           periodSeconds: 10
         readinessProbe:
-          tcpSocket:
-            port: 8443
+          httpGet:
+            path: /healthz
+            port: 8444
           initialDelaySeconds: 5
           periodSeconds: 10
       affinity:
