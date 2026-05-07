@@ -8,8 +8,12 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+      #! Combined with the required podAntiAffinity below, surge is forbidden:
+      #! a 3rd pod can never satisfy "different node from the other two" on a
+      #! 2-node cluster. Drop 1 pod first, then create the replacement on the
+      #! freed node.
+      maxSurge: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: haproxy
@@ -88,13 +92,13 @@ spec:
           periodSeconds: 10
       affinity:
         podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  app: haproxy
-              topologyKey: kubernetes.io/hostname
-            weight: 1
+          #! Hard-require pods on different nodes so externalTrafficPolicy: Local
+          #! always has a local endpoint on each node hosting an haproxy pod.
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: haproxy
+            topologyKey: kubernetes.io/hostname
       volumes:
       - name: haproxy-config
         configMap:
