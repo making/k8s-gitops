@@ -1,3 +1,7 @@
+image:
+  # Pin to v3.6.16 to avoid the v3.7.0 cross-provider warning regression
+  # in `pkg/provider/kubernetes/crd/kubernetes_http.go`. Drop this once v3.7.1 ships.
+  tag: v3.6.16
 service:
   type: ClusterIP
 deployment:

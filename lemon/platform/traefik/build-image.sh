@@ -34,8 +34,9 @@ then verify by inspecting the image and booting traefik briefly.
                       list — requires --push and creates a 'traefik-image-builder'
                       buildx builder (docker-container driver) on first use
   --no-verify         skip the post-build verification (--load mode only)
-  --traefik-version=  override the base traefik tag (default: derived from
-                      _apps/traefik.yaml chart version → Chart.yaml appVersion)
+  --traefik-version=  override the base traefik tag (default: helm-values.yaml
+                      .image.tag if set, else _apps/traefik.yaml chart version
+                      → Chart.yaml appVersion)
   --image=            override image repository (default: ${IMAGE_REPO})
   --tag=              override tag (default: <traefik-version>-<plugin-hash>)
 EOF
@@ -59,21 +60,28 @@ yq() {
 }
 
 # 1. Resolve the Traefik base image version
+#    Priority: --traefik-version flag > helm-values.yaml .image.tag > chart appVersion
 if [[ -n "${TRAEFIK_VERSION_OVERRIDE}" ]]; then
   TRAEFIK_VERSION="${TRAEFIK_VERSION_OVERRIDE}"
+  echo ">>> Using --traefik-version override: ${TRAEFIK_VERSION}"
 else
-  CHART_VERSION="$(yq '.spec.fetch[] | select(has("helmChart")) | .helmChart.version' < "${APP_FILE}" | tr -d '\r' | head -1)"
-  if [[ -z "${CHART_VERSION}" || "${CHART_VERSION}" = "null" ]]; then
-    echo "ERROR: Could not determine helm chart version from ${APP_FILE}" >&2
-    exit 1
+  TRAEFIK_VERSION="$(yq '.image.tag // ""' < "${HELM_VALUES}" | tr -d '\r' | head -1)"
+  if [[ -n "${TRAEFIK_VERSION}" && "${TRAEFIK_VERSION}" != "null" ]]; then
+    echo ">>> Using helm-values.yaml .image.tag: ${TRAEFIK_VERSION}"
+  else
+    CHART_VERSION="$(yq '.spec.fetch[] | select(has("helmChart")) | .helmChart.version' < "${APP_FILE}" | tr -d '\r' | head -1)"
+    if [[ -z "${CHART_VERSION}" || "${CHART_VERSION}" = "null" ]]; then
+      echo "ERROR: Could not determine helm chart version from ${APP_FILE}" >&2
+      exit 1
+    fi
+    CHART_URL="https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${CHART_VERSION}/traefik/Chart.yaml"
+    TRAEFIK_VERSION="$(curl -fsSL "${CHART_URL}" | yq '.appVersion' | tr -d '\r' | head -1)"
+    if [[ -z "${TRAEFIK_VERSION}" || "${TRAEFIK_VERSION}" = "null" ]]; then
+      echo "ERROR: Could not fetch appVersion from ${CHART_URL}" >&2
+      exit 1
+    fi
+    echo ">>> Detected traefik chart=${CHART_VERSION}, appVersion=${TRAEFIK_VERSION}"
   fi
-  CHART_URL="https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${CHART_VERSION}/traefik/Chart.yaml"
-  TRAEFIK_VERSION="$(curl -fsSL "${CHART_URL}" | yq '.appVersion' | tr -d '\r' | head -1)"
-  if [[ -z "${TRAEFIK_VERSION}" || "${TRAEFIK_VERSION}" = "null" ]]; then
-    echo "ERROR: Could not fetch appVersion from ${CHART_URL}" >&2
-    exit 1
-  fi
-  echo ">>> Detected traefik chart=${CHART_VERSION}, appVersion=${TRAEFIK_VERSION}"
 fi
 
 # 2. Extract plugins from helm-values.yaml as TSV: name<TAB>moduleName<TAB>version
