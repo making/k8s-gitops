@@ -134,7 +134,7 @@ spec:
         - --tls-cert-file=/etc/oidc/tls/tls.crt
         - --tls-private-key-file=/etc/oidc/tls/tls.key
         #! OIDC provider settings
-        - --oidc-issuer-url=https://id.ik.am/
+        - --oidc-issuer-url=https://id.ik.am
         - --oidc-client-id=kubernetes
         - --oidc-username-claim=preferred_username
         - --oidc-groups-claim=groups
