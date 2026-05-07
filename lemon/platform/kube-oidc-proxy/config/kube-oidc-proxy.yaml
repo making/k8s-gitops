@@ -31,10 +31,7 @@ rules:
   - "userextras/scopes"
   - "userextras/remote-client-ip"
   - "tokenreviews"
-  #! Extras required to support `kubectl --as`
-  - "userextras/originaluser.jetstack.io-user"
-  - "userextras/originaluser.jetstack.io-groups"
-  - "userextras/originaluser.jetstack.io-extra"
+  - "userextras/*"
   verbs: [ "create", "impersonate" ]
 - apiGroups: [ "authorization.k8s.io" ]
   resources: [ "subjectaccessreviews" ]
