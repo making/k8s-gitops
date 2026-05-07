@@ -14,7 +14,7 @@ spec:
   fetch:
   - helmChart:
       name: traefik
-      version: 39.0.5
+      version: 40.0.0
       repository:
         url: https://traefik.github.io/charts
   - git:
