@@ -1,7 +1,10 @@
 image:
-  # Pin to v3.6.16 to avoid the v3.7.0 cross-provider warning regression
-  # in `pkg/provider/kubernetes/crd/kubernetes_http.go`. Drop this once v3.7.1 ships.
-  tag: v3.6.16
+  # Pin to v3.6.15. Both v3.6.16 and v3.7.0 (released 2026-05-05) introduced
+  # a regression in pkg/provider/kubernetes/crd/kubernetes_http.go that always
+  # emits "namespace ... is ignored in cross-provider context" warnings for
+  # IngressRoutes referencing services like api@internal. Drop this once a
+  # release with the master-branch fix ships.
+  tag: v3.6.15
 service:
   type: ClusterIP
 deployment:
