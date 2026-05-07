@@ -1,0 +1,183 @@
+#! ─────────────────────────────────────────
+#! 1. Namespace
+#! ─────────────────────────────────────────
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-oidc-proxy
+---
+#! ─────────────────────────────────────────
+#! 2. ServiceAccount
+#! ─────────────────────────────────────────
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kube-oidc-proxy
+  namespace: kube-oidc-proxy
+---
+#! ─────────────────────────────────────────
+#! 3. RBAC: impersonation permissions
+#! ─────────────────────────────────────────
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kube-oidc-proxy
+rules:
+- apiGroups: [ "" ]
+  resources: [ "users", "groups", "serviceaccounts" ]
+  verbs: [ "impersonate" ]
+- apiGroups: [ "authentication.k8s.io" ]
+  resources:
+  - "userextras/scopes"
+  - "userextras/remote-client-ip"
+  - "tokenreviews"
+  #! Extras required to support `kubectl --as`
+  - "userextras/originaluser.jetstack.io-user"
+  - "userextras/originaluser.jetstack.io-groups"
+  - "userextras/originaluser.jetstack.io-extra"
+  verbs: [ "create", "impersonate" ]
+- apiGroups: [ "authorization.k8s.io" ]
+  resources: [ "subjectaccessreviews" ]
+  verbs: [ "create" ]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kube-oidc-proxy
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kube-oidc-proxy
+subjects:
+- kind: ServiceAccount
+  name: kube-oidc-proxy
+  namespace: kube-oidc-proxy
+---
+#! ─────────────────────────────────────────
+#! 4. Server certificate for the proxy (Let's Encrypt)
+#! ─────────────────────────────────────────
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-oidc-proxy-tls
+  namespace: kube-oidc-proxy
+spec:
+  secretName: kube-oidc-proxy-tls
+  commonName: k8s.lemon.ik.am
+  dnsNames:
+  - k8s.lemon.ik.am
+  privateKey:
+    algorithm: RSA
+    size: 2048
+  usages:
+  - server auth
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+    group: cert-manager.io
+---
+#! ─────────────────────────────────────────
+#! 5. Deployment
+#! ─────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-oidc-proxy
+  namespace: kube-oidc-proxy
+  labels:
+    app: kube-oidc-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-oidc-proxy
+  template:
+    metadata:
+      labels:
+        app: kube-oidc-proxy
+    spec:
+      serviceAccountName: kube-oidc-proxy
+      containers:
+      - name: kube-oidc-proxy
+        image: docker.io/tremolosecurity/kube-oidc-proxy:1.0.12
+        imagePullPolicy: IfNotPresent
+        command: [ "kube-oidc-proxy" ]
+        args:
+        - --secure-port=8443
+        - --tls-cert-file=/etc/oidc/tls/tls.crt
+        - --tls-private-key-file=/etc/oidc/tls/tls.key
+        #! OIDC provider settings
+        - --oidc-issuer-url=https://id.ik.am/
+        - --oidc-client-id=kubernetes
+        - --oidc-username-claim=preferred_username
+        - --oidc-groups-claim=groups
+        #! Enable only when the IdP cert is not signed by a public CA:
+        #! - --oidc-ca-file=/etc/oidc/idp-ca/ca.crt
+        ports:
+        - name: https
+          containerPort: 8443
+        - name: probe
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: probe
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        securityContext:
+          runAsUser: 10001
+          runAsGroup: 10001
+          allowPrivilegeEscalation: false
+        volumeMounts:
+        - name: tls
+          mountPath: /etc/oidc/tls
+          readOnly: true
+        #! - name: idp-ca
+        #!   mountPath: /etc/oidc/idp-ca
+        #!   readOnly: true
+      volumes:
+      - name: tls
+        secret:
+          secretName: kube-oidc-proxy-tls
+      #! - name: idp-ca
+      #!   configMap:
+      #!     name: idp-ca
+---
+#! ─────────────────────────────────────────
+#! 6. Service (ClusterIP)
+#! ─────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-oidc-proxy
+  namespace: kube-oidc-proxy
+  labels:
+    app: kube-oidc-proxy
+spec:
+  type: ClusterIP
+  selector:
+    app: kube-oidc-proxy
+  ports:
+  - name: https
+    port: 443
+    targetPort: 8443
+    protocol: TCP
+---
+#! ─────────────────────────────────────────
+#! 7. Traefik IngressRouteTCP (TLS passthrough)
+#! ─────────────────────────────────────────
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: kube-oidc-proxy
+  namespace: kube-oidc-proxy
+spec:
+  entryPoints:
+  - websecure
+  routes:
+  - match: HostSNI(`k8s.lemon.ik.am`)
+    services:
+    - name: kube-oidc-proxy
+      port: 443
+  tls:
+    passthrough: true
