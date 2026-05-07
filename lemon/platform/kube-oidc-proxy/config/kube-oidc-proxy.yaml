@@ -1,23 +1,14 @@
-#! ─────────────────────────────────────────
-#! 1. Namespace
-#! ─────────────────────────────────────────
 apiVersion: v1
 kind: Namespace
 metadata:
   name: kube-oidc-proxy
 ---
-#! ─────────────────────────────────────────
-#! 2. ServiceAccount
-#! ─────────────────────────────────────────
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kube-oidc-proxy
   namespace: kube-oidc-proxy
 ---
-#! ─────────────────────────────────────────
-#! 3. RBAC: impersonation permissions
-#! ─────────────────────────────────────────
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -53,9 +44,6 @@ subjects:
   name: kube-oidc-proxy
   namespace: kube-oidc-proxy
 ---
-#! ─────────────────────────────────────────
-#! 4. Server certificate for the proxy (Let's Encrypt)
-#! ─────────────────────────────────────────
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -76,9 +64,6 @@ spec:
     kind: ClusterIssuer
     group: cert-manager.io
 ---
-#! ─────────────────────────────────────────
-#! 5. Deployment
-#! ─────────────────────────────────────────
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -137,20 +122,11 @@ spec:
         - name: tls
           mountPath: /etc/oidc/tls
           readOnly: true
-        #! - name: idp-ca
-        #!   mountPath: /etc/oidc/idp-ca
-        #!   readOnly: true
       volumes:
       - name: tls
         secret:
           secretName: kube-oidc-proxy-tls
-      #! - name: idp-ca
-      #!   configMap:
-      #!     name: idp-ca
 ---
-#! ─────────────────────────────────────────
-#! 6. Service (ClusterIP)
-#! ─────────────────────────────────────────
 apiVersion: v1
 kind: Service
 metadata:
@@ -168,9 +144,6 @@ spec:
     targetPort: 8443
     protocol: TCP
 ---
-#! ─────────────────────────────────────────
-#! 7. Traefik IngressRouteTCP (TLS passthrough)
-#! ─────────────────────────────────────────
 apiVersion: traefik.io/v1alpha1
 kind: IngressRouteTCP
 metadata:
