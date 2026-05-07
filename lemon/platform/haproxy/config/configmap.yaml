@@ -12,11 +12,17 @@ data:
       maxconn 4096
       user haproxy
       group haproxy
+      # On SIGUSR1 (soft-stop), wait up to this long for in-flight connections
+      # to finish before forcibly closing them. Keep this < terminationGracePeriodSeconds - preStop sleep.
+      hard-stop-after 40s
 
     defaults
       log     global
       mode    tcp
       option  dontlognull
+      # Re-dispatch to another server on retry when the chosen one is down.
+      option  redispatch
+      retries 3
       timeout connect 5s
       timeout client  600s
       timeout server  600s
