@@ -94,13 +94,16 @@ data:
       option httplog
       # Track request rate per client IP (1 second window, 100k entries, 30s expiry)
       stick-table type ip size 100k expire 30s store http_req_rate(1s)
+      # Skip rate limit + tracking for traffic from cluster-internal CIDRs
+      # (kubelet probes, in-cluster pods hairpinning through the NLB).
+      acl internal src 10.0.0.0/16 10.96.0.0/16 127.0.0.0/8
       # Blocked IPs
       acl blocked src -f /usr/local/etc/haproxy/blocked-ips.txt
       tcp-request connection reject if blocked
-      # Record client IP in the stick-table
-      http-request track-sc0 src
+      # Record client IP in the stick-table (external only)
+      http-request track-sc0 src unless internal
       # Reject with 429 Too Many Requests if rate exceeds 10 req/sec
-      http-request deny deny_status 429 if { sc_http_req_rate(0) gt 10 }
+      http-request deny deny_status 429 if !internal { sc_http_req_rate(0) gt 10 }
 
       default_backend traefik_http_backend
     
@@ -115,15 +118,21 @@ data:
       option tcplog
       # Track connection rate per client IP (60 seconds window, 100k entries, 60s expiry)
       stick-table type ip size 100k expire 60s store conn_rate(60s)
+      # Skip rate limit + tracking for traffic from cluster-internal CIDRs
+      # (kubelet probes, in-cluster pods hairpinning through the NLB).
+      # If we tracked these, kubelet TCP probes from the node IP plus all
+      # the in-cluster traffic would get aggregated under one src IP and
+      # easily trip the limit, causing probes to be RST'd and pods to flap.
+      acl internal src 10.0.0.0/16 10.96.0.0/16 127.0.0.0/8
       # Blocked IPs
       acl blocked src -f /usr/local/etc/haproxy/blocked-ips.txt
       tcp-request connection reject if blocked
-      # Record client IP at connection level
-      tcp-request connection track-sc0 src
+      # Record client IP at connection level (external only)
+      tcp-request connection track-sc0 src unless internal
       # Reject connection if rate exceeds 200 conn / 60s window. A normal
       # browser pulling a page can open ~30 TCP conns; a logged-in user
       # browsing several pages per minute can easily exceed 50.
-      tcp-request connection reject if { sc_conn_rate(0) gt 200 }
+      tcp-request connection reject if !internal { sc_conn_rate(0) gt 200 }
       # Extract SNI for routing decisions
       tcp-request inspect-delay 5s
       tcp-request content accept if { req_ssl_hello_type 1 }
