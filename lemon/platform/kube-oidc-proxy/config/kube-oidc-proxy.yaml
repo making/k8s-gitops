@@ -138,8 +138,11 @@ spec:
         - --oidc-client-id=kubernetes
         - --oidc-username-claim=preferred_username
         - --oidc-groups-claim=groups
-        #! Enable only when the IdP cert is not signed by a public CA:
-        #! - --oidc-ca-file=/etc/oidc/idp-ca/ca.crt
+        #! Required even when the IdP uses a publicly-trusted CA: the
+        #! TremoloSecurity fork unconditionally parses --oidc-ca-file and
+        #! fails to start when the value is empty. Point it at the image's
+        #! system CA bundle (Ubuntu 24.04 + ca-certificates).
+        - --oidc-ca-file=/etc/ssl/certs/ca-certificates.crt
         ports:
         - name: https
           containerPort: 8443
