@@ -53,33 +53,6 @@ subjects:
   name: kube-oidc-proxy
   namespace: kube-oidc-proxy
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: kube-oidc-proxy-extension-apiserver-authentication-reader
-  namespace: kube-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: extension-apiserver-authentication-reader
-subjects:
-- kind: ServiceAccount
-  name: kube-oidc-proxy
-  namespace: kube-oidc-proxy
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: kube-oidc-proxy-auth-delegator
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: system:auth-delegator
-subjects:
-- kind: ServiceAccount
-  name: kube-oidc-proxy
-  namespace: kube-oidc-proxy
----
 #! ─────────────────────────────────────────
 #! 4. Server certificate for the proxy (Let's Encrypt)
 #! ─────────────────────────────────────────
