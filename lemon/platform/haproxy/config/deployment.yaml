@@ -21,7 +21,8 @@ spec:
       #! Must exceed preStop sleep + HAProxy soft-stop drain time.
       #! OCI NLB needs ~30s to mark the node unhealthy via healthCheckNodePort,
       #! then we still want time for in-flight connections to finish.
-      terminationGracePeriodSeconds: 90
+      #! preStop (60s) + hard-stop-after (60s) = 120s, plus 10s buffer.
+      terminationGracePeriodSeconds: 130
       containers:
       - name: haproxy
         image: haproxy:3.2
@@ -30,8 +31,9 @@ spec:
             exec:
               #! Keep accepting traffic until OCI NLB stops routing to this node.
               #! The healthCheckNodePort flips to "no local endpoints" the moment
-              #! this Pod becomes Terminating, but the NLB takes ~30s to react.
-              command: [ "/bin/sh", "-c", "sleep 40" ]
+              #! this Pod becomes Terminating, but the NLB takes ~30s to react;
+              #! 60s gives kube-proxy + NLB enough buffer to settle.
+              command: [ "/bin/sh", "-c", "sleep 60" ]
         ports:
         - containerPort: 25565
           name: minecraft

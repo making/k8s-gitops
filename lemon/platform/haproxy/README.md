@@ -50,18 +50,19 @@ HAProxy Pod が rolling update される。このとき以前は curl で `http_
 ### 1. Pod 側 (`config/deployment.yaml`)
 
 ```yaml
-terminationGracePeriodSeconds: 90
+terminationGracePeriodSeconds: 130
 lifecycle:
   preStop:
     exec:
-      command: [ "/bin/sh", "-c", "sleep 40" ]
+      command: [ "/bin/sh", "-c", "sleep 60" ]
 ```
 
 - Pod が `Terminating` に入ると、kubelet は **まず preStop を実行してから**
   STOPSIGNAL (haproxy:3.x の image では `SIGUSR1` = soft-stop) を送る。
-- `sleep 40` の間 HAProxy は通常通り通信を捌き続けるので、その間に
+- `sleep 60` の間 HAProxy は通常通り通信を捌き続けるので、その間に
   OCI NLB のヘルスチェック (約 30 秒で unhealthy 判定) がこの node を
-  外し、新規接続は別の node に流れるようになる。
+  外し、新規接続は別の node に流れるようになる。kube-proxy のルール
+  反映遅延も含めて余裕を取る。
 - preStop が終わってから初めて HAProxy が soft-stop を始めるため、
   「NLB はまだ送るが HAProxy はもう死んでいる」という穴が消える。
 
@@ -69,17 +70,17 @@ lifecycle:
 
 ```
 global
-  hard-stop-after 40s
+  hard-stop-after 60s
 
 defaults
   option redispatch
   retries 3
 ```
 
-- `hard-stop-after 40s`: soft-stop 後に in-flight 接続を最大 40 秒だけ
+- `hard-stop-after 60s`: soft-stop 後に in-flight 接続を最大 60 秒だけ
   drain する。これより長い接続は強制的に閉じる。`terminationGracePeriodSeconds`
-  (90s) − `preStop` (40s) = 50s の予算内に収まるので、kubelet による
-  SIGKILL が発火する前に確実に綺麗に落ちる。
+  (130s) − `preStop` (60s) − `hard-stop-after` (60s) = 10s の余裕を残しつつ、
+  kubelet による SIGKILL が発火する前に綺麗に落ちる。
 - `option redispatch` + `retries 3`: バックエンド (主に Traefik) が
   落ちかけたとき、別のサーバーへ再ディスパッチして retry する
   (HTTP モードのみ有効)。
@@ -89,17 +90,17 @@ defaults
 ![rolling-update timeline](./rolling-update-timeline.svg)
 
 ```
-0s    Pod が Terminating, Endpoints から外れる
-      → healthCheckNodePort が 503 を返し始める
-0s    preStop 開始 (sleep 40) — HAProxy は通常稼働
-~30s  OCI NLB がこの node を unhealthy と判断 → 新規接続が来なくなる
-40s   preStop 完了 → SIGUSR1 → HAProxy soft-stop 開始
-40-80s in-flight 接続を drain (hard-stop-after 40s)
-80s   残接続を強制 close
-90s   terminationGracePeriodSeconds 到達 (余裕 10s)
+0s     Pod が Terminating, Endpoints から外れる
+       → healthCheckNodePort が 503 を返し始める
+0s     preStop 開始 (sleep 60) — HAProxy は通常稼働
+~30s   OCI NLB がこの node を unhealthy と判断 → 新規接続が来なくなる
+60s    preStop 完了 → SIGUSR1 → HAProxy soft-stop 開始
+60-120s in-flight 接続を drain (hard-stop-after 60s)
+120s   残接続を強制 close
+130s   terminationGracePeriodSeconds 到達 (余裕 10s)
 ```
 
-このタイムラインを変更するときは **`preStop sleep` < `hard-stop-after` の合計
+このタイムラインを変更するときは **`preStop sleep` + `hard-stop-after`
 が `terminationGracePeriodSeconds` を超えないように** 注意する。
 
 ## ブロック IP の運用

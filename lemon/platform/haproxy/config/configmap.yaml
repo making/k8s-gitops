@@ -14,7 +14,7 @@ data:
       group haproxy
       # On SIGUSR1 (soft-stop), wait up to this long for in-flight connections
       # to finish before forcibly closing them. Keep this < terminationGracePeriodSeconds - preStop sleep.
-      hard-stop-after 40s
+      hard-stop-after 60s
 
     defaults
       log     global
@@ -120,8 +120,10 @@ data:
       tcp-request connection reject if blocked
       # Record client IP at connection level
       tcp-request connection track-sc0 src
-      # Reject connection if rate exceeds 50 conn/sec
-      tcp-request connection reject if { sc_conn_rate(0) gt 50 }
+      # Reject connection if rate exceeds 200 conn / 60s window. A normal
+      # browser pulling a page can open ~30 TCP conns; a logged-in user
+      # browsing several pages per minute can easily exceed 50.
+      tcp-request connection reject if { sc_conn_rate(0) gt 200 }
       # Extract SNI for routing decisions
       tcp-request inspect-delay 5s
       tcp-request content accept if { req_ssl_hello_type 1 }
