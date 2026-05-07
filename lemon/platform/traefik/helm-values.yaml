@@ -61,14 +61,7 @@ experimental:
   otlpLogs: true
 ingressRoute:
   dashboard:
-    enabled: true
-    matchRule: Host(`dashboard.traefik.ik.am`)
-    entryPoints:
-    - websecure
-    middlewares:
-    - name: oidc-auth-for-dashbord
-    tls:
-      secretName: dashboard-tls
+    enabled: false
 extraObjects:
 - apiVersion: cert-manager.io/v1
   kind: Certificate

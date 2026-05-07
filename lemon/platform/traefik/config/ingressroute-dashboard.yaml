@@ -1,0 +1,18 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard
+  namespace: traefik
+spec:
+  entryPoints:
+  - websecure
+  routes:
+  - match: Host(`dashboard.traefik.ik.am`)
+    kind: Rule
+    middlewares:
+    - name: oidc-auth-for-dashbord
+    services:
+    - name: api@internal
+      kind: TraefikService
+  tls:
+    secretName: dashboard-tls
