@@ -96,7 +96,7 @@ data:
       stick-table type ip size 100k expire 30s store http_req_rate(1s)
       # Skip rate limit + tracking for traffic from cluster-internal CIDRs
       # (kubelet probes, in-cluster pods hairpinning through the NLB).
-      acl internal src 10.0.0.0/16 10.96.0.0/16 127.0.0.0/8
+      acl internal src 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 127.0.0.0/8
       # Blocked IPs
       acl blocked src -f /usr/local/etc/haproxy/blocked-ips.txt
       tcp-request connection reject if blocked
@@ -123,7 +123,7 @@ data:
       # If we tracked these, kubelet TCP probes from the node IP plus all
       # the in-cluster traffic would get aggregated under one src IP and
       # easily trip the limit, causing probes to be RST'd and pods to flap.
-      acl internal src 10.0.0.0/16 10.96.0.0/16 127.0.0.0/8
+      acl internal src 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 127.0.0.0/8
       # Blocked IPs
       acl blocked src -f /usr/local/etc/haproxy/blocked-ips.txt
       tcp-request connection reject if blocked
