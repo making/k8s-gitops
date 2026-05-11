@@ -10,13 +10,11 @@ spec:
     spec:
       containers:
       #@overlay/match by=overlay.subset({"name": "traefik"})
-      - image: ghcr.io/making/traefik:v3.6.15-6fcb651
+      - image: ghcr.io/making/traefik:v3.6.15-550f089
         args:
         #@overlay/match by=lambda i,l,r: l.startswith("--experimental.plugins."), expects="0+"
         #@overlay/remove
         - ""
-        #@overlay/append
-        - "--experimental.localPlugins.coraza.moduleName=github.com/jcchavezs/coraza-http-wasm-traefik"
         #@overlay/append
         - "--experimental.localPlugins.oidc-auth.moduleName=github.com/sevensolutions/traefik-oidc-auth"
         #@overlay/append
