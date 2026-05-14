@@ -116,10 +116,11 @@ deployment:
           key: openai-url
           name: entry-api-config
     spring.ai.openai.chat.options.model:
-      valueFrom:
-        secretKeyRef:
-          key: openai-chat-model
-          name: entry-api-config
+      value: "deepseek-chat"
+      #! valueFrom:
+      #!   secretKeyRef:
+      #!     key: openai-chat-model
+      #!     name: entry-api-config
     spring.ai.openai.api-key:
       valueFrom:
         secretKeyRef:
