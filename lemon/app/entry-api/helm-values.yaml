@@ -116,7 +116,7 @@ deployment:
           key: openai-url
           name: entry-api-config
     spring.ai.openai.chat.options.model:
-      value: "deepseek-chat"
+      value: unsloth/Qwen3.6-27B-GGUF:Q4_K_XL
       #! valueFrom:
       #!   secretKeyRef:
       #!     key: openai-chat-model
