@@ -41,10 +41,11 @@ deployment:
           key: openai-chat-completions-path
           name: translation-config
     spring.ai.openai.chat.options.model:
-      valueFrom:
-        secretKeyRef:
-          key: openai-chat-options-model
-          name: translation-config
+      value: "deepseek-chat"
+      #! valueFrom:
+      #!   secretKeyRef:
+      #!     key: openai-chat-options-model
+      #!     name: translation-config
     github.access-token:
       valueFrom:
         secretKeyRef:
