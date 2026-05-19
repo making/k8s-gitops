@@ -19,9 +19,9 @@ ports:
       - 10.96.0.0/16
     transport:
       respondingTimeouts:
-        readTimeout: 600s
-        writeTimeout: 600s
-        idleTimeout: 600s
+        readTimeout: 1800s
+        writeTimeout: 1800s
+        idleTimeout: 1800s
   websecure:
     proxyProtocol:
       trustedIPs:
@@ -29,9 +29,9 @@ ports:
       - 10.96.0.0/16
     transport:
       respondingTimeouts:
-        readTimeout: 600s
-        writeTimeout: 600s
-        idleTimeout: 600s
+        readTimeout: 1800s
+        writeTimeout: 1800s
+        idleTimeout: 1800s
 logs:
   general:
     format: json
