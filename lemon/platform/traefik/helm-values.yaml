@@ -4,7 +4,7 @@ image:
   # emits "namespace ... is ignored in cross-provider context" warnings for
   # IngressRoutes referencing services like api@internal. Drop this once a
   # release with the master-branch fix ships.
-  tag: v3.6.15
+  tag: v3.7.1
 service:
   type: ClusterIP
 deployment:
