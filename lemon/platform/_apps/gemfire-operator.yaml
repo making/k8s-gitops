@@ -39,9 +39,6 @@ spec:
       paths:
       - "-"
       - 1/config
-  - kbld:
-      paths:
-      - '-'
   deploy:
   - kapp:
       rawOptions:
