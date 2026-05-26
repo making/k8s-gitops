@@ -12,7 +12,66 @@ deployment:
     protocol: TCP
   podLabels:
     app: counter-api-cpp
-  env: { }
+  #! The C++ native client only accepts PEM keystores; the Tanzu GemFire on
+  #! Kubernetes Secret ships PKCS#12 files. An init container converts them
+  #! into /certs/keystore.pem and /certs/truststore.pem at pod startup.
+  env:
+    GEMFIRE_LOCATORS:
+      value: "entry-gemfire-locator-0.entry-gemfire-locator.blog.svc.cluster.local[10334],entry-gemfire-locator-1.entry-gemfire-locator.blog.svc.cluster.local[10334]"
+    GEMFIRE_REGION:
+      value: "Counter"
+    GEMFIRE_LOG_LEVEL:
+      value: "config"
+    GEMFIRE_SSL_ENABLED:
+      value: "true"
+    GEMFIRE_SSL_KEYSTORE:
+      value: "/certs/keystore.pem"
+    GEMFIRE_SSL_TRUSTSTORE:
+      value: "/certs/truststore.pem"
+    GEMFIRE_SSL_KEYSTORE_PASSWORD:
+      valueFrom:
+        secretKeyRef:
+          name: entry-gemfire-cert
+          key: password
+  initContainers:
+    convert-pkcs12-to-pem:
+      image: alpine/openssl:3.5
+      imagePullPolicy: IfNotPresent
+      #! alpine/openssl's default entrypoint is `openssl`, so we override it
+      #! with `sh -c` to run the conversion script.
+      command: [ "sh", "-c" ]
+      args:
+      - |
+        set -eu
+        PASS="$(cat /certs-p12/password)"
+        openssl pkcs12 -in /certs-p12/keystore.p12 -nodes -password "pass:${PASS}" -out /certs/keystore.pem
+        openssl pkcs12 -in /certs-p12/truststore.p12 -nokeys -password "pass:${PASS}" -out /certs/truststore.pem
+      volumeMounts:
+      - name: certs-p12
+        mountPath: /certs-p12
+        readOnly: true
+      - name: certs
+        mountPath: /certs
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+  volumes:
+    certs-p12:
+      secret:
+        secretName: entry-gemfire-cert
+    certs:
+      emptyDir: { }
+  volumeMounts:
+    certs:
+      mountPath: /certs
+      readOnly: true
   resources:
     limits:
       memory: 128M
