@@ -1,0 +1,53 @@
+---
+applicationName: counter-api-cpp
+deployment:
+  replicas: 1
+  image:
+    repository: ghcr.io/categolj/counter-api-cpp
+    tag: native
+    pullPolicy: Always
+  ports:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  podLabels:
+    app: counter-api-cpp
+  env: { }
+  resources:
+    limits:
+      memory: 128M
+    requests:
+      memory: 128M
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health
+      port: 8080
+      scheme: HTTP
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health
+      port: 8080
+      scheme: HTTP
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 10001
+    seccompProfile:
+      type: RuntimeDefault
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: counter-api-cpp
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+ingress:
+  enabled: false
