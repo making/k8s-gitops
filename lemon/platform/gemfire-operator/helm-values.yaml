@@ -1,3 +1,3 @@
-image: registry.maki.lol/tanzu-gemfire-for-kubernetes/gemfire-controller:2.6.2
-controllerImage: registry.maki.lol/tanzu-gemfire-for-kubernetes/gemfire-controller@sha256:d203a0cb956a9502bf920c51a8aeecb48327a15f6f6393652870143638369678
+image: registry.maki.lol/tanzu-gemfire-for-kubernetes/gemfire-controller:2.6.3
+controllerImage: registry.maki.lol/tanzu-gemfire-for-kubernetes/gemfire-controller@sha256:e0a51508df523eb931ea906f88745da849bc48956d65361d0070acf98a9bd869
 imagePullSecretName: regsecret
