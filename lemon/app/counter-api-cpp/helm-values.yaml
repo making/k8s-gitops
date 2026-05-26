@@ -40,12 +40,15 @@ deployment:
       #! alpine/openssl's default entrypoint is `openssl`, so we override it
       #! with `sh -c` to run the conversion script.
       command: [ "sh", "-c" ]
+      #! OpenSSL 3.x disables RC2-40-CBC by default but Java-generated PKCS#12
+      #! files (including the ones from Tanzu GemFire on Kubernetes) typically
+      #! use it, so the legacy provider must be enabled via -legacy.
       args:
       - |
         set -eu
         PASS="$(cat /certs-p12/password)"
-        openssl pkcs12 -in /certs-p12/keystore.p12 -nodes -password "pass:${PASS}" -out /certs/keystore.pem
-        openssl pkcs12 -in /certs-p12/truststore.p12 -nokeys -password "pass:${PASS}" -out /certs/truststore.pem
+        openssl pkcs12 -legacy -in /certs-p12/keystore.p12 -nodes -password "pass:${PASS}" -out /certs/keystore.pem
+        openssl pkcs12 -legacy -in /certs-p12/truststore.p12 -nokeys -password "pass:${PASS}" -out /certs/truststore.pem
       volumeMounts:
       - name: certs-p12
         mountPath: /certs-p12
