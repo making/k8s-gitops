@@ -32,20 +32,12 @@ deployment:
       value: ecs
     info.env.hostname:
       value: ${HOSTNAME:}
-    blog-api.url:
-      value: http://entry-api.blog.svc.cluster.local:8080
     blog.api.base-url:
       value: http://entry-api.blog.svc.cluster.local:8080
-    translation-api.url:
-      value: http://translation-api.blog.svc.cluster.local:8080
-    note-api.url:
-      value: http://note-api.note.svc.cluster.local:8080
     note.api.base-url:
       value: http://note-api.note.svc.cluster.local:8080
-    counter-api.url:
-      value: http://counter-api-cpp.blog.svc.cluster.local:8080/counter
     counter.api.base-url:
-      value: http://counter-api.blog.svc.cluster.local:8080
+      value: http://counter-api-cpp.blog.svc.cluster.local:8080
     counter-api.ip-black-list:
       valueFrom:
         secretKeyRef:
