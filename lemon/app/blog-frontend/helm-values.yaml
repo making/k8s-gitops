@@ -43,7 +43,7 @@ deployment:
     note.api.base-url:
       value: http://note-api.note.svc.cluster.local:8080
     counter-api.url:
-      value: http://counter-api.blog.svc.cluster.local:8080/counter
+      value: http://counter-api-cpp.blog.svc.cluster.local:8080/counter
     counter.api.base-url:
       value: http://counter-api.blog.svc.cluster.local:8080
     counter-api.ip-black-list:
