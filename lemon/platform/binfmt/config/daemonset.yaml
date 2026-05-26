@@ -16,6 +16,15 @@ spec:
         args: [ "--install", "amd64" ]
         securityContext:
           privileged: true
+        volumeMounts:
+        - name: binfmt-misc
+          mountPath: /proc/sys/fs/binfmt_misc
+          mountPropagation: Bidirectional
       containers:
       - name: pause
         image: portainer/pause:3.9
+      volumes:
+      - name: binfmt-misc
+        hostPath:
+          path: /proc/sys/fs/binfmt_misc
+          type: Directory
