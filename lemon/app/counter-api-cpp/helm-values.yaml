@@ -21,7 +21,7 @@ deployment:
     GEMFIRE_REGION:
       value: "Counter"
     GEMFIRE_LOG_LEVEL:
-      value: "info"
+      value: "warning"
     GEMFIRE_SSL_ENABLED:
       value: "true"
     GEMFIRE_SSL_KEYSTORE:
