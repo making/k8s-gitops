@@ -1,4 +1,2 @@
-image: registry.maki.lol/tanzu-gemfire-for-kubernetes/gemfire-controller:2.6.3
-#! kbld -f lemon/platform/gemfire-operator/helm-values.yaml --platform linux/amd64 2>&1 | grep url | tail -1
-controllerImage: registry.maki.lol/tanzu-gemfire-for-kubernetes/gemfire-controller@sha256:0e3907b64349b35a8c0676e2f8e9db01cf9264cb0b34298d886aaa1e26596d0a
+image: registry.maki.lol/tanzu-gemfire-for-kubernetes/gemfire-controller:2.6.2
 imagePullSecretName: regsecret
