@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: binfmt
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels: { app: binfmt }
+  template:
+    metadata:
+      labels: { app: binfmt }
+    spec:
+      initContainers:
+      - name: binfmt
+        image: tonistiigi/binfmt:qemu-v10.2.1-65
+        args: [ "--install", "amd64" ]
+        securityContext:
+          privileged: true
+      containers:
+      - name: pause
+        image: portainer/pause:3.9
