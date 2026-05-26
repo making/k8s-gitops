@@ -4,7 +4,7 @@ deployment:
   replicas: 1
   image:
     repository: ghcr.io/categolj/counter-api-cpp
-    tag: latest
+    digest: sha256:f08efe89c42ec0f87cbb8b42c9f7612cadc179be52858069e8e0b19a98841ddd
     pullPolicy: Always
   ports:
   - name: http
