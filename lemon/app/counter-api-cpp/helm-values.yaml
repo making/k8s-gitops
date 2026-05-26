@@ -35,7 +35,7 @@ deployment:
           key: password
   initContainers:
     convert-pkcs12-to-pem:
-      image: alpine/openssl:3.5
+      image: alpine/openssl:3.5.6
       imagePullPolicy: IfNotPresent
       #! alpine/openssl's default entrypoint is `openssl`, so we override it
       #! with `sh -c` to run the conversion script.
