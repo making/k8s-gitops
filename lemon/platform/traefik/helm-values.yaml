@@ -6,7 +6,8 @@ image:
   # release with the master-branch fix ships.
   tag: v3.7.1
 service:
-  type: ClusterIP
+  spec:
+    type: ClusterIP
 deployment:
   replicas: 2
 api:
