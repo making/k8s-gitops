@@ -107,8 +107,8 @@ data:
       # (kubelet probes, in-cluster pods hairpinning through the NLB).
       acl internal src 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 127.0.0.0/8
       # Blocked IPs
-      # acl blocked src -f /usr/local/etc/haproxy/blocked-ips.txt
-      # tcp-request connection reject if blocked
+      acl blocked src -f /usr/local/etc/haproxy/blocked-ips.txt
+      tcp-request connection reject if blocked
       # Record client IP in the stick-table (external only)
       http-request track-sc0 src unless internal
       # Reject with 429 Too Many Requests if rate exceeds 10 req/sec
