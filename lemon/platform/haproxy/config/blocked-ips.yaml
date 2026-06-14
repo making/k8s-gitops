@@ -7,6 +7,7 @@ metadata:
     kapp.k14s.io/versioned: ""
 data:
   blocked-ips.txt: |
+    101.47.8.187/32
     103.147.237.208/32
     103.72.147.224/32
     110.35.80.116/32
