@@ -1,6 +1,5 @@
 {
-  "__inputs": [
-  ],
+  "__inputs": [],
   "__elements": {},
   "__requires": [
     {
@@ -779,38 +778,7 @@
           },
           "unit": "bytes"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "used"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#E0B400",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "available"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#73BF69",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 7,
@@ -837,20 +805,20 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(\n  max by (device) (\n    node_filesystem_size_bytes{instance=\"$instance\", fstype!=\"\"}\n  -\n    node_filesystem_avail_bytes{instance=\"$instance\", fstype!=\"\"}\n  )\n)\n",
+          "expr": "node_filesystem_size_bytes{instance=\"$instance\", fstype!=\"\"}\n-\nnode_filesystem_avail_bytes{instance=\"$instance\", fstype!=\"\"}\n",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "used",
+          "legendFormat": "{{device}} used",
           "refId": "A"
         },
         {
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(\n  max by (device) (\n    node_filesystem_avail_bytes{instance=\"$instance\", fstype!=\"\"}\n  )\n)\n",
+          "expr": "node_filesystem_avail_bytes{instance=\"$instance\", fstype!=\"\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "available",
+          "legendFormat": "{{device}} available",
           "refId": "B"
         }
       ],
