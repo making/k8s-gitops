@@ -41,7 +41,7 @@ deployment:
           key: openai-chat-completions-path
           name: translation-config
     spring.ai.openai.chat.options.model:
-      value: unsloth/Qwen3.6-27B-MTP-GGUF:Q4_K_XL
+      value: GLM-5.3-Flash-EXL3
       #! valueFrom:
       #!   secretKeyRef:
       #!     key: openai-chat-options-model

@@ -116,7 +116,7 @@ deployment:
           key: openai-url
           name: entry-api-config
     spring.ai.openai.chat.options.model:
-      value: unsloth/Qwen3.6-27B-MTP-GGUF:Q4_K_XL
+      value: GLM-5.3-Flash-EXL3
       #! valueFrom:
       #!   secretKeyRef:
       #!     key: openai-chat-model
