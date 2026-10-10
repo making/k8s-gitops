@@ -151,12 +151,19 @@ data:
       # the backend is plain Tomcat JSSE and does not accept it.
       acl sluice_console_sni req.ssl_sni -i console.sluice.ik.am
       use_backend sluice_console_https_backend if sluice_console_sni
+      # gRPC (TLS) endpoint of sluice-server, same pass-through treatment.
+      acl sluice_control_sni req.ssl_sni -i control.sluice.ik.am
+      use_backend sluice_control_https_backend if sluice_control_sni
 
       default_backend traefik_https_backend
 
     backend sluice_console_https_backend
       mode tcp
       server sluice-console sluice-server.sluice.svc.cluster.local:8081 check
+
+    backend sluice_control_https_backend
+      mode tcp
+      server sluice-control sluice-server.sluice.svc.cluster.local:8001 check
 
     backend traefik_https_backend
       mode tcp
