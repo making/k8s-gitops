@@ -27,6 +27,16 @@ deployment:
       value: file:///mnt/certs/tls.crt
     spring.ssl.bundle.pem.cert-manager.keystore.private-key:
       value: file:///mnt/certs/tls.key
+    spring.security.user.name:
+      valueFrom:
+        secretKeyRef:
+          name: sluice-token
+          key: username
+    spring.security.user.password:
+      valueFrom:
+        secretKeyRef:
+          name: sluice-token
+          key: password
     logging.structured.format.console:
       value: ecs
     logging.level.am.ik.sluice.server.SluiceServerApplication:
