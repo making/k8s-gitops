@@ -20,9 +20,9 @@ deployment:
     spring.grpc.server.ssl.bundle:
       value: cert-manager
     spring.ssl.bundle.pem.cert-manager.keystore.certificate:
-      value: file://mnt/certs/tls.crt
+      value: file:///mnt/certs/tls.crt
     spring.ssl.bundle.pem.cert-manager.keystore.private-key:
-      value: file://mnt/certs/tls.key
+      value: file:///mnt/certs/tls.key
     logging.structured.format.console:
       value: ecs
     logging.level.am.ik.sluice.server.SluiceServerApplication:
