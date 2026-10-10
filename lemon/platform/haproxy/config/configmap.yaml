@@ -146,8 +146,18 @@ data:
       tcp-request inspect-delay 5s
       tcp-request content accept if { req_ssl_hello_type 1 }
 
+      # TLS pass-through for sluice console: forward the ClientHello untouched
+      # to sluice-server, which terminates TLS itself. proxy v2 is used so the
+      # backend still sees the original client address.
+      acl sluice_console_sni req.ssl_sni -i console.sluice.ik.am
+      use_backend sluice_https_backend if sluice_console_sni
+
       default_backend traefik_https_backend
-    
+
+    backend sluice_https_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:8081 check send-proxy-v2
+
     backend traefik_https_backend
       mode tcp
       server traefik traefik.traefik.svc.cluster.local:443 check send-proxy-v2
