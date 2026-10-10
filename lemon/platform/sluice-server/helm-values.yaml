@@ -5,6 +5,8 @@ deployment:
     repository: ghcr.io/making/sluice/sluice-server
     tag: native
     pullPolicy: Always
+  podLabels:
+    app: sluice-server
   additionalPodAnnotations:
     prometheus.io/path: /actuator/prometheus
     prometheus.io/port: "8081"
