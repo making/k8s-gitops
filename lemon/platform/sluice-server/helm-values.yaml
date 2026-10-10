@@ -7,6 +7,9 @@ deployment:
     pullPolicy: Always
   podLabels:
     app: sluice-server
+  annotations:
+    secret.reloader.stakater.com/reload: "sluice-ik-am-tls"
+    reloader.stakater.com/rollout-strategy: "restart"
   additionalPodAnnotations:
     prometheus.io/path: /actuator/prometheus
     prometheus.io/port: "8081"
