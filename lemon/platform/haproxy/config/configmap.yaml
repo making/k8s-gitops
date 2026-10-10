@@ -114,9 +114,9 @@ data:
       # Reject with 429 Too Many Requests if rate exceeds 10 req/sec
       http-request deny deny_status 429 if !internal { sc_http_req_rate(0) gt 10 }
 
-      # sluice apps are HTTPS-only; bounce plain HTTP before it reaches traefik
-      acl sluice_apps_host hdr(host) -m end .apps.sluice.ik.am
-      http-request redirect scheme https if sluice_apps_host
+      # anything under .sluice.ik.am is HTTPS-only; bounce plain HTTP first
+      acl sluice_https_host hdr(host) -m end .sluice.ik.am
+      http-request redirect scheme https if sluice_https_host
 
       default_backend traefik_http_backend
     
