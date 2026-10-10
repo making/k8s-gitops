@@ -15,6 +15,14 @@ deployment:
   env:
     sluice.token-file:
       value: /mnt/secrets/token
+    sluice.data-tls-bundle:
+      value: cert-manager
+    spring.grpc.server.ssl.bundle:
+      value: cert-manager
+    spring.ssl.bundle.pem.cert-manager.keystore.certificate:
+      value: /mnt/certs/tls.crt
+    spring.ssl.bundle.pem.cert-manager.keystore.private-key:
+      value: /mnt/certs/tls.key
     logging.structured.format.console:
       value: ecs
     logging.level.am.ik.sluice.server.SluiceServerApplication:
@@ -41,12 +49,16 @@ deployment:
     token:
       secret:
         secretName: sluice-token
+    certs:
+      secret:
+        secretName: sluice-ik-am-tls
   volumeMounts:
     tmp:
       mountPath: /tmp
     token:
       mountPath: /mnt/secrets
-
+    certs:
+      mountPath: /mnt/certs
 service:
   type: ClusterIP
   ports:
