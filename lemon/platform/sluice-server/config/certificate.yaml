@@ -1,14 +1,30 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: sluice-ik-am
+  name: sluice-apps-ik-am
   namespace: sluice
 spec:
+  #! the data plane terminates TLS for the tunnel routes; kept to the apps wildcard
+  #! so the browsers do not coalesce the console onto a data-plane connection
+  #! (the console is fronted by the 8081 listener, see helm-values.yaml)
+  dnsNames:
+    - "*.apps.sluice.ik.am"
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: sluice-apps-ik-am-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: sluice-system-ik-am
+  namespace: sluice
+spec:
+  #! the server's own listeners (console 8081, gRPC control 8001)
   dnsNames:
     - "*.sluice.ik.am"
-    - "*.apps.sluice.ik.am"
     - "*.sys.sluice.ik.am"
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
-  secretName: sluice-ik-am-tls
+  secretName: sluice-system-ik-am-tls

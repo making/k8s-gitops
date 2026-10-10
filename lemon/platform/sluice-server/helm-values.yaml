@@ -8,7 +8,7 @@ deployment:
   podLabels:
     app: sluice-server
   annotations:
-    secret.reloader.stakater.com/reload: "sluice-ik-am-tls"
+    secret.reloader.stakater.com/reload: "sluice-system-ik-am-tls,sluice-apps-ik-am-tls"
     reloader.stakater.com/rollout-strategy: "restart"
   additionalPodAnnotations:
     prometheus.io/path: /actuator/prometheus
@@ -21,17 +21,24 @@ deployment:
     sluice.token-file:
       value: /mnt/secrets/token
     sluice.data-tls-bundle:
-      value: cert-manager
+      value: apps
     server.ssl.enabled:
       value: "true"
     server.ssl.bundle:
-      value: cert-manager
+      value: system
     spring.grpc.server.ssl.bundle:
-      value: cert-manager
-    spring.ssl.bundle.pem.cert-manager.keystore.certificate:
-      value: file:///mnt/certs/tls.crt
-    spring.ssl.bundle.pem.cert-manager.keystore.private-key:
-      value: file:///mnt/certs/tls.key
+      value: system
+    # the server's own listeners (console, gRPC): the system certificate
+    spring.ssl.bundle.pem.system.keystore.certificate:
+      value: file:///mnt/certs-system/tls.crt
+    spring.ssl.bundle.pem.system.keystore.private-key:
+      value: file:///mnt/certs-system/tls.key
+    # the data plane (tunnel routes): the apps certificate, so the browsers do not
+    # coalesce the console onto a data-plane connection
+    spring.ssl.bundle.pem.apps.keystore.certificate:
+      value: file:///mnt/certs-apps/tls.crt
+    spring.ssl.bundle.pem.apps.keystore.private-key:
+      value: file:///mnt/certs-apps/tls.key
     spring.security.user.name:
       valueFrom:
         secretKeyRef:
@@ -70,16 +77,21 @@ deployment:
     token:
       secret:
         secretName: sluice-token
-    certs:
+    certs-system:
       secret:
-        secretName: sluice-ik-am-tls
+        secretName: sluice-system-ik-am-tls
+    certs-apps:
+      secret:
+        secretName: sluice-apps-ik-am-tls
   volumeMounts:
     tmp:
       mountPath: /tmp
     token:
       mountPath: /mnt/secrets
-    certs:
-      mountPath: /mnt/certs
+    certs-system:
+      mountPath: /mnt/certs-system
+    certs-apps:
+      mountPath: /mnt/certs-apps
 service:
   type: ClusterIP
   ports:
