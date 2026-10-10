@@ -20,7 +20,7 @@ spec:
   - git:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
-      subPath: lemon/app/sluice-server
+      subPath: lemon/platform/sluice-server
   - git:
       url: https://github.com/making/sluice.git
       ref: origin/images
