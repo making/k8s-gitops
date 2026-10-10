@@ -154,7 +154,7 @@ data:
 
       default_backend traefik_https_backend
 
-backend sluice_console_https_backend
+    backend sluice_console_https_backend
       mode tcp
       server sluice-console sluice-server.sluice.svc.cluster.local:8081 check
 
