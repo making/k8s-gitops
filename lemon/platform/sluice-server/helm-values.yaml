@@ -17,6 +17,8 @@ deployment:
       value: /mnt/secrets/token
     logging.structured.format.console:
       value: ecs
+    logging.level.am.ik.sluice.server.SluiceServerApplication:
+      value: debug
   readinessProbe:
     enabled: true
     httpGet:
@@ -35,7 +37,7 @@ deployment:
     runAsNonRoot: true
   volumes:
     tmp:
-      emptyDir: {}
+      emptyDir: { }
     token:
       secret:
         secretName: sluice-token
