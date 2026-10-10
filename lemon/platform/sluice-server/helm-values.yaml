@@ -36,12 +36,14 @@ deployment:
     httpGet:
       path: /actuator/health/readiness
       port: 8081
+      scheme: HTTPS
     periodSeconds: 5
   livenessProbe:
     enabled: true
     httpGet:
       path: /actuator/health/liveness
       port: 8081
+      scheme: HTTPS
     periodSeconds: 10
   # the chart defaults to a read-only root filesystem; Tomcat needs a writable
   # temp dir, so back /tmp with an emptyDir
