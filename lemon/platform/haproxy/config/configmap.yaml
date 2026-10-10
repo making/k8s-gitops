@@ -154,6 +154,9 @@ data:
       # gRPC (TLS) endpoint of sluice-server, same pass-through treatment.
       acl sluice_control_sni req.ssl_sni -i control.sluice.ik.am
       use_backend sluice_control_https_backend if sluice_control_sni
+      # Data plane (TLS) of sluice-server; wildcard subdomains of apps.sluice.ik.am.
+      acl sluice_apps_sni req.ssl_sni -m end .apps.sluice.ik.am
+      use_backend sluice_apps_https_backend if sluice_apps_sni
 
       default_backend traefik_https_backend
 
@@ -164,6 +167,10 @@ data:
     backend sluice_control_https_backend
       mode tcp
       server sluice-control sluice-server.sluice.svc.cluster.local:8001 check
+
+    backend sluice_apps_https_backend
+      mode tcp
+      server sluice-apps sluice-server.sluice.svc.cluster.local:8000 check
 
     backend traefik_https_backend
       mode tcp
