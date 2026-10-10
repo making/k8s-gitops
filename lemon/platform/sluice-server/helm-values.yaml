@@ -17,6 +17,10 @@ deployment:
       value: /mnt/secrets/token
     sluice.data-tls-bundle:
       value: cert-manager
+    server.ssl.enabled:
+      value: "true"
+    server.ssl.bundle:
+      value: cert-manager
     spring.grpc.server.ssl.bundle:
       value: cert-manager
     spring.ssl.bundle.pem.cert-manager.keystore.certificate:
