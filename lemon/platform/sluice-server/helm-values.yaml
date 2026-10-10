@@ -36,7 +36,7 @@ deployment:
       emptyDir: {}
     token:
       secret:
-        name: sluice-token
+        secretName: sluice-token
   volumeMounts:
     tmp:
       mountPath: /tmp
