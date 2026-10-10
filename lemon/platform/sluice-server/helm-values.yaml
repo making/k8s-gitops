@@ -1,0 +1,60 @@
+applicationName: sluice-server
+
+deployment:
+  image:
+    repository: ghcr.io/making/sluice/sluice-server
+    tag: native
+    pullPolicy: Always
+  additionalPodAnnotations:
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8081"
+    prometheus.io/scrape: "true"
+  resources:
+    limits:
+      memory: 512Mi
+  env:
+    sluice.token-file:
+      value: /mnt/secrets/token
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8081
+    periodSeconds: 5
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8081
+    periodSeconds: 10
+  # the chart defaults to a read-only root filesystem; Tomcat needs a writable
+  # temp dir, so back /tmp with an emptyDir
+  containerSecurityContext:
+    runAsNonRoot: true
+  volumes:
+    tmp:
+      emptyDir: {}
+    token:
+      secret:
+        name: sluice-token
+  volumeMounts:
+    tmp:
+      mountPath: /tmp
+    token:
+      mountPath: /mnt/secrets
+
+service:
+  type: ClusterIP
+  ports:
+  - name: grpc
+    port: 8001
+    protocol: TCP
+    targetPort: 8001
+  - name: data
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  - name: http
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
