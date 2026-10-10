@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: sluice-ik-am
+  namespace: sluice
+spec:
+  dnsNames:
+    - "*.sluice.ik.am"
+    - "*.apps.sluice.ik.am"
+    - "*.sys.sluice.ik.am"
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: sluice-ik-am-tls
