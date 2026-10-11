@@ -14,6 +14,7 @@ deployment:
     prometheus.io/path: /actuator/prometheus
     prometheus.io/port: "8081"
     prometheus.io/scrape: "true"
+    prometheus.io/scheme: https
   resources:
     limits:
       memory: 512Mi
