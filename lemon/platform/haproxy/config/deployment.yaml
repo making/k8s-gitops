@@ -55,6 +55,55 @@ spec:
           name: ldaps
         - containerPort: 9090
           name: vault-audit
+        #! sluice TCP routes (mirrors the frontends in haproxy.cfg)
+        - containerPort: 1099
+          name: gemfire-jmx-1
+        - containerPort: 1100
+          name: gemfire-jmx-2
+        - containerPort: 1101
+          name: gemfire-jmx-3
+        - containerPort: 5432
+          name: postgresql
+        - containerPort: 5671
+          name: rabbitmq-1-tls
+        - containerPort: 5672
+          name: rabbitmq-1
+        - containerPort: 5673
+          name: rabbitmq-2-tls
+        - containerPort: 5674
+          name: rabbitmq-2
+        - containerPort: 5675
+          name: rabbitmq-3-tls
+        - containerPort: 5676
+          name: rabbitmq-3
+        - containerPort: 6379
+          name: redis
+        - containerPort: 6380
+          name: redis-tls
+        - containerPort: 9092
+          name: kafka-1
+        - containerPort: 9093
+          name: kafka-1-tls
+        - containerPort: 9094
+          name: kafka-2
+        - containerPort: 9095
+          name: kafka-2-tls
+        - containerPort: 9096
+          name: kafka-3
+        - containerPort: 9097
+          name: kafka-3-tls
+        - containerPort: 10334
+          name: gemfire-locator-1
+        - containerPort: 10335
+          name: gemfire-locator-2
+        - containerPort: 10336
+          name: gemfire-locator-3
+        - containerPort: 40404
+          name: gemfire-server-1
+        - containerPort: 40405
+          name: gemfire-server-2
+        - containerPort: 40406
+          name: gemfire-server-3
         volumeMounts:
         - name: haproxy-config
           mountPath: /usr/local/etc/haproxy/haproxy.cfg

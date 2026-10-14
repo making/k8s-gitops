@@ -180,4 +180,232 @@ data:
       mode tcp
       server traefik traefik.traefik.svc.cluster.local:443 check send-proxy-v2
 
+    # Sluice TCP routes: plain L4 pass-through, one listener per middleware
+    # port. The backend port always equals the listen port, so clients reach
+    # the same port number through haproxy as the sluice client advertised.
+    # (All ports are >1024, so haproxy binds them directly, like 9090 above.)
+
+    # GemFire JMX (3 members)
+    frontend sluice_gemfire_jmx_1_frontend
+      bind *:1099
+      mode tcp
+      no log
+      default_backend sluice_gemfire_jmx_1_backend
+    backend sluice_gemfire_jmx_1_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:1099 check
+
+    frontend sluice_gemfire_jmx_2_frontend
+      bind *:1100
+      mode tcp
+      no log
+      default_backend sluice_gemfire_jmx_2_backend
+    backend sluice_gemfire_jmx_2_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:1100 check
+
+    frontend sluice_gemfire_jmx_3_frontend
+      bind *:1101
+      mode tcp
+      no log
+      default_backend sluice_gemfire_jmx_3_backend
+    backend sluice_gemfire_jmx_3_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:1101 check
+
+    # PostgreSQL
+    frontend sluice_postgresql_frontend
+      bind *:5432
+      mode tcp
+      no log
+      default_backend sluice_postgresql_backend
+    backend sluice_postgresql_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5432 check
+
+    # RabbitMQ: node N = 5672+2(N-1) amqp / +1 amqps
+    frontend sluice_rabbitmq_1_frontend
+      bind *:5672
+      mode tcp
+      no log
+      default_backend sluice_rabbitmq_1_backend
+    backend sluice_rabbitmq_1_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5672 check
+
+    frontend sluice_rabbitmq_1_tls_frontend
+      bind *:5671
+      mode tcp
+      no log
+      default_backend sluice_rabbitmq_1_tls_backend
+    backend sluice_rabbitmq_1_tls_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5671 check
+
+    frontend sluice_rabbitmq_2_frontend
+      bind *:5674
+      mode tcp
+      no log
+      default_backend sluice_rabbitmq_2_backend
+    backend sluice_rabbitmq_2_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5674 check
+
+    frontend sluice_rabbitmq_2_tls_frontend
+      bind *:5673
+      mode tcp
+      no log
+      default_backend sluice_rabbitmq_2_tls_backend
+    backend sluice_rabbitmq_2_tls_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5673 check
+
+    frontend sluice_rabbitmq_3_frontend
+      bind *:5676
+      mode tcp
+      no log
+      default_backend sluice_rabbitmq_3_backend
+    backend sluice_rabbitmq_3_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5676 check
+
+    frontend sluice_rabbitmq_3_tls_frontend
+      bind *:5675
+      mode tcp
+      no log
+      default_backend sluice_rabbitmq_3_tls_backend
+    backend sluice_rabbitmq_3_tls_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5675 check
+
+    # Redis / TLS
+    frontend sluice_redis_frontend
+      bind *:6379
+      mode tcp
+      no log
+      default_backend sluice_redis_backend
+    backend sluice_redis_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:6379 check
+
+    frontend sluice_redis_tls_frontend
+      bind *:6380
+      mode tcp
+      no log
+      default_backend sluice_redis_tls_backend
+    backend sluice_redis_tls_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:6380 check
+
+    # Kafka: broker N = 9092+2(N-1) plaintext / +1 TLS listener
+    frontend sluice_kafka_1_frontend
+      bind *:9092
+      mode tcp
+      no log
+      default_backend sluice_kafka_1_backend
+    backend sluice_kafka_1_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:9092 check
+
+    frontend sluice_kafka_1_tls_frontend
+      bind *:9093
+      mode tcp
+      no log
+      default_backend sluice_kafka_1_tls_backend
+    backend sluice_kafka_1_tls_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:9093 check
+
+    frontend sluice_kafka_2_frontend
+      bind *:9094
+      mode tcp
+      no log
+      default_backend sluice_kafka_2_backend
+    backend sluice_kafka_2_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:9094 check
+
+    frontend sluice_kafka_2_tls_frontend
+      bind *:9095
+      mode tcp
+      no log
+      default_backend sluice_kafka_2_tls_backend
+    backend sluice_kafka_2_tls_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:9095 check
+
+    frontend sluice_kafka_3_frontend
+      bind *:9096
+      mode tcp
+      no log
+      default_backend sluice_kafka_3_backend
+    backend sluice_kafka_3_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:9096 check
+
+    frontend sluice_kafka_3_tls_frontend
+      bind *:9097
+      mode tcp
+      no log
+      default_backend sluice_kafka_3_tls_backend
+    backend sluice_kafka_3_tls_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:9097 check
+
+    # GemFire locators (3 members)
+    frontend sluice_gemfire_locator_1_frontend
+      bind *:10334
+      mode tcp
+      no log
+      default_backend sluice_gemfire_locator_1_backend
+    backend sluice_gemfire_locator_1_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:10334 check
+
+    frontend sluice_gemfire_locator_2_frontend
+      bind *:10335
+      mode tcp
+      no log
+      default_backend sluice_gemfire_locator_2_backend
+    backend sluice_gemfire_locator_2_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:10335 check
+
+    frontend sluice_gemfire_locator_3_frontend
+      bind *:10336
+      mode tcp
+      no log
+      default_backend sluice_gemfire_locator_3_backend
+    backend sluice_gemfire_locator_3_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:10336 check
+
+    # GemFire cache servers (3 members)
+    frontend sluice_gemfire_server_1_frontend
+      bind *:40404
+      mode tcp
+      no log
+      default_backend sluice_gemfire_server_1_backend
+    backend sluice_gemfire_server_1_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:40404 check
+
+    frontend sluice_gemfire_server_2_frontend
+      bind *:40405
+      mode tcp
+      no log
+      default_backend sluice_gemfire_server_2_backend
+    backend sluice_gemfire_server_2_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:40405 check
+
+    frontend sluice_gemfire_server_3_frontend
+      bind *:40406
+      mode tcp
+      no log
+      default_backend sluice_gemfire_server_3_backend
+    backend sluice_gemfire_server_3_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:40406 check
+
 ---
