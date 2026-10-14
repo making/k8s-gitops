@@ -112,27 +112,27 @@ spec:
     port: 9097
     targetPort: 9097
     protocol: TCP
-  - name: gemfire-locator-1
+  - name: gf-locator-1
     port: 10334
     targetPort: 10334
     protocol: TCP
-  - name: gemfire-locator-2
+  - name: gf-locator-2
     port: 10335
     targetPort: 10335
     protocol: TCP
-  - name: gemfire-locator-3
+  - name: gf-locator-3
     port: 10336
     targetPort: 10336
     protocol: TCP
-  - name: gemfire-server-1
+  - name: gf-server-1
     port: 40404
     targetPort: 40404
     protocol: TCP
-  - name: gemfire-server-2
+  - name: gf-server-2
     port: 40405
     targetPort: 40405
     protocol: TCP
-  - name: gemfire-server-3
+  - name: gf-server-3
     port: 40406
     targetPort: 40406
     protocol: TCP

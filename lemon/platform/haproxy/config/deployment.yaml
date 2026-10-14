@@ -93,17 +93,17 @@ spec:
         - containerPort: 9097
           name: kafka-3-tls
         - containerPort: 10334
-          name: gemfire-locator-1
+          name: gf-locator-1
         - containerPort: 10335
-          name: gemfire-locator-2
+          name: gf-locator-2
         - containerPort: 10336
-          name: gemfire-locator-3
+          name: gf-locator-3
         - containerPort: 40404
-          name: gemfire-server-1
+          name: gf-server-1
         - containerPort: 40405
-          name: gemfire-server-2
+          name: gf-server-2
         - containerPort: 40406
-          name: gemfire-server-3
+          name: gf-server-3
         volumeMounts:
         - name: haproxy-config
           mountPath: /usr/local/etc/haproxy/haproxy.cfg
