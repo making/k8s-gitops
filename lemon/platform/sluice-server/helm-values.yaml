@@ -19,6 +19,9 @@ deployment:
     limits:
       memory: 512Mi
   env:
+    # TCP routes may only claim the middleware ports exposed on the Service
+    sluice.tcp-port-range:
+      value: 5432,5671-5676,6379-6380,9092-9097,1099-1101,10334-10336,40404-40406
     sluice.token-file:
       value: /mnt/secrets/token
     sluice.data-tls-bundle:
@@ -108,3 +111,106 @@ service:
     port: 8081
     protocol: TCP
     targetPort: 8081
+  # TCP-route listeners: the server opens one listener per client-advertised
+  # listen-port, so the well-known middleware ports must be exposed on the
+  # Service. Plain and TLS-denominated variants where the ecosystem has one.
+  - name: postgresql
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  # RabbitMQ: 3 nodes; node N = 5672+2(N-1) amqp / +1 amqps
+  - name: rabbitmq-1
+    port: 5672
+    protocol: TCP
+    targetPort: 5672
+  - name: rabbitmq-1-tls
+    port: 5671
+    protocol: TCP
+    targetPort: 5671
+  - name: rabbitmq-2
+    port: 5674
+    protocol: TCP
+    targetPort: 5674
+  - name: rabbitmq-2-tls
+    port: 5673
+    protocol: TCP
+    targetPort: 5673
+  - name: rabbitmq-3
+    port: 5676
+    protocol: TCP
+    targetPort: 5676
+  - name: rabbitmq-3-tls
+    port: 5675
+    protocol: TCP
+    targetPort: 5675
+  - name: redis
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+  - name: redis-tls
+    port: 6380
+    protocol: TCP
+    targetPort: 6380
+  # Kafka: 3 brokers; broker N = 9092+2(N-1) plaintext / +1 TLS listener
+  - name: kafka-1
+    port: 9092
+    protocol: TCP
+    targetPort: 9092
+  - name: kafka-1-tls
+    port: 9093
+    protocol: TCP
+    targetPort: 9093
+  - name: kafka-2
+    port: 9094
+    protocol: TCP
+    targetPort: 9094
+  - name: kafka-2-tls
+    port: 9095
+    protocol: TCP
+    targetPort: 9095
+  - name: kafka-3
+    port: 9096
+    protocol: TCP
+    targetPort: 9096
+  - name: kafka-3-tls
+    port: 9097
+    protocol: TCP
+    targetPort: 9097
+  # GemFire: 3 members each for locator / cache-server / JMX; one contiguous
+  # range per role so a cluster maps to a range
+  - name: gemfire-jmx-1
+    port: 1099
+    protocol: TCP
+    targetPort: 1099
+  - name: gemfire-jmx-2
+    port: 1100
+    protocol: TCP
+    targetPort: 1100
+  - name: gemfire-jmx-3
+    port: 1101
+    protocol: TCP
+    targetPort: 1101
+  - name: gemfire-locator-1
+    port: 10334
+    protocol: TCP
+    targetPort: 10334
+  - name: gemfire-locator-2
+    port: 10335
+    protocol: TCP
+    targetPort: 10335
+  - name: gemfire-locator-3
+    port: 10336
+    protocol: TCP
+    targetPort: 10336
+  - name: gemfire-server-1
+    port: 40404
+    protocol: TCP
+    targetPort: 40404
+  - name: gemfire-server-2
+    port: 40405
+    protocol: TCP
+    targetPort: 40405
+  - name: gemfire-server-3
+    port: 40406
+    protocol: TCP
+    targetPort: 40406
