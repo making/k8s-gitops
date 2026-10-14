@@ -136,5 +136,50 @@ spec:
     port: 40406
     targetPort: 40406
     protocol: TCP
+  - name: gemfire-wan-1
+    port: 5000
+    targetPort: 5000
+    protocol: TCP
+  - name: gemfire-wan-2
+    port: 5001
+    targetPort: 5001
+    protocol: TCP
+  - name: gemfire-wan-3
+    port: 5002
+    targetPort: 5002
+    protocol: TCP
+  - name: gemfire-wan-4
+    port: 5003
+    targetPort: 5003
+    protocol: TCP
+  - name: gemfire-wan-5
+    port: 5004
+    targetPort: 5004
+    protocol: TCP
+  - name: gemfire-wan-6
+    port: 5005
+    targetPort: 5005
+    protocol: TCP
+  - name: gemfire-wan-7
+    port: 5006
+    targetPort: 5006
+    protocol: TCP
+  - name: gemfire-wan-8
+    port: 5007
+    targetPort: 5007
+    protocol: TCP
+  - name: gemfire-wan-9
+    port: 5008
+    targetPort: 5008
+    protocol: TCP
+  - name: gemfire-wan-10
+    port: 5009
+    targetPort: 5009
+    protocol: TCP
+  - name: gemfire-wan-11
+    port: 5010
+    targetPort: 5010
+    protocol: TCP
+
   selector:
     app: haproxy

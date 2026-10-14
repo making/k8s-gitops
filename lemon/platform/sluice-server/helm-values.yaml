@@ -21,7 +21,7 @@ deployment:
   env:
     # TCP routes may only claim the middleware ports exposed on the Service
     sluice.tcp-port-range:
-      value: 5432,5671-5676,6379-6380,9092-9097,1099-1101,10334-10336,40404-40406
+      value: 5432,5671-5676,6379-6380,9092-9097,1099-1101,5000-5010,10334-10336,40404-40406
     sluice.token-file:
       value: /mnt/secrets/token
     sluice.data-tls-bundle:
@@ -213,4 +213,48 @@ service:
   - name: gemfire-server-3
     port: 40406
     protocol: TCP
-    targetPort: 40406
+    targetPort: 40406  # GemFire WAN replication endpoints
+  - name: gemfire-wan-1
+    port: 5000
+    protocol: TCP
+    targetPort: 5000
+  - name: gemfire-wan-2
+    port: 5001
+    protocol: TCP
+    targetPort: 5001
+  - name: gemfire-wan-3
+    port: 5002
+    protocol: TCP
+    targetPort: 5002
+  - name: gemfire-wan-4
+    port: 5003
+    protocol: TCP
+    targetPort: 5003
+  - name: gemfire-wan-5
+    port: 5004
+    protocol: TCP
+    targetPort: 5004
+  - name: gemfire-wan-6
+    port: 5005
+    protocol: TCP
+    targetPort: 5005
+  - name: gemfire-wan-7
+    port: 5006
+    protocol: TCP
+    targetPort: 5006
+  - name: gemfire-wan-8
+    port: 5007
+    protocol: TCP
+    targetPort: 5007
+  - name: gemfire-wan-9
+    port: 5008
+    protocol: TCP
+    targetPort: 5008
+  - name: gemfire-wan-10
+    port: 5009
+    protocol: TCP
+    targetPort: 5009
+  - name: gemfire-wan-11
+    port: 5010
+    protocol: TCP
+    targetPort: 5010

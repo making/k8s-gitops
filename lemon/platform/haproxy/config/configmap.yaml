@@ -407,5 +407,94 @@ data:
     backend sluice_gemfire_server_3_backend
       mode tcp
       server sluice sluice-server.sluice.svc.cluster.local:40406 check
+    # GemFire WAN replication (5000-5010)
+    frontend sluice_gemfire_wan_1_frontend
+      bind *:5000
+      mode tcp
+      no log
+      default_backend sluice_gemfire_wan_1_backend
+    backend sluice_gemfire_wan_1_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5000 check
+    frontend sluice_gemfire_wan_2_frontend
+      bind *:5001
+      mode tcp
+      no log
+      default_backend sluice_gemfire_wan_2_backend
+    backend sluice_gemfire_wan_2_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5001 check
+    frontend sluice_gemfire_wan_3_frontend
+      bind *:5002
+      mode tcp
+      no log
+      default_backend sluice_gemfire_wan_3_backend
+    backend sluice_gemfire_wan_3_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5002 check
+    frontend sluice_gemfire_wan_4_frontend
+      bind *:5003
+      mode tcp
+      no log
+      default_backend sluice_gemfire_wan_4_backend
+    backend sluice_gemfire_wan_4_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5003 check
+    frontend sluice_gemfire_wan_5_frontend
+      bind *:5004
+      mode tcp
+      no log
+      default_backend sluice_gemfire_wan_5_backend
+    backend sluice_gemfire_wan_5_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5004 check
+    frontend sluice_gemfire_wan_6_frontend
+      bind *:5005
+      mode tcp
+      no log
+      default_backend sluice_gemfire_wan_6_backend
+    backend sluice_gemfire_wan_6_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5005 check
+    frontend sluice_gemfire_wan_7_frontend
+      bind *:5006
+      mode tcp
+      no log
+      default_backend sluice_gemfire_wan_7_backend
+    backend sluice_gemfire_wan_7_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5006 check
+    frontend sluice_gemfire_wan_8_frontend
+      bind *:5007
+      mode tcp
+      no log
+      default_backend sluice_gemfire_wan_8_backend
+    backend sluice_gemfire_wan_8_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5007 check
+    frontend sluice_gemfire_wan_9_frontend
+      bind *:5008
+      mode tcp
+      no log
+      default_backend sluice_gemfire_wan_9_backend
+    backend sluice_gemfire_wan_9_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5008 check
+    frontend sluice_gemfire_wan_10_frontend
+      bind *:5009
+      mode tcp
+      no log
+      default_backend sluice_gemfire_wan_10_backend
+    backend sluice_gemfire_wan_10_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5009 check
+    frontend sluice_gemfire_wan_11_frontend
+      bind *:5010
+      mode tcp
+      no log
+      default_backend sluice_gemfire_wan_11_backend
+    backend sluice_gemfire_wan_11_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:5010 check
 
 ---

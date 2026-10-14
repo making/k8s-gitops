@@ -103,7 +103,29 @@ spec:
         - containerPort: 40405
           name: gf-server-2
         - containerPort: 40406
-          name: gf-server-3
+          name: gf-server-3        - containerPort: 5000
+          name: gemfire-wan-1
+        - containerPort: 5001
+          name: gemfire-wan-2
+        - containerPort: 5002
+          name: gemfire-wan-3
+        - containerPort: 5003
+          name: gemfire-wan-4
+        - containerPort: 5004
+          name: gemfire-wan-5
+        - containerPort: 5005
+          name: gemfire-wan-6
+        - containerPort: 5006
+          name: gemfire-wan-7
+        - containerPort: 5007
+          name: gemfire-wan-8
+        - containerPort: 5008
+          name: gemfire-wan-9
+        - containerPort: 5009
+          name: gemfire-wan-10
+        - containerPort: 5010
+          name: gemfire-wan-11
+
         volumeMounts:
         - name: haproxy-config
           mountPath: /usr/local/etc/haproxy/haproxy.cfg
