@@ -103,7 +103,8 @@ spec:
         - containerPort: 40405
           name: gf-server-2
         - containerPort: 40406
-          name: gf-server-3        - containerPort: 5000
+          name: gf-server-3
+        - containerPort: 5000
           name: gemfire-wan-1
         - containerPort: 5001
           name: gemfire-wan-2
