@@ -126,7 +126,18 @@ spec:
           name: gemfire-wan-10
         - containerPort: 5010
           name: gemfire-wan-11
-
+        - containerPort: 7070
+          name: gf-loc-web-1
+        - containerPort: 7071
+          name: gf-srv-web-1
+        - containerPort: 7072
+          name: gf-loc-web-2
+        - containerPort: 7073
+          name: gf-srv-web-2
+        - containerPort: 7074
+          name: gf-loc-web-3
+        - containerPort: 7075
+          name: gf-srv-web-3
         volumeMounts:
         - name: haproxy-config
           mountPath: /usr/local/etc/haproxy/haproxy.cfg

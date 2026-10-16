@@ -497,4 +497,55 @@ data:
       mode tcp
       server sluice sluice-server.sluice.svc.cluster.local:5010 check
 
+    # GemFire web UI (locator/server http-services)
+    frontend sluice_gemfire_locator_web_1_frontend
+      bind *:7070
+      mode tcp
+      no log
+      default_backend sluice_gemfire_locator_web_1_backend
+    backend sluice_gemfire_locator_web_1_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:7070 check
+    frontend sluice_gemfire_server_web_1_frontend
+      bind *:7071
+      mode tcp
+      no log
+      default_backend sluice_gemfire_server_web_1_backend
+    backend sluice_gemfire_server_web_1_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:7071 check
+    frontend sluice_gemfire_locator_web_2_frontend
+      bind *:7072
+      mode tcp
+      no log
+      default_backend sluice_gemfire_locator_web_2_backend
+    backend sluice_gemfire_locator_web_2_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:7072 check
+    frontend sluice_gemfire_server_web_2_frontend
+      bind *:7073
+      mode tcp
+      no log
+      default_backend sluice_gemfire_server_web_2_backend
+    backend sluice_gemfire_server_web_2_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:7073 check
+    frontend sluice_gemfire_locator_web_3_frontend
+      bind *:7074
+      mode tcp
+      no log
+      default_backend sluice_gemfire_locator_web_3_backend
+    backend sluice_gemfire_locator_web_3_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:7074 check
+    frontend sluice_gemfire_server_web_3_frontend
+      bind *:7075
+      mode tcp
+      no log
+      default_backend sluice_gemfire_server_web_3_backend
+    backend sluice_gemfire_server_web_3_backend
+      mode tcp
+      server sluice sluice-server.sluice.svc.cluster.local:7075 check
+
+
 ---

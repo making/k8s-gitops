@@ -180,6 +180,36 @@ spec:
     port: 5010
     targetPort: 5010
     protocol: TCP
+  # gemfire-locator-web-1
+  - name: gf-loc-web-1
+    port: 7070
+    targetPort: 7070
+    protocol: TCP
+  # gemfire-server-web-1
+  - name: gf-srv-web-1
+    port: 7071
+    targetPort: 7071
+    protocol: TCP
+  # gemfire-locator-web-2
+  - name: gf-loc-web-2
+    port: 7072
+    targetPort: 7072
+    protocol: TCP
+  # gemfire-server-web-2
+  - name: gf-srv-web-2
+    port: 7073
+    targetPort: 7073
+    protocol: TCP
+  # gemfire-locator-web-3
+  - name: gf-loc-web-3
+    port: 7074
+    targetPort: 7074
+    protocol: TCP
+  # gemfire-server-web-3
+  - name: gf-srv-web-3
+    port: 7075
+    targetPort: 7075
+    protocol: TCP
 
   selector:
     app: haproxy

@@ -21,7 +21,7 @@ deployment:
   env:
     # TCP routes may only claim the middleware ports exposed on the Service
     sluice.tcp-port-range:
-      value: 5432,5671-5676,6379-6380,9092-9097,1099-1101,5000-5010,10334-10336,40404-40406
+      value: 5432,5671-5676,6379-6380,9092-9097,1099-1101,5000-5010,7070-7075,10334-10336,40404-40406
     sluice.token-file:
       value: /mnt/secrets/token
     sluice.data-tls-bundle:
@@ -258,3 +258,33 @@ service:
     port: 5010
     protocol: TCP
     targetPort: 5010
+  # gemfire-locator-web-1  (k8s port name shortened)
+  - name: gf-loc-web-1
+    port: 7070
+    protocol: TCP
+    targetPort: 7070
+  # gemfire-server-web-1  (k8s port name shortened)
+  - name: gf-srv-web-1
+    port: 7071
+    protocol: TCP
+    targetPort: 7071
+  # gemfire-locator-web-2  (k8s port name shortened)
+  - name: gf-loc-web-2
+    port: 7072
+    protocol: TCP
+    targetPort: 7072
+  # gemfire-server-web-2  (k8s port name shortened)
+  - name: gf-srv-web-2
+    port: 7073
+    protocol: TCP
+    targetPort: 7073
+  # gemfire-locator-web-3  (k8s port name shortened)
+  - name: gf-loc-web-3
+    port: 7074
+    protocol: TCP
+    targetPort: 7074
+  # gemfire-server-web-3  (k8s port name shortened)
+  - name: gf-srv-web-3
+    port: 7075
+    protocol: TCP
+    targetPort: 7075
