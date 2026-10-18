@@ -37,14 +37,14 @@ deployment:
     gemfire.properties.ssl-endpoint-identification-enabled:
       value: "true"
     gemfire.properties.ssl-keystore:
-      value: /certs/truststore.p12
+      value: /certs/keystore.p12
     gemfire.properties.ssl-keystore-password:
       valueFrom:
         secretKeyRef:
           name: entry-gemfire-tls
           key: password
     gemfire.properties.ssl-truststore:
-      value: /certs/keystore.p12
+      value: /certs/truststore.p12
     gemfire.properties.ssl-truststore-password:
       valueFrom:
         secretKeyRef:
