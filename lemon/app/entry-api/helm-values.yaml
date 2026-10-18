@@ -37,14 +37,14 @@ deployment:
     gemfire.properties.ssl-keystore-password:
       valueFrom:
         secretKeyRef:
-          name: entry-gemfire-tls
+          name: entry-gemfire-cert
           key: password
     gemfire.properties.ssl-truststore:
       value: /certs/keystore.p12
     gemfire.properties.ssl-truststore-password:
       valueFrom:
         secretKeyRef:
-          name: entry-gemfire-tls
+          name: entry-gemfire-cert
           key: password
     spring.security.user.password:
       valueFrom:
@@ -194,7 +194,7 @@ deployment:
   volumes:
     cert-volume:
       secret:
-        secretName: entry-gemfire-tls
+        secretName: entry-gemfire-cert
   resources:
     limits:
       cpu:
