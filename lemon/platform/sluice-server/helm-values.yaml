@@ -19,6 +19,8 @@ deployment:
     limits:
       memory: 512Mi
   env:
+    sluice.proxy-protocol:
+      value: "true"
     # TCP routes may only claim the middleware ports exposed on the Service
     sluice.tcp-port-range:
       value: 5432,5671-5676,6379-6380,9092-9097,1099-1101,5000-5010,7070-7075,10334-10336,40404-40406
