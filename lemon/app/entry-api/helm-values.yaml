@@ -27,11 +27,7 @@ deployment:
     BPL_JVM_THREAD_COUNT:
       value: "28"
     gemfire.locators:
-      #! value: entry-gemfire-locator-0.entry-gemfire-locator.blog.svc.cluster.local:10334,entry-gemfire-locator-1.entry-gemfire-locator.blog.svc.cluster.local:10334
-      valueFrom:
-        secretKeyRef:
-          key: gemfire-locators
-          name: entry-api-config
+      value: entry-gemfire-locator-0.entry-gemfire-locator.blog.svc.cluster.local:10334,entry-gemfire-locator-1.entry-gemfire-locator.blog.svc.cluster.local:10334
     gemfire.properties.ssl-enabled-components:
       value: all
     gemfire.properties.ssl-endpoint-identification-enabled:
@@ -41,14 +37,14 @@ deployment:
     gemfire.properties.ssl-keystore-password:
       valueFrom:
         secretKeyRef:
-          name: entry-gemfire-tls
+          name: entry-gemfire-cert
           key: password
     gemfire.properties.ssl-truststore:
       value: /certs/keystore.p12
     gemfire.properties.ssl-truststore-password:
       valueFrom:
         secretKeyRef:
-          name: entry-gemfire-tls
+          name: entry-gemfire-cert
           key: password
     spring.security.user.password:
       valueFrom:
@@ -198,7 +194,7 @@ deployment:
   volumes:
     cert-volume:
       secret:
-        secretName: entry-gemfire-tls
+        secretName: entry-gemfire-cert
   resources:
     limits:
       cpu:
