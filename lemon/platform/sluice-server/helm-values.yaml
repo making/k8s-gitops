@@ -98,6 +98,7 @@ deployment:
       mountPath: /mnt/certs-apps
 service:
   type: ClusterIP
+  clusterIP: 10.96.106.41
   ports:
   - name: grpc
     port: 8001
