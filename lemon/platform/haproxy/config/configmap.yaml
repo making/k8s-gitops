@@ -174,7 +174,7 @@ data:
 
     backend sluice_apps_https_backend
       mode tcp
-      server sluice-apps sluice-server.sluice.svc.cluster.local:8000 check send-proxy-v2 check
+      server sluice-apps sluice-server.sluice.svc.cluster.local:8000 check send-proxy-v2
 
     backend traefik_https_backend
       mode tcp
@@ -505,7 +505,7 @@ data:
       default_backend sluice_gemfire_locator_web_1_backend
     backend sluice_gemfire_locator_web_1_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7070 check
+      server sluice sluice-server.sluice.svc.cluster.local:7070 check send-proxy-v2
     frontend sluice_gemfire_server_web_1_frontend
       bind *:7071
       mode tcp
@@ -513,7 +513,7 @@ data:
       default_backend sluice_gemfire_server_web_1_backend
     backend sluice_gemfire_server_web_1_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7071 check
+      server sluice sluice-server.sluice.svc.cluster.local:7071 check send-proxy-v2
     frontend sluice_gemfire_locator_web_2_frontend
       bind *:7072
       mode tcp
@@ -521,7 +521,7 @@ data:
       default_backend sluice_gemfire_locator_web_2_backend
     backend sluice_gemfire_locator_web_2_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7072 check
+      server sluice sluice-server.sluice.svc.cluster.local:7072 check send-proxy-v2
     frontend sluice_gemfire_server_web_2_frontend
       bind *:7073
       mode tcp
@@ -529,7 +529,7 @@ data:
       default_backend sluice_gemfire_server_web_2_backend
     backend sluice_gemfire_server_web_2_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7073 check
+      server sluice sluice-server.sluice.svc.cluster.local:7073 check send-proxy-v2
     frontend sluice_gemfire_locator_web_3_frontend
       bind *:7074
       mode tcp
@@ -537,7 +537,7 @@ data:
       default_backend sluice_gemfire_locator_web_3_backend
     backend sluice_gemfire_locator_web_3_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7074 check
+      server sluice sluice-server.sluice.svc.cluster.local:7074 check send-proxy-v2
     frontend sluice_gemfire_server_web_3_frontend
       bind *:7075
       mode tcp
@@ -545,7 +545,7 @@ data:
       default_backend sluice_gemfire_server_web_3_backend
     backend sluice_gemfire_server_web_3_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7075 check
+      server sluice sluice-server.sluice.svc.cluster.local:7075 check send-proxy-v2
 
 
 ---
