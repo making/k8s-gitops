@@ -174,7 +174,7 @@ data:
 
     backend sluice_apps_https_backend
       mode tcp
-      server sluice-apps sluice-server.sluice.svc.cluster.local:8000 check
+      server sluice-apps sluice-server.sluice.svc.cluster.local:8000 check send-proxy-v2 check
 
     backend traefik_https_backend
       mode tcp
