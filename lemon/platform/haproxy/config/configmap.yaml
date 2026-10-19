@@ -162,6 +162,9 @@ data:
       # Data plane (TLS) of sluice-server; wildcard subdomains of apps.sluice.ik.am.
       acl sluice_apps_sni req.ssl_sni -m end .apps.sluice.ik.am
       use_backend sluice_apps_https_backend if sluice_apps_sni
+      # .synology
+      acl sluice_synology_apps_sni req.ssl_sni -i machi.synology.ik.am
+      use_backend sluice_apps_https_backend if sluice_synology_apps_sni
 
       default_backend traefik_https_backend
 
