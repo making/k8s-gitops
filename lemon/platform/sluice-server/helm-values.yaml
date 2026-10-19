@@ -8,7 +8,7 @@ deployment:
   podLabels:
     app: sluice-server
   annotations:
-    secret.reloader.stakater.com/reload: "sluice-system-ik-am-tls,sluice-apps-ik-am-tls"
+    secret.reloader.stakater.com/reload: "sluice-system-ik-am-tls,sluice-apps-ik-am-tls,sluice-server-route-auth"
     reloader.stakater.com/rollout-strategy: "restart"
   additionalPodAnnotations:
     prometheus.io/path: /actuator/prometheus
@@ -38,6 +38,9 @@ deployment:
     spring.grpc.server.ssl.bundle:
       value: system
     # the server's own listeners (console, gRPC): the system certificate
+    # per-route credentials file, mounted from the sluice-server-route-auth secret
+    spring.config.additional-location:
+      value: file:///mnt/route-auth/route-auth.properties
     spring.ssl.bundle.pem.system.keystore.certificate:
       value: file:///mnt/certs-system/tls.crt
     spring.ssl.bundle.pem.system.keystore.private-key:
@@ -92,6 +95,9 @@ deployment:
     certs-apps:
       secret:
         secretName: sluice-apps-ik-am-tls
+    route-auth:
+      secret:
+        secretName: sluice-server-route-auth
   volumeMounts:
     tmp:
       mountPath: /tmp
@@ -101,6 +107,8 @@ deployment:
       mountPath: /mnt/certs-system
     certs-apps:
       mountPath: /mnt/certs-apps
+    route-auth:
+      mountPath: /mnt/route-auth
 service:
   type: ClusterIP
   clusterIP: 10.96.106.41
