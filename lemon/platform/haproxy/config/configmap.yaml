@@ -197,7 +197,7 @@ data:
       default_backend sluice_gemfire_jmx_1_backend
     backend sluice_gemfire_jmx_1_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:1099
+      server sluice sluice-server.sluice.svc.cluster.local:1099 send-proxy-v2
 
     frontend sluice_gemfire_jmx_2_frontend
       bind *:1100
@@ -206,7 +206,7 @@ data:
       default_backend sluice_gemfire_jmx_2_backend
     backend sluice_gemfire_jmx_2_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:1100
+      server sluice sluice-server.sluice.svc.cluster.local:1100 send-proxy-v2
 
     frontend sluice_gemfire_jmx_3_frontend
       bind *:1101
@@ -215,7 +215,7 @@ data:
       default_backend sluice_gemfire_jmx_3_backend
     backend sluice_gemfire_jmx_3_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:1101
+      server sluice sluice-server.sluice.svc.cluster.local:1101 send-proxy-v2
 
     # PostgreSQL
     frontend sluice_postgresql_frontend
@@ -225,7 +225,7 @@ data:
       default_backend sluice_postgresql_backend
     backend sluice_postgresql_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5432
+      server sluice sluice-server.sluice.svc.cluster.local:5432 send-proxy-v2
 
     # RabbitMQ: node N = 5672+2(N-1) amqp / +1 amqps
     frontend sluice_rabbitmq_1_frontend
@@ -235,7 +235,7 @@ data:
       default_backend sluice_rabbitmq_1_backend
     backend sluice_rabbitmq_1_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5672
+      server sluice sluice-server.sluice.svc.cluster.local:5672 send-proxy-v2
 
     frontend sluice_rabbitmq_1_tls_frontend
       bind *:5671
@@ -244,7 +244,7 @@ data:
       default_backend sluice_rabbitmq_1_tls_backend
     backend sluice_rabbitmq_1_tls_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5671
+      server sluice sluice-server.sluice.svc.cluster.local:5671 send-proxy-v2
 
     frontend sluice_rabbitmq_2_frontend
       bind *:5674
@@ -253,7 +253,7 @@ data:
       default_backend sluice_rabbitmq_2_backend
     backend sluice_rabbitmq_2_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5674
+      server sluice sluice-server.sluice.svc.cluster.local:5674 send-proxy-v2
 
     frontend sluice_rabbitmq_2_tls_frontend
       bind *:5673
@@ -262,7 +262,7 @@ data:
       default_backend sluice_rabbitmq_2_tls_backend
     backend sluice_rabbitmq_2_tls_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5673
+      server sluice sluice-server.sluice.svc.cluster.local:5673 send-proxy-v2
 
     frontend sluice_rabbitmq_3_frontend
       bind *:5676
@@ -271,7 +271,7 @@ data:
       default_backend sluice_rabbitmq_3_backend
     backend sluice_rabbitmq_3_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5676
+      server sluice sluice-server.sluice.svc.cluster.local:5676 send-proxy-v2
 
     frontend sluice_rabbitmq_3_tls_frontend
       bind *:5675
@@ -280,7 +280,7 @@ data:
       default_backend sluice_rabbitmq_3_tls_backend
     backend sluice_rabbitmq_3_tls_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5675
+      server sluice sluice-server.sluice.svc.cluster.local:5675 send-proxy-v2
 
     # Redis / TLS
     frontend sluice_redis_frontend
@@ -290,7 +290,7 @@ data:
       default_backend sluice_redis_backend
     backend sluice_redis_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:6379
+      server sluice sluice-server.sluice.svc.cluster.local:6379 send-proxy-v2
 
     frontend sluice_redis_tls_frontend
       bind *:6380
@@ -299,7 +299,7 @@ data:
       default_backend sluice_redis_tls_backend
     backend sluice_redis_tls_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:6380
+      server sluice sluice-server.sluice.svc.cluster.local:6380 send-proxy-v2
 
     # Kafka: broker N = 9092+2(N-1) plaintext / +1 TLS listener
     frontend sluice_kafka_1_frontend
@@ -309,7 +309,7 @@ data:
       default_backend sluice_kafka_1_backend
     backend sluice_kafka_1_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9092
+      server sluice sluice-server.sluice.svc.cluster.local:9092 send-proxy-v2
 
     frontend sluice_kafka_1_tls_frontend
       bind *:9093
@@ -318,7 +318,7 @@ data:
       default_backend sluice_kafka_1_tls_backend
     backend sluice_kafka_1_tls_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9093
+      server sluice sluice-server.sluice.svc.cluster.local:9093 send-proxy-v2
 
     frontend sluice_kafka_2_frontend
       bind *:9094
@@ -327,7 +327,7 @@ data:
       default_backend sluice_kafka_2_backend
     backend sluice_kafka_2_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9094
+      server sluice sluice-server.sluice.svc.cluster.local:9094 send-proxy-v2
 
     frontend sluice_kafka_2_tls_frontend
       bind *:9095
@@ -336,7 +336,7 @@ data:
       default_backend sluice_kafka_2_tls_backend
     backend sluice_kafka_2_tls_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9095
+      server sluice sluice-server.sluice.svc.cluster.local:9095 send-proxy-v2
 
     frontend sluice_kafka_3_frontend
       bind *:9096
@@ -345,7 +345,7 @@ data:
       default_backend sluice_kafka_3_backend
     backend sluice_kafka_3_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9096
+      server sluice sluice-server.sluice.svc.cluster.local:9096 send-proxy-v2
 
     frontend sluice_kafka_3_tls_frontend
       bind *:9097
@@ -354,7 +354,7 @@ data:
       default_backend sluice_kafka_3_tls_backend
     backend sluice_kafka_3_tls_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9097
+      server sluice sluice-server.sluice.svc.cluster.local:9097 send-proxy-v2
 
     # GemFire locators (3 members)
     frontend sluice_gemfire_locator_1_frontend
@@ -364,7 +364,7 @@ data:
       default_backend sluice_gemfire_locator_1_backend
     backend sluice_gemfire_locator_1_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:10334
+      server sluice sluice-server.sluice.svc.cluster.local:10334 send-proxy-v2
 
     frontend sluice_gemfire_locator_2_frontend
       bind *:10335
@@ -373,7 +373,7 @@ data:
       default_backend sluice_gemfire_locator_2_backend
     backend sluice_gemfire_locator_2_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:10335
+      server sluice sluice-server.sluice.svc.cluster.local:10335 send-proxy-v2
 
     frontend sluice_gemfire_locator_3_frontend
       bind *:10336
@@ -382,7 +382,7 @@ data:
       default_backend sluice_gemfire_locator_3_backend
     backend sluice_gemfire_locator_3_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:10336
+      server sluice sluice-server.sluice.svc.cluster.local:10336 send-proxy-v2
 
     # GemFire cache servers (3 members)
     frontend sluice_gemfire_server_1_frontend
@@ -392,7 +392,7 @@ data:
       default_backend sluice_gemfire_server_1_backend
     backend sluice_gemfire_server_1_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:40404
+      server sluice sluice-server.sluice.svc.cluster.local:40404 send-proxy-v2
 
     frontend sluice_gemfire_server_2_frontend
       bind *:40405
@@ -401,7 +401,7 @@ data:
       default_backend sluice_gemfire_server_2_backend
     backend sluice_gemfire_server_2_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:40405
+      server sluice sluice-server.sluice.svc.cluster.local:40405 send-proxy-v2
 
     frontend sluice_gemfire_server_3_frontend
       bind *:40406
@@ -410,7 +410,7 @@ data:
       default_backend sluice_gemfire_server_3_backend
     backend sluice_gemfire_server_3_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:40406
+      server sluice sluice-server.sluice.svc.cluster.local:40406 send-proxy-v2
     # GemFire WAN replication (5000-5010)
     frontend sluice_gemfire_wan_1_frontend
       bind *:5000
@@ -419,7 +419,7 @@ data:
       default_backend sluice_gemfire_wan_1_backend
     backend sluice_gemfire_wan_1_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5000
+      server sluice sluice-server.sluice.svc.cluster.local:5000 send-proxy-v2
     frontend sluice_gemfire_wan_2_frontend
       bind *:5001
       mode tcp
@@ -427,7 +427,7 @@ data:
       default_backend sluice_gemfire_wan_2_backend
     backend sluice_gemfire_wan_2_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5001
+      server sluice sluice-server.sluice.svc.cluster.local:5001 send-proxy-v2
     frontend sluice_gemfire_wan_3_frontend
       bind *:5002
       mode tcp
@@ -435,7 +435,7 @@ data:
       default_backend sluice_gemfire_wan_3_backend
     backend sluice_gemfire_wan_3_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5002
+      server sluice sluice-server.sluice.svc.cluster.local:5002 send-proxy-v2
     frontend sluice_gemfire_wan_4_frontend
       bind *:5003
       mode tcp
@@ -443,7 +443,7 @@ data:
       default_backend sluice_gemfire_wan_4_backend
     backend sluice_gemfire_wan_4_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5003
+      server sluice sluice-server.sluice.svc.cluster.local:5003 send-proxy-v2
     frontend sluice_gemfire_wan_5_frontend
       bind *:5004
       mode tcp
@@ -451,7 +451,7 @@ data:
       default_backend sluice_gemfire_wan_5_backend
     backend sluice_gemfire_wan_5_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5004
+      server sluice sluice-server.sluice.svc.cluster.local:5004 send-proxy-v2
     frontend sluice_gemfire_wan_6_frontend
       bind *:5005
       mode tcp
@@ -459,7 +459,7 @@ data:
       default_backend sluice_gemfire_wan_6_backend
     backend sluice_gemfire_wan_6_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5005
+      server sluice sluice-server.sluice.svc.cluster.local:5005 send-proxy-v2
     frontend sluice_gemfire_wan_7_frontend
       bind *:5006
       mode tcp
@@ -467,7 +467,7 @@ data:
       default_backend sluice_gemfire_wan_7_backend
     backend sluice_gemfire_wan_7_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5006
+      server sluice sluice-server.sluice.svc.cluster.local:5006 send-proxy-v2
     frontend sluice_gemfire_wan_8_frontend
       bind *:5007
       mode tcp
@@ -475,7 +475,7 @@ data:
       default_backend sluice_gemfire_wan_8_backend
     backend sluice_gemfire_wan_8_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5007
+      server sluice sluice-server.sluice.svc.cluster.local:5007 send-proxy-v2
     frontend sluice_gemfire_wan_9_frontend
       bind *:5008
       mode tcp
@@ -483,7 +483,7 @@ data:
       default_backend sluice_gemfire_wan_9_backend
     backend sluice_gemfire_wan_9_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5008
+      server sluice sluice-server.sluice.svc.cluster.local:5008 send-proxy-v2
     frontend sluice_gemfire_wan_10_frontend
       bind *:5009
       mode tcp
@@ -491,7 +491,7 @@ data:
       default_backend sluice_gemfire_wan_10_backend
     backend sluice_gemfire_wan_10_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5009
+      server sluice sluice-server.sluice.svc.cluster.local:5009 send-proxy-v2
     frontend sluice_gemfire_wan_11_frontend
       bind *:5010
       mode tcp
@@ -499,7 +499,7 @@ data:
       default_backend sluice_gemfire_wan_11_backend
     backend sluice_gemfire_wan_11_backend
       mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5010
+      server sluice sluice-server.sluice.svc.cluster.local:5010 send-proxy-v2
 
     # GemFire web UI (locator/server http-services)
     frontend sluice_gemfire_locator_web_1_frontend
