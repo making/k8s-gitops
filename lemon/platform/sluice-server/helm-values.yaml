@@ -8,7 +8,7 @@ deployment:
   podLabels:
     app: sluice-server
   annotations:
-    secret.reloader.stakater.com/reload: "sluice-system-ik-am-tls,sluice-apps-ik-am-tls,sluice-server-route-auth"
+    secret.reloader.stakater.com/reload: "sluice-system-ik-am-tls,sluice-apps-ik-am-tls"
     reloader.stakater.com/rollout-strategy: "restart"
   additionalPodAnnotations:
     prometheus.io/path: /actuator/prometheus
