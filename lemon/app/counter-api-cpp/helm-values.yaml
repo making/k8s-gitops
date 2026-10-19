@@ -17,7 +17,7 @@ deployment:
   #! into /certs/keystore.pem and /certs/truststore.pem at pod startup.
   env:
     GEMFIRE_LOCATORS:
-      value: "entry-gemfire-locator-0.entry-gemfire-locator.blog.svc.cluster.local[10334],entry-gemfire-locator-1.entry-gemfire-locator.blog.svc.cluster.local[10334]"
+      value: "sluice-server.sluice.svc.cluster.local[10335],sluice-server.sluice.svc.cluster.local[10336],sluice-server.sluice.svc.cluster.local[10334]"
     GEMFIRE_REGION:
       value: "Counter"
     GEMFIRE_LOG_LEVEL:
@@ -31,7 +31,7 @@ deployment:
     GEMFIRE_SSL_KEYSTORE_PASSWORD:
       valueFrom:
         secretKeyRef:
-          name: entry-gemfire-cert
+          name: entry-gemfire-tls
           key: password
   initContainers:
     convert-pkcs12-to-pem:
@@ -68,7 +68,7 @@ deployment:
   volumes:
     certs-p12:
       secret:
-        secretName: entry-gemfire-cert
+        secretName: entry-gemfire-tls
     certs:
       emptyDir: { }
   volumeMounts:
