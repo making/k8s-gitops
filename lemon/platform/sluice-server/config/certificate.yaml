@@ -9,6 +9,8 @@ spec:
   #! (the console is fronted by the 8081 listener, see helm-values.yaml)
   dnsNames:
     - "*.apps.sluice.ik.am"
+    - "*.synology.ik.am"
+    - "synology.ik.am"
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
@@ -24,8 +26,6 @@ spec:
   dnsNames:
     - "*.sluice.ik.am"
     - "*.sys.sluice.ik.am"
-    - "*.synology.ik.am"
-    - "synology.ik.am"
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
