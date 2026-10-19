@@ -19,7 +19,10 @@ deployment:
     limits:
       memory: 512Mi
   env:
-    sluice.proxy-protocol:
+    # PROXY protocol from haproxy: data plane (8000, tcp routes) and control plane (8001)
+    sluice.data-proxy-protocol:
+      value: "true"
+    sluice.control-proxy-protocol:
       value: "true"
     # TCP routes may only claim the middleware ports exposed on the Service
     sluice.tcp-port-range:
