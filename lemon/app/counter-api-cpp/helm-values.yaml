@@ -17,7 +17,10 @@ deployment:
   #! into /certs/keystore.pem and /certs/truststore.pem at pod startup.
   env:
     GEMFIRE_LOCATORS:
-      value: "sluice-server.sluice.svc.cluster.local[10335],sluice-server.sluice.svc.cluster.local[10336],sluice-server.sluice.svc.cluster.local[10334]"
+      valueFrom:
+        secretKeyRef:
+          key: gemfire-locators
+          name: counter-config
     GEMFIRE_REGION:
       value: "Counter"
     GEMFIRE_LOG_LEVEL:
