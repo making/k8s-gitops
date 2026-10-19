@@ -24,6 +24,8 @@ spec:
   dnsNames:
     - "*.sluice.ik.am"
     - "*.sys.sluice.ik.am"
+    - "*.synology.ik.am"
+    - "synology.ik.am"
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
