@@ -167,6 +167,7 @@ data:
       acl sluice_synology_apps_sni req.ssl_sni -i lognroll.synology.synology.ik.am
       acl sluice_synology_apps_sni req.ssl_sni -i access-monitor.synology.ik.am
       acl sluice_synology_apps_sni req.ssl_sni -i machi.synology.ik.am
+      acl sluice_synology_apps_sni req.ssl_sni -i llama-server.synology.ik.am
       acl sluice_synology_apps_sni req.ssl_sni -i otlp-sink.synology.ik.am
       use_backend sluice_apps_https_backend if sluice_synology_apps_sni
 
