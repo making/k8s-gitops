@@ -40,7 +40,7 @@ deployment:
     # the server's own listeners (console, gRPC): the system certificate
     # per-route credentials file, mounted from the sluice-server-route-auth secret
     spring.config.additional-location:
-      value: file:///mnt/route-auth/route-auth.properties
+      value: file:///mnt/route-auth/route-auth.yml
     spring.ssl.bundle.pem.system.keystore.certificate:
       value: file:///mnt/certs-system/tls.crt
     spring.ssl.bundle.pem.system.keystore.private-key:
