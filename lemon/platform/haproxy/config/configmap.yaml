@@ -163,9 +163,11 @@ data:
       acl sluice_apps_sni req.ssl_sni -m end .apps.sluice.ik.am
       use_backend sluice_apps_https_backend if sluice_apps_sni
       # .synology
-      acl sluice_synology_sni req.ssl_sni -i synology.ik.am
-      use_backend sluice_apps_https_backend if sluice_synology_sni
+      acl sluice_synology_apps_sni req.ssl_sni -i synology.ik.am
+      acl sluice_synology_apps_sni req.ssl_sni -i lognroll.synology.synology.ik.am
+      acl sluice_synology_apps_sni req.ssl_sni -i access-monitor.synology.ik.am
       acl sluice_synology_apps_sni req.ssl_sni -i machi.synology.ik.am
+      acl sluice_synology_apps_sni req.ssl_sni -i otlp-sink.synology.ik.am
       use_backend sluice_apps_https_backend if sluice_synology_apps_sni
 
       default_backend traefik_https_backend
