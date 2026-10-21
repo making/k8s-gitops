@@ -25,7 +25,7 @@ spec:
     port: 8081
     protocol: TCP
     targetPort: 8081
-  #@ for name, port in struct.decode(data.values.tcp_route_ports).items():
+  #@ for name, port in struct.decode(data.values.sluice.tcp_route_ports).items():
   - name: #@ name
     port: #@ port
     protocol: TCP
@@ -48,7 +48,7 @@ spec:
     port: 8001
     protocol: TCP
     targetPort: 8001
-#@ for i in range(data.values.replicas):
+#@ for i in range(data.values.sluice.replicas):
 ---
 #! per-node control plane (control-N.sluice.ik.am in haproxy) and console. Not-ready
 #! pods stay published: clients must reach a node during its warmup, which is exactly

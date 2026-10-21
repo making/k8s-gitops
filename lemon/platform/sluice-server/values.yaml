@@ -1,57 +1,59 @@
-#! number of nodes; the StatefulSet, the per-node Services and sluice.cluster.nodes
-#! follow it. Every node N also needs an SNI route control-N.sluice.ik.am in haproxy
-#! (lemon/platform/haproxy/config/configmap.yaml).
-replicas: 2
-#! TCP-route listeners exposed on the shared Service (port == targetPort): the server
-#! opens one listener per client-advertised listen-port, so the well-known middleware
-#! ports must be exposed. Plain and TLS-denominated variants where the ecosystem has
-#! one. Port names are the Service port names. haproxy mirrors this list (frontends,
-#! containerPorts and the NLB Service in lemon/platform/haproxy/config).
-tcp_route_ports:
-  postgresql: 5432
-  #! RabbitMQ: 3 nodes; node N = 5672+2(N-1) amqp / +1 amqps
-  rabbitmq-1: 5672
-  rabbitmq-1-tls: 5671
-  rabbitmq-2: 5674
-  rabbitmq-2-tls: 5673
-  rabbitmq-3: 5676
-  rabbitmq-3-tls: 5675
-  redis: 6379
-  redis-tls: 6380
-  #! Kafka: 3 brokers; broker N = 9092+2(N-1) plaintext / +1 TLS listener
-  kafka-1: 9092
-  kafka-1-tls: 9093
-  kafka-2: 9094
-  kafka-2-tls: 9095
-  kafka-3: 9096
-  kafka-3-tls: 9097
-  #! GemFire: 3 members each for locator / cache-server / JMX; one contiguous
-  #! range per role so a cluster maps to a range
-  gemfire-jmx-1: 1099
-  gemfire-jmx-2: 1100
-  gemfire-jmx-3: 1101
-  gemfire-locator-1: 10334
-  gemfire-locator-2: 10335
-  gemfire-locator-3: 10336
-  gemfire-server-1: 40404
-  gemfire-server-2: 40405
-  gemfire-server-3: 40406
-  #! GemFire WAN replication endpoints
-  gemfire-wan-1: 5000
-  gemfire-wan-2: 5001
-  gemfire-wan-3: 5002
-  gemfire-wan-4: 5003
-  gemfire-wan-5: 5004
-  gemfire-wan-6: 5005
-  gemfire-wan-7: 5006
-  gemfire-wan-8: 5007
-  gemfire-wan-9: 5008
-  gemfire-wan-10: 5009
-  gemfire-wan-11: 5010
-  #! GemFire web: gemfire-locator-web-N / gemfire-server-web-N, names shortened
-  gf-loc-web-1: 7070
-  gf-srv-web-1: 7071
-  gf-loc-web-2: 7072
-  gf-srv-web-2: 7073
-  gf-loc-web-3: 7074
-  gf-srv-web-3: 7075
+#! read by the sluice-server and the haproxy Apps (valuesFrom)
+sluice:
+  #! number of nodes; the StatefulSet, the per-node Services and sluice.cluster.nodes
+  #! follow it, and so do the per-node SNI routes control-N.sluice.ik.am in haproxy.
+  replicas: 2
+  #! TCP-route listeners exposed on the shared Service (port == targetPort): the server
+  #! opens one listener per client-advertised listen-port, so the well-known middleware
+  #! ports must be exposed. Plain and TLS-denominated variants where the ecosystem has
+  #! one. haproxy reads this file too (frontends/backends, containerPorts and the NLB
+  #! Service are generated from it). Names are port names: at most 15 characters (the
+  #! containerPort limit).
+  tcp_route_ports:
+    postgresql: 5432
+    #! RabbitMQ: 3 nodes; node N = 5672+2(N-1) amqp / +1 amqps
+    rabbitmq-1: 5672
+    rabbitmq-1-tls: 5671
+    rabbitmq-2: 5674
+    rabbitmq-2-tls: 5673
+    rabbitmq-3: 5676
+    rabbitmq-3-tls: 5675
+    redis: 6379
+    redis-tls: 6380
+    #! Kafka: 3 brokers; broker N = 9092+2(N-1) plaintext / +1 TLS listener
+    kafka-1: 9092
+    kafka-1-tls: 9093
+    kafka-2: 9094
+    kafka-2-tls: 9095
+    kafka-3: 9096
+    kafka-3-tls: 9097
+    #! GemFire: 3 members each for locator / cache-server / JMX; one contiguous
+    #! range per role so a cluster maps to a range
+    gemfire-jmx-1: 1099
+    gemfire-jmx-2: 1100
+    gemfire-jmx-3: 1101
+    gf-locator-1: 10334
+    gf-locator-2: 10335
+    gf-locator-3: 10336
+    gf-server-1: 40404
+    gf-server-2: 40405
+    gf-server-3: 40406
+    #! GemFire WAN replication endpoints
+    gemfire-wan-1: 5000
+    gemfire-wan-2: 5001
+    gemfire-wan-3: 5002
+    gemfire-wan-4: 5003
+    gemfire-wan-5: 5004
+    gemfire-wan-6: 5005
+    gemfire-wan-7: 5006
+    gemfire-wan-8: 5007
+    gemfire-wan-9: 5008
+    gemfire-wan-10: 5009
+    gemfire-wan-11: 5010
+    #! GemFire web: gf-locator-web-N / gf-server-web-N, names shortened
+    gf-loc-web-1: 7070
+    gf-srv-web-1: 7071
+    gf-loc-web-2: 7072
+    gf-srv-web-2: 7073
+    gf-loc-web-3: 7074
+    gf-srv-web-3: 7075

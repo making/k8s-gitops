@@ -2,13 +2,13 @@
 #@ load("@ytt:struct", "struct")
 #@ def cluster_nodes():
 #@   nodes = []
-#@   for i in range(data.values.replicas):
+#@   for i in range(data.values.sluice.replicas):
 #@     nodes.append("sluice-server-{}=grpcs://control-{}.sluice.ik.am:443".format(i, i))
 #@   end
 #@   return ",".join(nodes)
 #@ end
 #@ def tcp_port_range():
-#@   ports = sorted(struct.decode(data.values.tcp_route_ports).values())
+#@   ports = sorted(struct.decode(data.values.sluice.tcp_route_ports).values())
 #@   ranges = []
 #@   for port in ports:
 #@     if ranges and ranges[-1][1] + 1 == port:
@@ -30,7 +30,7 @@ metadata:
     reloader.stakater.com/rollout-strategy: "restart"
 spec:
   serviceName: sluice-server-headless
-  replicas: #@ data.values.replicas
+  replicas: #@ data.values.sluice.replicas
   #! nodes do not depend on each other; rolling updates stay one pod at a time
   podManagementPolicy: Parallel
   revisionHistoryLimit: 2
