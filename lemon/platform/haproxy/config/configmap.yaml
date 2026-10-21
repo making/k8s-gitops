@@ -159,6 +159,11 @@ data:
       # takes the PROXY protocol ahead of TLS (sluice.control-proxy-protocol).
       acl sluice_control_sni req.ssl_sni -i control.sluice.ik.am
       use_backend sluice_control_https_backend if sluice_control_sni
+      # per-node control plane of the cluster (sluice.cluster.nodes)
+      acl sluice_control_0_sni req.ssl_sni -i control-0.sluice.ik.am
+      use_backend sluice_control_0_https_backend if sluice_control_0_sni
+      acl sluice_control_1_sni req.ssl_sni -i control-1.sluice.ik.am
+      use_backend sluice_control_1_https_backend if sluice_control_1_sni
       # Data plane (TLS) of sluice-server; wildcard subdomains of apps.sluice.ik.am.
       acl sluice_apps_sni req.ssl_sni -m end .apps.sluice.ik.am
       use_backend sluice_apps_https_backend if sluice_apps_sni
@@ -173,17 +178,35 @@ data:
 
       default_backend traefik_https_backend
 
-    # No health checks on the sluice-server backends: each is the single
+    # No health checks on the data plane backends: each is the single shared
     # ClusterIP (readiness drops warming up / draining pods from its endpoints),
     # and a TCP check is a data plane connection that dials the upstream through
     # the tunnel and floods the access log.
+
+    # console login is an HttpSession on one node: pin each client IP to a node
+    # (same hash on every haproxy replica); the TCP check fails over when a node
+    # is gone
     backend sluice_console_https_backend
       mode tcp
-      server sluice-console sluice-server.sluice.svc.cluster.local:8081
+      balance source
+      hash-type consistent
+      server sluice-console-0 sluice-server-0.sluice.svc.cluster.local:8081 check
+      server sluice-console-1 sluice-server-1.sluice.svc.cluster.local:8081 check
 
+    # bootstrap (the clients' sluice.server-url): always node 0. The client keeps
+    # the bootstrap stream as the stream of the node it first reached; a reconnect
+    # landing on another node would leave that node without the client's routes.
     backend sluice_control_https_backend
       mode tcp
-      server sluice-control sluice-server.sluice.svc.cluster.local:8001 send-proxy-v2
+      server sluice-control sluice-server-0.sluice.svc.cluster.local:8001 send-proxy-v2
+
+    backend sluice_control_0_https_backend
+      mode tcp
+      server sluice-control-0 sluice-server-0.sluice.svc.cluster.local:8001 send-proxy-v2
+
+    backend sluice_control_1_https_backend
+      mode tcp
+      server sluice-control-1 sluice-server-1.sluice.svc.cluster.local:8001 send-proxy-v2
 
     backend sluice_apps_https_backend
       mode tcp
