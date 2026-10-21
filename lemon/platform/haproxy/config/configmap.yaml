@@ -1,3 +1,49 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
+#@ sluice = data.values.sluice
+#@ def sluice_control_sni():
+#@   lines = []
+#@   for i in range(sluice.replicas):
+#@     lines.append("  acl sluice_control_{}_sni req.ssl_sni -i control-{}.sluice.ik.am".format(i, i))
+#@     lines.append("  use_backend sluice_control_{}_https_backend if sluice_control_{}_sni".format(i, i))
+#@   end
+#@   return "\n".join(lines)
+#@ end
+#@ def sluice_console_servers():
+#@   lines = []
+#@   for i in range(sluice.replicas):
+#@     lines.append("  server sluice-console-{} sluice-server-{}.sluice.svc.cluster.local:8081 check".format(i, i))
+#@   end
+#@   return "\n".join(lines)
+#@ end
+#@ def sluice_control_backends():
+#@   blocks = []
+#@   for i in range(sluice.replicas):
+#@     blocks.append("\n".join([
+#@       "backend sluice_control_{}_https_backend".format(i),
+#@       "  mode tcp",
+#@       "  server sluice-control-{} sluice-server-{}.sluice.svc.cluster.local:8001 send-proxy-v2".format(i, i),
+#@     ]))
+#@   end
+#@   return "\n\n".join(blocks)
+#@ end
+#@ def sluice_tcp_routes():
+#@   blocks = []
+#@   for name, port in struct.decode(sluice.tcp_route_ports).items():
+#@     id = "sluice_" + name.replace("-", "_")
+#@     blocks.append("\n".join([
+#@       "frontend {}_frontend".format(id),
+#@       "  bind *:{}".format(port),
+#@       "  mode tcp",
+#@       "  no log",
+#@       "  default_backend {}_backend".format(id),
+#@       "backend {}_backend".format(id),
+#@       "  mode tcp",
+#@       "  server sluice sluice-server.sluice.svc.cluster.local:{} send-proxy-v2".format(port),
+#@     ]))
+#@   end
+#@   return "\n\n".join(blocks)
+#@ end
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,6 +52,7 @@ metadata:
   annotations:
     kapp.k14s.io/versioned: ""
 data:
+  #@yaml/text-templated-strings
   haproxy.cfg: |
     global
       log stdout format raw local0
@@ -159,11 +206,9 @@ data:
       # takes the PROXY protocol ahead of TLS (sluice.control-proxy-protocol).
       acl sluice_control_sni req.ssl_sni -i control.sluice.ik.am
       use_backend sluice_control_https_backend if sluice_control_sni
-      # per-node control plane of the cluster (sluice.cluster.nodes)
-      acl sluice_control_0_sni req.ssl_sni -i control-0.sluice.ik.am
-      use_backend sluice_control_0_https_backend if sluice_control_0_sni
-      acl sluice_control_1_sni req.ssl_sni -i control-1.sluice.ik.am
-      use_backend sluice_control_1_https_backend if sluice_control_1_sni
+      # per-node control plane of the cluster (sluice.cluster.nodes); one per
+      # sluice replica (lemon/platform/sluice-server/values.yaml)
+    (@= sluice_control_sni() @)
       # Data plane (TLS) of sluice-server; wildcard subdomains of apps.sluice.ik.am.
       acl sluice_apps_sni req.ssl_sni -m end .apps.sluice.ik.am
       use_backend sluice_apps_https_backend if sluice_apps_sni
@@ -190,8 +235,7 @@ data:
       mode tcp
       balance source
       hash-type consistent
-      server sluice-console-0 sluice-server-0.sluice.svc.cluster.local:8081 check
-      server sluice-console-1 sluice-server-1.sluice.svc.cluster.local:8081 check
+    (@= sluice_console_servers() @)
 
     # bootstrap (the clients' sluice.server-url): always node 0. The client keeps
     # the bootstrap stream as the stream of the node it first reached; a reconnect
@@ -200,13 +244,7 @@ data:
       mode tcp
       server sluice-control sluice-server-0.sluice.svc.cluster.local:8001 send-proxy-v2
 
-    backend sluice_control_0_https_backend
-      mode tcp
-      server sluice-control-0 sluice-server-0.sluice.svc.cluster.local:8001 send-proxy-v2
-
-    backend sluice_control_1_https_backend
-      mode tcp
-      server sluice-control-1 sluice-server-1.sluice.svc.cluster.local:8001 send-proxy-v2
+    (@= sluice_control_backends() @)
 
     backend sluice_apps_https_backend
       mode tcp
@@ -216,372 +254,10 @@ data:
       mode tcp
       server traefik traefik.traefik.svc.cluster.local:443 check send-proxy-v2
 
-    # Sluice TCP routes: plain L4 pass-through, one listener per middleware
-    # port. The backend port always equals the listen port, so clients reach
-    # the same port number through haproxy as the sluice client advertised.
-    # (All ports are >1024, so haproxy binds them directly, like 9090 above.)
+    # Sluice TCP routes: plain L4 pass-through, one listener per port of
+    # tcp_route_ports (lemon/platform/sluice-server/values.yaml). The backend port
+    # always equals the listen port, so clients reach the same port number through
+    # haproxy as the sluice client advertised. (All ports are >1024, so haproxy
+    # binds them directly, like 9090 above.)
 
-    # GemFire JMX (3 members)
-    frontend sluice_gemfire_jmx_1_frontend
-      bind *:1099
-      mode tcp
-      no log
-      default_backend sluice_gemfire_jmx_1_backend
-    backend sluice_gemfire_jmx_1_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:1099 send-proxy-v2
-
-    frontend sluice_gemfire_jmx_2_frontend
-      bind *:1100
-      mode tcp
-      no log
-      default_backend sluice_gemfire_jmx_2_backend
-    backend sluice_gemfire_jmx_2_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:1100 send-proxy-v2
-
-    frontend sluice_gemfire_jmx_3_frontend
-      bind *:1101
-      mode tcp
-      no log
-      default_backend sluice_gemfire_jmx_3_backend
-    backend sluice_gemfire_jmx_3_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:1101 send-proxy-v2
-
-    # PostgreSQL
-    frontend sluice_postgresql_frontend
-      bind *:5432
-      mode tcp
-      no log
-      default_backend sluice_postgresql_backend
-    backend sluice_postgresql_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5432 send-proxy-v2
-
-    # RabbitMQ: node N = 5672+2(N-1) amqp / +1 amqps
-    frontend sluice_rabbitmq_1_frontend
-      bind *:5672
-      mode tcp
-      no log
-      default_backend sluice_rabbitmq_1_backend
-    backend sluice_rabbitmq_1_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5672 send-proxy-v2
-
-    frontend sluice_rabbitmq_1_tls_frontend
-      bind *:5671
-      mode tcp
-      no log
-      default_backend sluice_rabbitmq_1_tls_backend
-    backend sluice_rabbitmq_1_tls_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5671 send-proxy-v2
-
-    frontend sluice_rabbitmq_2_frontend
-      bind *:5674
-      mode tcp
-      no log
-      default_backend sluice_rabbitmq_2_backend
-    backend sluice_rabbitmq_2_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5674 send-proxy-v2
-
-    frontend sluice_rabbitmq_2_tls_frontend
-      bind *:5673
-      mode tcp
-      no log
-      default_backend sluice_rabbitmq_2_tls_backend
-    backend sluice_rabbitmq_2_tls_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5673 send-proxy-v2
-
-    frontend sluice_rabbitmq_3_frontend
-      bind *:5676
-      mode tcp
-      no log
-      default_backend sluice_rabbitmq_3_backend
-    backend sluice_rabbitmq_3_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5676 send-proxy-v2
-
-    frontend sluice_rabbitmq_3_tls_frontend
-      bind *:5675
-      mode tcp
-      no log
-      default_backend sluice_rabbitmq_3_tls_backend
-    backend sluice_rabbitmq_3_tls_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5675 send-proxy-v2
-
-    # Redis / TLS
-    frontend sluice_redis_frontend
-      bind *:6379
-      mode tcp
-      no log
-      default_backend sluice_redis_backend
-    backend sluice_redis_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:6379 send-proxy-v2
-
-    frontend sluice_redis_tls_frontend
-      bind *:6380
-      mode tcp
-      no log
-      default_backend sluice_redis_tls_backend
-    backend sluice_redis_tls_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:6380 send-proxy-v2
-
-    # Kafka: broker N = 9092+2(N-1) plaintext / +1 TLS listener
-    frontend sluice_kafka_1_frontend
-      bind *:9092
-      mode tcp
-      no log
-      default_backend sluice_kafka_1_backend
-    backend sluice_kafka_1_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9092 send-proxy-v2
-
-    frontend sluice_kafka_1_tls_frontend
-      bind *:9093
-      mode tcp
-      no log
-      default_backend sluice_kafka_1_tls_backend
-    backend sluice_kafka_1_tls_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9093 send-proxy-v2
-
-    frontend sluice_kafka_2_frontend
-      bind *:9094
-      mode tcp
-      no log
-      default_backend sluice_kafka_2_backend
-    backend sluice_kafka_2_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9094 send-proxy-v2
-
-    frontend sluice_kafka_2_tls_frontend
-      bind *:9095
-      mode tcp
-      no log
-      default_backend sluice_kafka_2_tls_backend
-    backend sluice_kafka_2_tls_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9095 send-proxy-v2
-
-    frontend sluice_kafka_3_frontend
-      bind *:9096
-      mode tcp
-      no log
-      default_backend sluice_kafka_3_backend
-    backend sluice_kafka_3_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9096 send-proxy-v2
-
-    frontend sluice_kafka_3_tls_frontend
-      bind *:9097
-      mode tcp
-      no log
-      default_backend sluice_kafka_3_tls_backend
-    backend sluice_kafka_3_tls_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:9097 send-proxy-v2
-
-    # GemFire locators (3 members)
-    frontend sluice_gemfire_locator_1_frontend
-      bind *:10334
-      mode tcp
-      no log
-      default_backend sluice_gemfire_locator_1_backend
-    backend sluice_gemfire_locator_1_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:10334 send-proxy-v2
-
-    frontend sluice_gemfire_locator_2_frontend
-      bind *:10335
-      mode tcp
-      no log
-      default_backend sluice_gemfire_locator_2_backend
-    backend sluice_gemfire_locator_2_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:10335 send-proxy-v2
-
-    frontend sluice_gemfire_locator_3_frontend
-      bind *:10336
-      mode tcp
-      no log
-      default_backend sluice_gemfire_locator_3_backend
-    backend sluice_gemfire_locator_3_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:10336 send-proxy-v2
-
-    # GemFire cache servers (3 members)
-    frontend sluice_gemfire_server_1_frontend
-      bind *:40404
-      mode tcp
-      no log
-      default_backend sluice_gemfire_server_1_backend
-    backend sluice_gemfire_server_1_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:40404 send-proxy-v2
-
-    frontend sluice_gemfire_server_2_frontend
-      bind *:40405
-      mode tcp
-      no log
-      default_backend sluice_gemfire_server_2_backend
-    backend sluice_gemfire_server_2_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:40405 send-proxy-v2
-
-    frontend sluice_gemfire_server_3_frontend
-      bind *:40406
-      mode tcp
-      no log
-      default_backend sluice_gemfire_server_3_backend
-    backend sluice_gemfire_server_3_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:40406 send-proxy-v2
-    # GemFire WAN replication (5000-5010)
-    frontend sluice_gemfire_wan_1_frontend
-      bind *:5000
-      mode tcp
-      no log
-      default_backend sluice_gemfire_wan_1_backend
-    backend sluice_gemfire_wan_1_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5000 send-proxy-v2
-    frontend sluice_gemfire_wan_2_frontend
-      bind *:5001
-      mode tcp
-      no log
-      default_backend sluice_gemfire_wan_2_backend
-    backend sluice_gemfire_wan_2_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5001 send-proxy-v2
-    frontend sluice_gemfire_wan_3_frontend
-      bind *:5002
-      mode tcp
-      no log
-      default_backend sluice_gemfire_wan_3_backend
-    backend sluice_gemfire_wan_3_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5002 send-proxy-v2
-    frontend sluice_gemfire_wan_4_frontend
-      bind *:5003
-      mode tcp
-      no log
-      default_backend sluice_gemfire_wan_4_backend
-    backend sluice_gemfire_wan_4_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5003 send-proxy-v2
-    frontend sluice_gemfire_wan_5_frontend
-      bind *:5004
-      mode tcp
-      no log
-      default_backend sluice_gemfire_wan_5_backend
-    backend sluice_gemfire_wan_5_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5004 send-proxy-v2
-    frontend sluice_gemfire_wan_6_frontend
-      bind *:5005
-      mode tcp
-      no log
-      default_backend sluice_gemfire_wan_6_backend
-    backend sluice_gemfire_wan_6_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5005 send-proxy-v2
-    frontend sluice_gemfire_wan_7_frontend
-      bind *:5006
-      mode tcp
-      no log
-      default_backend sluice_gemfire_wan_7_backend
-    backend sluice_gemfire_wan_7_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5006 send-proxy-v2
-    frontend sluice_gemfire_wan_8_frontend
-      bind *:5007
-      mode tcp
-      no log
-      default_backend sluice_gemfire_wan_8_backend
-    backend sluice_gemfire_wan_8_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5007 send-proxy-v2
-    frontend sluice_gemfire_wan_9_frontend
-      bind *:5008
-      mode tcp
-      no log
-      default_backend sluice_gemfire_wan_9_backend
-    backend sluice_gemfire_wan_9_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5008 send-proxy-v2
-    frontend sluice_gemfire_wan_10_frontend
-      bind *:5009
-      mode tcp
-      no log
-      default_backend sluice_gemfire_wan_10_backend
-    backend sluice_gemfire_wan_10_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5009 send-proxy-v2
-    frontend sluice_gemfire_wan_11_frontend
-      bind *:5010
-      mode tcp
-      no log
-      default_backend sluice_gemfire_wan_11_backend
-    backend sluice_gemfire_wan_11_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:5010 send-proxy-v2
-
-    # GemFire web UI (locator/server http-services)
-    frontend sluice_gemfire_locator_web_1_frontend
-      bind *:7070
-      mode tcp
-      no log
-      default_backend sluice_gemfire_locator_web_1_backend
-    backend sluice_gemfire_locator_web_1_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7070 send-proxy-v2
-    frontend sluice_gemfire_server_web_1_frontend
-      bind *:7071
-      mode tcp
-      no log
-      default_backend sluice_gemfire_server_web_1_backend
-    backend sluice_gemfire_server_web_1_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7071 send-proxy-v2
-    frontend sluice_gemfire_locator_web_2_frontend
-      bind *:7072
-      mode tcp
-      no log
-      default_backend sluice_gemfire_locator_web_2_backend
-    backend sluice_gemfire_locator_web_2_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7072 send-proxy-v2
-    frontend sluice_gemfire_server_web_2_frontend
-      bind *:7073
-      mode tcp
-      no log
-      default_backend sluice_gemfire_server_web_2_backend
-    backend sluice_gemfire_server_web_2_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7073 send-proxy-v2
-    frontend sluice_gemfire_locator_web_3_frontend
-      bind *:7074
-      mode tcp
-      no log
-      default_backend sluice_gemfire_locator_web_3_backend
-    backend sluice_gemfire_locator_web_3_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7074 send-proxy-v2
-    frontend sluice_gemfire_server_web_3_frontend
-      bind *:7075
-      mode tcp
-      no log
-      default_backend sluice_gemfire_server_web_3_backend
-    backend sluice_gemfire_server_web_3_backend
-      mode tcp
-      server sluice sluice-server.sluice.svc.cluster.local:7075 send-proxy-v2
-
-
----
+    (@= sluice_tcp_routes() @)

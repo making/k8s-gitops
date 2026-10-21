@@ -12,6 +12,11 @@ spec:
       url: https://github.com/making/k8s-gitops.git
       ref: origin/main
       subPath: lemon/platform/haproxy
+  #! the sluice TCP route ports and node count (sluice-server/values.yaml)
+  - git:
+      url: https://github.com/making/k8s-gitops.git
+      ref: origin/main
+      subPath: lemon/platform/sluice-server
   syncPeriod: 24h
   template:
   - sops:
@@ -20,9 +25,10 @@ spec:
           name: age-key
   - ytt:
       paths:
-      - config
+      - 0/config
       valuesFrom:
-      - path: values.yaml
+      - path: 0/values.yaml
+      - path: 1/values.yaml
   - kbld:
       paths:
       - '-'

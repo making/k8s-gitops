@@ -1,3 +1,5 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 apiVersion: v1
 kind: Service
 metadata:
@@ -39,177 +41,14 @@ spec:
     port: 9090
     targetPort: 9090
     protocol: TCP
-  # sluice TCP routes: NLB port == haproxy bind port == sluice listen port
-  - name: gemfire-jmx-1
-    port: 1099
-    targetPort: 1099
+  #! sluice TCP routes: NLB port == haproxy bind port == sluice listen port
+  #! (tcp_route_ports in lemon/platform/sluice-server/values.yaml)
+  #@ for name, port in struct.decode(data.values.sluice.tcp_route_ports).items():
+  - name: #@ name
+    port: #@ port
+    targetPort: #@ port
     protocol: TCP
-  - name: gemfire-jmx-2
-    port: 1100
-    targetPort: 1100
-    protocol: TCP
-  - name: gemfire-jmx-3
-    port: 1101
-    targetPort: 1101
-    protocol: TCP
-  - name: postgresql
-    port: 5432
-    targetPort: 5432
-    protocol: TCP
-  - name: rabbitmq-1-tls
-    port: 5671
-    targetPort: 5671
-    protocol: TCP
-  - name: rabbitmq-1
-    port: 5672
-    targetPort: 5672
-    protocol: TCP
-  - name: rabbitmq-2-tls
-    port: 5673
-    targetPort: 5673
-    protocol: TCP
-  - name: rabbitmq-2
-    port: 5674
-    targetPort: 5674
-    protocol: TCP
-  - name: rabbitmq-3-tls
-    port: 5675
-    targetPort: 5675
-    protocol: TCP
-  - name: rabbitmq-3
-    port: 5676
-    targetPort: 5676
-    protocol: TCP
-  - name: redis
-    port: 6379
-    targetPort: 6379
-    protocol: TCP
-  - name: redis-tls
-    port: 6380
-    targetPort: 6380
-    protocol: TCP
-  - name: kafka-1
-    port: 9092
-    targetPort: 9092
-    protocol: TCP
-  - name: kafka-1-tls
-    port: 9093
-    targetPort: 9093
-    protocol: TCP
-  - name: kafka-2
-    port: 9094
-    targetPort: 9094
-    protocol: TCP
-  - name: kafka-2-tls
-    port: 9095
-    targetPort: 9095
-    protocol: TCP
-  - name: kafka-3
-    port: 9096
-    targetPort: 9096
-    protocol: TCP
-  - name: kafka-3-tls
-    port: 9097
-    targetPort: 9097
-    protocol: TCP
-  - name: gf-locator-1
-    port: 10334
-    targetPort: 10334
-    protocol: TCP
-  - name: gf-locator-2
-    port: 10335
-    targetPort: 10335
-    protocol: TCP
-  - name: gf-locator-3
-    port: 10336
-    targetPort: 10336
-    protocol: TCP
-  - name: gf-server-1
-    port: 40404
-    targetPort: 40404
-    protocol: TCP
-  - name: gf-server-2
-    port: 40405
-    targetPort: 40405
-    protocol: TCP
-  - name: gf-server-3
-    port: 40406
-    targetPort: 40406
-    protocol: TCP
-  - name: gemfire-wan-1
-    port: 5000
-    targetPort: 5000
-    protocol: TCP
-  - name: gemfire-wan-2
-    port: 5001
-    targetPort: 5001
-    protocol: TCP
-  - name: gemfire-wan-3
-    port: 5002
-    targetPort: 5002
-    protocol: TCP
-  - name: gemfire-wan-4
-    port: 5003
-    targetPort: 5003
-    protocol: TCP
-  - name: gemfire-wan-5
-    port: 5004
-    targetPort: 5004
-    protocol: TCP
-  - name: gemfire-wan-6
-    port: 5005
-    targetPort: 5005
-    protocol: TCP
-  - name: gemfire-wan-7
-    port: 5006
-    targetPort: 5006
-    protocol: TCP
-  - name: gemfire-wan-8
-    port: 5007
-    targetPort: 5007
-    protocol: TCP
-  - name: gemfire-wan-9
-    port: 5008
-    targetPort: 5008
-    protocol: TCP
-  - name: gemfire-wan-10
-    port: 5009
-    targetPort: 5009
-    protocol: TCP
-  - name: gemfire-wan-11
-    port: 5010
-    targetPort: 5010
-    protocol: TCP
-  # gemfire-locator-web-1
-  - name: gf-loc-web-1
-    port: 7070
-    targetPort: 7070
-    protocol: TCP
-  # gemfire-server-web-1
-  - name: gf-srv-web-1
-    port: 7071
-    targetPort: 7071
-    protocol: TCP
-  # gemfire-locator-web-2
-  - name: gf-loc-web-2
-    port: 7072
-    targetPort: 7072
-    protocol: TCP
-  # gemfire-server-web-2
-  - name: gf-srv-web-2
-    port: 7073
-    targetPort: 7073
-    protocol: TCP
-  # gemfire-locator-web-3
-  - name: gf-loc-web-3
-    port: 7074
-    targetPort: 7074
-    protocol: TCP
-  # gemfire-server-web-3
-  - name: gf-srv-web-3
-    port: 7075
-    targetPort: 7075
-    protocol: TCP
+  #@ end
 
   selector:
     app: haproxy

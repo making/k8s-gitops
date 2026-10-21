@@ -1,3 +1,5 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -55,89 +57,11 @@ spec:
           name: ldaps
         - containerPort: 9090
           name: vault-audit
-        #! sluice TCP routes (mirrors the frontends in haproxy.cfg)
-        - containerPort: 1099
-          name: gemfire-jmx-1
-        - containerPort: 1100
-          name: gemfire-jmx-2
-        - containerPort: 1101
-          name: gemfire-jmx-3
-        - containerPort: 5432
-          name: postgresql
-        - containerPort: 5671
-          name: rabbitmq-1-tls
-        - containerPort: 5672
-          name: rabbitmq-1
-        - containerPort: 5673
-          name: rabbitmq-2-tls
-        - containerPort: 5674
-          name: rabbitmq-2
-        - containerPort: 5675
-          name: rabbitmq-3-tls
-        - containerPort: 5676
-          name: rabbitmq-3
-        - containerPort: 6379
-          name: redis
-        - containerPort: 6380
-          name: redis-tls
-        - containerPort: 9092
-          name: kafka-1
-        - containerPort: 9093
-          name: kafka-1-tls
-        - containerPort: 9094
-          name: kafka-2
-        - containerPort: 9095
-          name: kafka-2-tls
-        - containerPort: 9096
-          name: kafka-3
-        - containerPort: 9097
-          name: kafka-3-tls
-        - containerPort: 10334
-          name: gf-locator-1
-        - containerPort: 10335
-          name: gf-locator-2
-        - containerPort: 10336
-          name: gf-locator-3
-        - containerPort: 40404
-          name: gf-server-1
-        - containerPort: 40405
-          name: gf-server-2
-        - containerPort: 40406
-          name: gf-server-3
-        - containerPort: 5000
-          name: gemfire-wan-1
-        - containerPort: 5001
-          name: gemfire-wan-2
-        - containerPort: 5002
-          name: gemfire-wan-3
-        - containerPort: 5003
-          name: gemfire-wan-4
-        - containerPort: 5004
-          name: gemfire-wan-5
-        - containerPort: 5005
-          name: gemfire-wan-6
-        - containerPort: 5006
-          name: gemfire-wan-7
-        - containerPort: 5007
-          name: gemfire-wan-8
-        - containerPort: 5008
-          name: gemfire-wan-9
-        - containerPort: 5009
-          name: gemfire-wan-10
-        - containerPort: 5010
-          name: gemfire-wan-11
-        - containerPort: 7070
-          name: gf-loc-web-1
-        - containerPort: 7071
-          name: gf-srv-web-1
-        - containerPort: 7072
-          name: gf-loc-web-2
-        - containerPort: 7073
-          name: gf-srv-web-2
-        - containerPort: 7074
-          name: gf-loc-web-3
-        - containerPort: 7075
-          name: gf-srv-web-3
+        #! sluice TCP routes (tcp_route_ports in lemon/platform/sluice-server/values.yaml)
+        #@ for name, port in struct.decode(data.values.sluice.tcp_route_ports).items():
+        - containerPort: #@ port
+          name: #@ name
+        #@ end
         volumeMounts:
         - name: haproxy-config
           mountPath: /usr/local/etc/haproxy/haproxy.cfg
