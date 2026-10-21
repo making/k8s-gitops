@@ -1,4 +1,11 @@
 #@ load("@ytt:data", "data")
+#@ def cluster_nodes():
+#@   nodes = []
+#@   for i in range(data.values.replicas):
+#@     nodes.append("sluice-server-{}=grpcs://control-{}.sluice.ik.am:443".format(i, i))
+#@   end
+#@   return ",".join(nodes)
+#@ end
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -10,7 +17,7 @@ metadata:
     reloader.stakater.com/rollout-strategy: "restart"
 spec:
   serviceName: sluice-server-headless
-  replicas: 2 #! keep in sync with sluice.cluster.nodes and the per-node Services
+  replicas: #@ data.values.replicas
   #! nodes do not depend on each other; rolling updates stay one pod at a time
   podManagementPolicy: Parallel
   revisionHistoryLimit: 2
@@ -64,7 +71,7 @@ spec:
         #! static membership; haproxy routes control-N.sluice.ik.am by SNI to the
         #! Service sluice-server-N
         - name: sluice.cluster.nodes
-          value: sluice-server-0=grpcs://control-0.sluice.ik.am:443,sluice-server-1=grpcs://control-1.sluice.ik.am:443
+          value: #@ cluster_nodes()
         #! covers the client reconnect backoff (max 30s), so a restarted node holds every
         #! client's routes before the next one is rolled
         - name: sluice.cluster.warmup

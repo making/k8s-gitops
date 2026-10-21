@@ -1,3 +1,4 @@
+#@ load("@ytt:data", "data")
 #! shared entry for haproxy: bootstrap control plane (control.sluice.ik.am), data plane
 #! and TCP routes. Ready nodes only (readiness is down while warming up / draining).
 apiVersion: v1
@@ -217,6 +218,7 @@ spec:
     port: 8001
     protocol: TCP
     targetPort: 8001
+#@ for i in range(data.values.replicas):
 ---
 #! per-node control plane (control-N.sluice.ik.am in haproxy) and console. Not-ready
 #! pods stay published: clients must reach a node during its warmup, which is exactly
@@ -224,14 +226,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: sluice-server-0
+  name: #@ "sluice-server-{}".format(i)
   namespace: sluice
 spec:
   type: ClusterIP
   publishNotReadyAddresses: true
   selector:
     app.kubernetes.io/name: sluice-server
-    statefulset.kubernetes.io/pod-name: sluice-server-0
+    statefulset.kubernetes.io/pod-name: #@ "sluice-server-{}".format(i)
   ports:
   - name: grpc
     port: 8001
@@ -241,24 +243,4 @@ spec:
     port: 8081
     protocol: TCP
     targetPort: 8081
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: sluice-server-1
-  namespace: sluice
-spec:
-  type: ClusterIP
-  publishNotReadyAddresses: true
-  selector:
-    app.kubernetes.io/name: sluice-server
-    statefulset.kubernetes.io/pod-name: sluice-server-1
-  ports:
-  - name: grpc
-    port: 8001
-    protocol: TCP
-    targetPort: 8001
-  - name: http
-    port: 8081
-    protocol: TCP
-    targetPort: 8081
+#@ end

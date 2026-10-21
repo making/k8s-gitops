@@ -1,0 +1,4 @@
+#! number of nodes; the StatefulSet, the per-node Services and sluice.cluster.nodes
+#! follow it. Every node N also needs an SNI route control-N.sluice.ik.am in haproxy
+#! (lemon/platform/haproxy/config/configmap.yaml).
+replicas: 2
