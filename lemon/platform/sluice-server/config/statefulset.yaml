@@ -1,10 +1,23 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ def cluster_nodes():
 #@   nodes = []
 #@   for i in range(data.values.replicas):
 #@     nodes.append("sluice-server-{}=grpcs://control-{}.sluice.ik.am:443".format(i, i))
 #@   end
 #@   return ",".join(nodes)
+#@ end
+#@ def tcp_port_range():
+#@   ports = sorted(struct.decode(data.values.tcp_route_ports).values())
+#@   ranges = []
+#@   for port in ports:
+#@     if ranges and ranges[-1][1] + 1 == port:
+#@       ranges[-1][1] = port
+#@     else:
+#@       ranges.append([port, port])
+#@     end
+#@   end
+#@   return ",".join([str(r[0]) if r[0] == r[1] else "{}-{}".format(r[0], r[1]) for r in ranges])
 #@ end
 apiVersion: apps/v1
 kind: StatefulSet
@@ -81,9 +94,10 @@ spec:
           value: "true"
         - name: sluice.control-proxy-protocol
           value: "true"
-        #! TCP routes may only claim the middleware ports exposed on the Service
-        #! - name: sluice.tcp-port-range
-        #!   value: 5432,5671-5676,6379-6380,9092-9097,1099-1101,5000-5010,7070-7075,10334-10336,40404-40406
+        #! TCP routes may only claim the ports exposed on the shared Service
+        #! (tcp_route_ports in values.yaml)
+        - name: sluice.tcp-port-range
+          value: #@ tcp_port_range()
         - name: sluice.token-file
           value: /mnt/secrets/token
         - name: sluice.data-tls-bundle
