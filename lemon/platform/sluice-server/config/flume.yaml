@@ -1,0 +1,97 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#! sluice-flume: the live access log's collector. Every node feeds it and every console
+#! watches it, in-cluster only (no haproxy route). One replica: the lines live in its
+#! memory, a second one would split them.
+#@ flume = yaml.decode(data.read("/sluice-flume.yaml"))
+---
+#! bearer token of the flume, shared with the nodes (sluice.live-log.token)
+apiVersion: secretgen.k14s.io/v1alpha1
+kind: Password
+metadata:
+  name: sluice-flume-token
+  namespace: sluice
+spec:
+  length: 32
+  secretTemplate:
+    type: Opaque
+    stringData:
+      token: $(value)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sluice-flume
+  namespace: sluice
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  #! never two flumes at once: the nodes and the consoles would split between them
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sluice-flume
+  template:
+    metadata:
+      labels:
+        app: sluice-flume
+        app.kubernetes.io/name: sluice-flume
+        github.com/revision: #@ flume["git_revision"]
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - name: sluice-flume
+        #! the digest from sluice-flume.yaml of the sluice images branch
+        image: #@ flume["image"]
+        imagePullPolicy: Always
+        ports:
+        - name: grpc
+          containerPort: 8002
+        env:
+        - name: SLUICE_FLUME_TOKEN_FILE
+          value: /mnt/secrets/token
+        #! the health service answers without the token
+        readinessProbe:
+          grpc:
+            port: 8002
+            service: sluice.v1.Flume
+          periodSeconds: 5
+        livenessProbe:
+          grpc:
+            port: 8002
+            service: sluice.v1.Flume
+          periodSeconds: 10
+          failureThreshold: 6
+        resources:
+          limits:
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        volumeMounts:
+        - name: token
+          mountPath: /mnt/secrets
+      volumes:
+      - name: token
+        secret:
+          secretName: sluice-flume-token
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sluice-flume
+  namespace: sluice
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: sluice-flume
+  ports:
+  - name: grpc
+    port: 8002
+    protocol: TCP
+    targetPort: 8002

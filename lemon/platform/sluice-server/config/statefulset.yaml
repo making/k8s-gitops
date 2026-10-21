@@ -100,6 +100,14 @@ spec:
           value: #@ tcp_port_range()
         - name: sluice.token-file
           value: /mnt/secrets/token
+        #! the in-cluster sluice-flume (flume.yaml) behind the live access log
+        - name: sluice.live-log.url
+          value: grpc://sluice-flume.sluice.svc.cluster.local:8002
+        - name: sluice.live-log.token
+          valueFrom:
+            secretKeyRef:
+              name: sluice-flume-token
+              key: token
         - name: sluice.data-tls-bundle
           value: apps
         - name: server.ssl.enabled
