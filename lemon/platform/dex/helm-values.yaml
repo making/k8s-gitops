@@ -1,5 +1,9 @@
 #@ load("@ytt:data", "data")
 
+image:
+  #! Chart 0.26.0 ships v2.46.0; v2.46.1 is the latest dex patch release.
+  tag: v2.46.1
+
 config:
   issuer: #@ "https://" + data.values.DEX_HOST
   storage:
