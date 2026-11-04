@@ -11,7 +11,11 @@ config:
     config:
       inCluster: true
   oauth2:
+    grantTypes:
+    - authorization_code
+    - refresh_token
     skipApprovalScreen: true
+  staticClients: #@ data.values.STATIC_CLIENTS
   connectors:
   - type: github
     id: github

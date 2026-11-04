@@ -1,0 +1,8 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind": "Secret", "metadata": {"labels": {"app.kubernetes.io/name": "dex", "app.kubernetes.io/instance": "dex"}}})
+---
+metadata:
+  #@overlay/match missing_ok=True
+  annotations:
+    kapp.k14s.io/versioned: ""
