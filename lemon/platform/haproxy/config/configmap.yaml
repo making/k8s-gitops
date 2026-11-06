@@ -209,6 +209,10 @@ data:
       # per-node control plane of the cluster (sluice.cluster.nodes); one per
       # sluice replica (lemon/platform/sluice-server/values.yaml)
     (@= sluice_control_sni() @)
+      # sluice-flume (the live access log's collector), same pass-through; it
+      # terminates TLS itself and takes no PROXY protocol.
+      acl sluice_flume_sni req.ssl_sni -i flume.sluice.ik.am
+      use_backend sluice_flume_https_backend if sluice_flume_sni
       # Data plane (TLS) of sluice-server; wildcard subdomains of apps.sluice.ik.am.
       acl sluice_apps_sni req.ssl_sni -m end .apps.sluice.ik.am
       use_backend sluice_apps_https_backend if sluice_apps_sni
@@ -245,6 +249,10 @@ data:
       server sluice-control sluice-server-0.sluice.svc.cluster.local:8001 send-proxy-v2
 
     (@= sluice_control_backends() @)
+
+    backend sluice_flume_https_backend
+      mode tcp
+      server sluice-flume sluice-flume.sluice.svc.cluster.local:8002
 
     backend sluice_apps_https_backend
       mode tcp

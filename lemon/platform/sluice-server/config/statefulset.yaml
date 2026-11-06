@@ -100,9 +100,10 @@ spec:
           value: #@ tcp_port_range()
         - name: sluice.token-file
           value: /mnt/secrets/token
-        #! the in-cluster sluice-flume (flume.yaml) behind the live access log
+        #! the sluice-flume (flume.yaml) behind the live access log, through haproxy:
+        #! it serves TLS for flume.sluice.ik.am only
         - name: sluice.live-log.url
-          value: grpc://sluice-flume.sluice.svc.cluster.local:8002
+          value: grpcs://flume.sluice.ik.am:443
         - name: sluice.live-log.token
           valueFrom:
             secretKeyRef:

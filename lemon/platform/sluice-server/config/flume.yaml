@@ -1,7 +1,8 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:yaml", "yaml")
 #! sluice-flume: the live access log's collector. Every node feeds it and every console
-#! watches it, in-cluster only (no haproxy route). One replica: the lines live in its
+#! watches it; it serves grpcs:// with the system certificate, published as
+#! flume.sluice.ik.am by haproxy (TLS pass-through). One replica: the lines live in its
 #! memory, a second one would split them.
 #@ flume = yaml.decode(data.read("/sluice-flume.yaml"))
 ---
@@ -54,16 +55,19 @@ spec:
         env:
         - name: SLUICE_FLUME_TOKEN_FILE
           value: /mnt/secrets/token
-        #! the health service answers without the token
+        #! read once at startup; reloader restarts the pod on a renewal
+        - name: SLUICE_FLUME_TLS_CERT
+          value: /mnt/certs-system/tls.crt
+        - name: SLUICE_FLUME_TLS_KEY
+          value: /mnt/certs-system/tls.key
+        #! TCP: the kubelet's gRPC probe speaks plaintext only
         readinessProbe:
-          grpc:
+          tcpSocket:
             port: 8002
-            service: sluice.v1.Flume
           periodSeconds: 5
         livenessProbe:
-          grpc:
+          tcpSocket:
             port: 8002
-            service: sluice.v1.Flume
           periodSeconds: 10
           failureThreshold: 6
         resources:
@@ -76,10 +80,15 @@ spec:
         volumeMounts:
         - name: token
           mountPath: /mnt/secrets
+        - name: certs-system
+          mountPath: /mnt/certs-system
       volumes:
       - name: token
         secret:
           secretName: sluice-flume-token
+      - name: certs-system
+        secret:
+          secretName: sluice-system-ik-am-tls
 ---
 apiVersion: v1
 kind: Service
