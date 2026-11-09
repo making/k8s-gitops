@@ -94,6 +94,8 @@ spec:
           value: "true"
         - name: sluice.control-proxy-protocol
           value: "true"
+        - name: sluice.http-load-balance
+          value: round-robin
         #! TCP routes may only claim the ports exposed on the shared Service
         #! (tcp_route_ports in values.yaml)
         - name: sluice.tcp-port-range
