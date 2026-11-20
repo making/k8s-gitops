@@ -41,7 +41,8 @@ deployment:
           key: openai-chat-completions-path
           name: translation-config
     spring.ai.openai.chat.options.model:
-      value: DeepSeek-V4.1-Flash-1017
+      #! value: DeepSeek-V4.1-Flash-1017
+      value: preview/GLM-5.3-Flash
       #! valueFrom:
       #!   secretKeyRef:
       #!     key: openai-chat-options-model
